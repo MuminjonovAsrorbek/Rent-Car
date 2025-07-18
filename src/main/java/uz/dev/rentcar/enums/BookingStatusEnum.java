@@ -6,4 +6,6 @@ package uz.dev.rentcar.enums;
  **/
 
 public enum BookingStatusEnum {
+
+    PENDING,CANCELLED,CONFIRMED,COMPLETED
 }
