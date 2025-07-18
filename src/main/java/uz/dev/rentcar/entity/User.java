@@ -24,13 +24,13 @@ import java.util.List;
 public class User extends AbsDeleteEntity {
 
     @Column(nullable = false)
-    private String password;
+    private String fullName;
 
     @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false)
-    private String fullName;
+    private String password;
 
     @Enumerated(EnumType.STRING)
     private RoleEnum role;

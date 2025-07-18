@@ -1,11 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: '006-create-category-table'
-      author: "Ulug'bek"
+      id: '016-create-payment-table'
+      author: 'Asrorbek'
       changes:
         - createTable:
-            tableName: 'category'
-            schemaName: 'public'
+            tableName: 'payment'
             columns:
               - column:
                   name: 'id'
@@ -27,15 +26,26 @@ databaseChangeLog:
                   type: boolean
                   defaultValue: 'false'
               - column:
-                  name: 'description'
-                  type: varchar
+                  name: 'booking_id'
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: 'fk_payment_booking'
+                    references: booking(id)
               - column:
-                  name: 'name'
+                  name: 'amount'
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'payment_method'
                   type: varchar
                   constraints:
                     nullable: false
-                    unique: true
-
-
-
-
+                    checkConstraint: "payment_method in ('CREDIT_CARD' , 'GOOGLE_PAY' , 'CLICK', 'PAYNET')"
+              - column:
+                  name: 'status'
+                  type: varchar
+                  constraints:
+                    nullable: false
+                    checkConstraint: "status in ('PENDING','COMPLETED','FAILED')"

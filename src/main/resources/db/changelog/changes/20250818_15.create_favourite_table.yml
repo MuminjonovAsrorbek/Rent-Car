@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: '004-create-car_image-table'
+      id: '015-create-favorite-table'
       author: "Ulug'bek"
       changes:
         - createTable:
-            tableName: 'car_image'
+            tableName: 'favorite'
             schemaName: 'public'
             columns:
               - column:
@@ -27,17 +27,16 @@ databaseChangeLog:
                   type: boolean
                   defaultValue: 'false'
               - column:
-                  name: 'image_url'
-                  type: varchar
+                  name: 'user_id'
+                  type: bigint
                   constraints:
-                    nullable: false
+                    referencedTableName: users
+                    referencedColumnNames: id
+                    foreignKeyName: users_and_favorite_rf
               - column:
                   name: 'car_id'
                   type: bigint
                   constraints:
                     referencedTableName: car
-                    referencedColumnNames: 'id'
-                    foreignKeyName: car_car_image_id_rf
-
-
-
+                    referencedColumnNames: id
+                    foreignKeyName: car_and_favorite_rf

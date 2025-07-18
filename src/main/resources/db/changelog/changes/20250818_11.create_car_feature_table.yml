@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: '003-create-car_feature-table'
+      id: '011-create-car_feature-table'
       author: "Ulug'bek"
       changes:
         - createTable:
@@ -35,9 +35,7 @@ databaseChangeLog:
                   name: 'car_id'
                   type: bigint
                   constraints:
+                    nullable: false
                     referencedTableName: car
                     referencedColumnNames: 'id'
                     foreignKeyName: car_car_featchure_id_rf
-
-
-

@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: '005-create-car_location-table'
+      id: '012-create-car_image-table'
       author: "Ulug'bek"
       changes:
         - createTable:
-            tableName: 'car_location'
+            tableName: 'car_image'
             schemaName: 'public'
             columns:
               - column:
@@ -27,13 +27,8 @@ databaseChangeLog:
                   type: boolean
                   defaultValue: 'false'
               - column:
-                  name: 'latitude'
-                  type: decimal
-                  constraints:
-                    nullable: false
-              - column:
-                  name: 'longitude'
-                  type: decimal
+                  name: 'image_url'
+                  type: varchar
                   constraints:
                     nullable: false
               - column:
@@ -42,7 +37,4 @@ databaseChangeLog:
                   constraints:
                     referencedTableName: car
                     referencedColumnNames: 'id'
-                    foreignKeyName: car_car_location_id_rf
-
-
-
+                    foreignKeyName: car_car_image_id_rf

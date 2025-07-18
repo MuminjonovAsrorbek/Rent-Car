@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
 import uz.dev.rentcar.entity.template.AbsDeleteEntity;
-
-import java.time.LocalDateTime;
+import uz.dev.rentcar.enums.BookingStatusEnum;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,9 +20,7 @@ public class BookingHistory extends AbsDeleteEntity {
     private Booking booking;
 
     @Column(nullable = false)
-    private String status;
-
-    @Column(updatable = false)
-    private LocalDateTime changedAt = LocalDateTime.now();
+    @Enumerated(EnumType.STRING)
+    private BookingStatusEnum status;
 
 }

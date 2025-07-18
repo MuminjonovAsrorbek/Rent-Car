@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: '017-create-car-categories-table'
+      author: 'Asrorbek'
+      changes:
+        - createTable:
+            tableName: 'car_categories'
+            columns:
+              - column:
+                  name: 'id'
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: 'car_id'
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: 'fk_car_categories_car'
+                    references: car(id)
+              - column:
+                  name: 'category_id'
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: 'fk_car_categories_category'
+                    references: category(id)
