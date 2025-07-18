@@ -1,0 +1,73 @@
+databaseChangeLog:
+  - changeSet:
+      id: '002-create-car-table'
+      author: 'Asrorbek'
+      changes:
+        - createTable:
+            tableName: 'car'
+            columns:
+              - column:
+                  name: 'id'
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: 'created_at'
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'updated_at'
+                  type: TIMESTAMP
+              - column:
+                  name: 'deleted'
+                  type: boolean
+                  defaultValue: 'false'
+              - column:
+                  name: 'brand'
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'model'
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'year'
+                  type: int
+              - column:
+                  name: 'price_per_day'
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'available'
+                  type: boolean
+                  defaultValue: 'true'
+              - column:
+                  name: 'image_url'
+                  type: text
+              - column:
+                  name: 'description'
+                  type: text
+              - column:
+                  name: 'seats'
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'fuel_type'
+                  type: varchar
+                  constraints:
+                    checkConstraint: "fuel_type in ('PETROL' , 'GASOLINE', 'ELECTRIC' , 'HYBRID')"
+              - column:
+                  name: 'fuel_consumption'
+                  type: decimal
+              - column:
+                  name: 'transmission'
+                  type: varchar
+                  constraints:
+                    nullable: false
