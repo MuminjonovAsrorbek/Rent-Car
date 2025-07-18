@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: '007-create-office-table'
+      author: 'Asrorbek'
+      changes:
+        - createTable:
+            tableName: 'office'
+            columns:
+              - column:
+                  name: 'id'
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: 'created_at'
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'updated_at'
+                  type: TIMESTAMP
+              - column:
+                  name: 'deleted'
+                  type: boolean
+                  defaultValue: 'false'
+              - column:
+                  name: 'name'
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'address'
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'latitude'
+                  type: decimal
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'longitude'
+                  type: decimal
+                  constraints:
+                    nullable: false
