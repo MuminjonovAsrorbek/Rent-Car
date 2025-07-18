@@ -1,0 +1,101 @@
+databaseChangeLog:
+  - changeSet:
+      id: '009-create-booking-table'
+      author: "Ulug'bek"
+      changes:
+        - createTable:
+            tableName: 'booking'
+            schemaName: 'public'
+            columns:
+              - column:
+                  name: 'id'
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: 'created_at'
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'updated_at'
+                  type: TIMESTAMP
+              - column:
+                  name: 'deleted'
+                  type: boolean
+                  defaultValue: 'false'
+              - column:
+                  name: 'user_id'
+                  type: bigint
+                  constraints:
+                    referencedTableName: users
+                    referencedColumnNames: id
+                    foreignKeyName: users_and_booking_rf
+              - column:
+                  name: 'recipient_full_name'
+                  type: varchar
+
+              - column:
+                  name: 'recipient_phone'
+                  type: varchar
+
+              - column:
+                  name: 'is_for_self'
+                  type: boolean
+                  defaultValue: 'true'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'pickup_date'
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'return_date'
+                  type: datetime
+              - column:
+                  name: 'total_price'
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'status'
+                  type: varchar
+                  constraints:
+                    checkConstraint: "status in ('PENDING','CANCELLED','CONFIRMED','COMPLETED')"
+              - column:
+                  name: 'promo_code_id'
+                  type: bigint
+                  constraints:
+                    referencedTableName: 'promo_code'
+                    referencedColumnNames: 'id'
+                    foreignKeyName: booking_promokod_rf
+              - column:
+                  name: 'return_office_id'
+                  type: bigint
+                  constraints:
+                    referencedTableName: 'office'
+                    referencedColumnNames: 'id'
+                    foreignKeyName: booking_and_office_rf
+              - column:
+                  name: 'pickup_office_id'
+                  type: bigint
+                  constraints:
+                    referencedTableName: 'office'
+                    referencedColumnNames: 'id'
+                    foreignKeyName: booking_and_pickup_office_rf
+                    nullable: false
+              - column:
+                  name: 'car_id'
+                  type: bigint
+                  constraints:
+                    referencedTableName: 'car'
+                    referencedColumnNames: 'id'
+                    foreignKeyName: booking_and_car_rf
+                    nullable: false
+
+
+
+
