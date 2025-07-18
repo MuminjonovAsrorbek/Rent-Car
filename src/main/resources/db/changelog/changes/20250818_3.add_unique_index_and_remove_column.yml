@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: '003-add_unique_index_and_drop_column_in_user'
+      author: 'Asrorbek'
+      changes:
+        - addColumn:
+            tableName: 'users'
+            columns:
+              - column:
+                  name: 'email'
+                  type: varchar
+                  constraints:
+                    nullable: false
+        - sql: |
+            CREATE UNIQUE INDEX uq_user_email_not_deleted ON users (email)
+                       WHERE deleted = false;
+        - dropColumn:
+            columnName: 'username'
+            tableName: 'users'

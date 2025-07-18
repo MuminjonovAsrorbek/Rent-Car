@@ -3,3 +3,5 @@ databaseChangeLog:
       file: 'db/changelog/changes/20250818_1.create_user_table.yml'
   - include:
       file: 'db/changelog/changes/20250818_2.create_car_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_3.add_unique_index_and_remove_column.yml'

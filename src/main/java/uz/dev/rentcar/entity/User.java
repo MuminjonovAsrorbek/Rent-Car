@@ -23,9 +23,6 @@ import java.util.List;
 @FieldNameConstants
 public class User extends AbsDeleteEntity {
 
-    @Column(unique = true, nullable = false)
-    private String username;
-
     @Column(nullable = false)
     private String password;
 
