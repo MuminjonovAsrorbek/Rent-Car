@@ -1,4 +1,5 @@
 spring:
   application:
     name: Rent-Car
-
+  profiles:
+    active: dev
