@@ -23,8 +23,6 @@ import java.util.List;
 @FieldNameConstants
 public class User extends AbsDeleteEntity {
 
-    private String fullName;
-
     @Column(unique = true, nullable = false)
     private String username;
 
@@ -34,23 +32,29 @@ public class User extends AbsDeleteEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
+    private String fullName;
+
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private RoleEnum role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Booking> bookings;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Review> reviews;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<UserAddress> addresses;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Favorite> favorites;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Notification> notifications;
 
 }
