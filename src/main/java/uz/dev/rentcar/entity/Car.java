@@ -44,7 +44,6 @@ public class Car extends AbsDeleteEntity {
     private int seats;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private FuelTypeEnum fuelType;
 
     private BigDecimal fuelConsumption;
@@ -62,21 +61,27 @@ public class Car extends AbsDeleteEntity {
     private List<Category> categories;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Booking> bookings;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Review> reviews;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<CarImage> images;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<CarFeature> features;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<CarLocation> locations;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Favorite> favorites;
 
 }

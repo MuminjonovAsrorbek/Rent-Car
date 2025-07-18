@@ -57,16 +57,17 @@ public class Booking extends AbsDeleteEntity {
     private PromoCode promoCode;
 
     @Column(nullable = false)
-    private BigDecimal totalPrice;
+    private Long totalPrice;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private BookingStatusEnum status;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Payment> payments;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<BookingHistory> history;
 
 }
