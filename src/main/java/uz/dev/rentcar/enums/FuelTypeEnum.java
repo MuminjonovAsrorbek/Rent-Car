@@ -7,5 +7,6 @@ package uz.dev.rentcar.enums;
 
 public enum FuelTypeEnum {
 
-       BENZIN,GAZ,ELEKTR
+    PETROL, GASOLINE, ELECTRIC, HYBRID
+
 }
