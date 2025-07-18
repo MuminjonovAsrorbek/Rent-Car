@@ -7,5 +7,6 @@ package uz.dev.rentcar.enums;
 
 public enum PaymetMethodEnum {
 
+    CASH, CREDIT_CARD, GOOGLE_PAY, CLICK, PAYNET
 
 }
