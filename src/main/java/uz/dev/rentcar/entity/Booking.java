@@ -1,15 +1,14 @@
 package uz.dev.rentcar.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
 import uz.dev.rentcar.entity.template.AbsDeleteEntity;
 import uz.dev.rentcar.enums.BookingStatusEnum;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Created by: asrorbek
@@ -26,21 +25,27 @@ import java.time.LocalDateTime;
 public class Booking extends AbsDeleteEntity {
 
     @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
     @ManyToOne
+    @JoinColumn(name = "pickup_office_id", nullable = false)
     private Office pickupOffice;
 
     @ManyToOne
+    @JoinColumn(name = "return_office_id")
     private Office returnOffice;
 
+    @Column(nullable = false)
     private LocalDateTime pickupDate;
 
     private LocalDateTime returnDate;
 
+    @Column(nullable = false)
     private boolean isForSelf = true;
 
     private String recipientFullName;
@@ -48,13 +53,20 @@ public class Booking extends AbsDeleteEntity {
     private String recipientPhone;
 
     @ManyToOne
+    @JoinColumn(name = "promo_code_id")
     private PromoCode promoCode;
 
-    private Long totalPrice;
+    @Column(nullable = false)
+    private BigDecimal totalPrice;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private BookingStatusEnum status;
 
-    // davomi bor
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+    private List<Payment> payments;
+
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+    private List<BookingHistory> history;
 
 }

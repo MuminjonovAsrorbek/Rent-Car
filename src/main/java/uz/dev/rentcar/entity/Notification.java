@@ -7,11 +7,9 @@ import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
 import uz.dev.rentcar.entity.template.AbsDeleteEntity;
+import uz.dev.rentcar.enums.NotificationTypeEnum;
 
-/**
- * Created by: asrorbek
- * DateTime: 7/18/25 09:49
- **/
+import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,19 +18,18 @@ import uz.dev.rentcar.entity.template.AbsDeleteEntity;
 @ToString
 @Entity
 @FieldNameConstants
-public class Review extends AbsDeleteEntity {
+public class Notification extends AbsDeleteEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "car_id", nullable = false)
-    private Car car;
+    @Column(nullable = false)
+    private String message;
 
     @Column(nullable = false)
-    private int rating;
+    private NotificationTypeEnum type;
 
-    private String comment;
+    private boolean isRead = false;
 
 }

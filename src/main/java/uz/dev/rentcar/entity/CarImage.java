@@ -8,11 +8,6 @@ import lombok.*;
 import lombok.experimental.FieldNameConstants;
 import uz.dev.rentcar.entity.template.AbsDeleteEntity;
 
-/**
- * Created by: asrorbek
- * DateTime: 7/18/25 09:49
- **/
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -20,19 +15,13 @@ import uz.dev.rentcar.entity.template.AbsDeleteEntity;
 @ToString
 @Entity
 @FieldNameConstants
-public class Review extends AbsDeleteEntity {
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+public class CarImage extends AbsDeleteEntity {
 
     @ManyToOne
     @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
     @Column(nullable = false)
-    private int rating;
-
-    private String comment;
+    private String imageUrl;
 
 }
