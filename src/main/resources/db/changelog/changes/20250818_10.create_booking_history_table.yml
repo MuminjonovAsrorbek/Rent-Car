@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: '0010-create-booking_history-table'
+      author: "Ulug'bek"
+      changes:
+        - createTable:
+            tableName: 'booking_history'
+            schemaName: 'public'
+            columns:
+              - column:
+                  name: 'id'
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: 'created_at'
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'updated_at'
+                  type: TIMESTAMP
+              - column:
+                  name: 'deleted'
+                  type: boolean
+                  defaultValue: 'false'
+              - column:
+                  name: 'booking_id'
+                  type: bigint
+                  constraints:
+                    referencedTableName: booking
+                    referencedColumnNames: id
+                    foreignKeyName: booking_and_booking_history_rf
+                    nullable: false
+              - column:
+                  name: 'status'
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'changed_at'
+                  type: timestamp
+                  defaultValueComputed: current_timestamp
+
+
+
+
+
+

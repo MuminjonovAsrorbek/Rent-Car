@@ -3,3 +3,19 @@ databaseChangeLog:
       file: 'db/changelog/changes/20250818_1.create_user_table.yml'
   - include:
       file: 'db/changelog/changes/20250818_2.create_car_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_3.create_car_feature_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_4.create_car_image_table.yml.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_5.create_car_location_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_6.create_category_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_7.create_favorite_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_8.create_notification_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_9.create_booking_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_10.create_booking_history_table.yml'

@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: '005-create-car_location-table'
+      author: "Ulug'bek"
+      changes:
+        - createTable:
+            tableName: 'car_location'
+            schemaName: 'public'
+            columns:
+              - column:
+                  name: 'id'
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: 'created_at'
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'updated_at'
+                  type: TIMESTAMP
+              - column:
+                  name: 'deleted'
+                  type: boolean
+                  defaultValue: 'false'
+              - column:
+                  name: 'latitude'
+                  type: decimal
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'longitude'
+                  type: decimal
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'car_id'
+                  type: bigint
+                  constraints:
+                    referencedTableName: car
+                    referencedColumnNames: 'id'
+                    foreignKeyName: car_car_location_id_rf
+
+
+
