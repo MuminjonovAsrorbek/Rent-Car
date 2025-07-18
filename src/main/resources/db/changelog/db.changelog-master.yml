@@ -5,3 +5,9 @@ databaseChangeLog:
       file: 'db/changelog/changes/20250818_2.create_car_table.yml'
   - include:
       file: 'db/changelog/changes/20250818_3.add_unique_index_and_remove_column.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_3.create_user_address_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_4.create_review_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_5.create_promo_code_table.yml'

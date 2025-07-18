@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: '004-create-user-address-table'
+      author: 'Asrorbek'
+      changes:
+        - createTable:
+            tableName: 'user_address'
+            columns:
+              - column:
+                  name: 'id'
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: 'created_at'
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'updated_at'
+                  type: TIMESTAMP
+              - column:
+                  name: 'deleted'
+                  type: boolean
+                  defaultValue: 'false'
+              - column:
+                  name: 'user_id'
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: 'fk_user_address_user'
+                    references: users(id)
+              - column:
+                  name: 'address_line'
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'city'
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'country'
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'postal_code'
+                  type: varchar
