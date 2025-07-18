@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: '007-create-favorite-table'
+      id: '014-create-category-table'
       author: "Ulug'bek"
       changes:
         - createTable:
-            tableName: 'favorite'
+            tableName: 'category'
             schemaName: 'public'
             columns:
               - column:
@@ -27,20 +27,13 @@ databaseChangeLog:
                   type: boolean
                   defaultValue: 'false'
               - column:
-                  name: 'user_id'
-                  type: bigint
-                  constraints:
-                    referencedTableName: users
-                    referencedColumnNames: id
-                    foreignKeyName: users_and_favorite_rf
+                  name: 'description'
+                  type: varchar
               - column:
-                  name: 'car_id'
-                  type: bigint
+                  name: 'name'
+                  type: varchar
                   constraints:
-                    referencedTableName: car
-                    referencedColumnNames: id
-                    foreignKeyName: car_and_favorite_rf
-
-
-
-
+                    nullable: false
+        - sql: |
+            CREATE UNIQUE INDEX uq_category_name_not_deleted ON category (name)
+                       WHERE deleted = false;

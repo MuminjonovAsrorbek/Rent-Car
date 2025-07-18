@@ -4,23 +4,6 @@ databaseChangeLog:
   - include:
       file: 'db/changelog/changes/20250818_2.create_car_table.yml'
   - include:
-
-      file: 'db/changelog/changes/20250818_3.create_car_feature_table.yml'
-  - include:
-      file: 'db/changelog/changes/20250818_4.create_car_image_table.yml.yml'
-  - include:
-      file: 'db/changelog/changes/20250818_5.create_car_location_table.yml'
-  - include:
-      file: 'db/changelog/changes/20250818_6.create_category_table.yml'
-  - include:
-      file: 'db/changelog/changes/20250818_7.create_favorite_table.yml'
-  - include:
-      file: 'db/changelog/changes/20250818_8.create_notification_table.yml'
-  - include:
-      file: 'db/changelog/changes/20250818_9.create_booking_table.yml'
-  - include:
-      file: 'db/changelog/changes/20250818_10.create_booking_history_table.yml'
-  - include:
       file: 'db/changelog/changes/20250818_3.add_unique_index_and_remove_column.yml'
   - include:
       file: 'db/changelog/changes/20250818_4.create_user_address_table.yml'
@@ -30,4 +13,23 @@ databaseChangeLog:
       file: 'db/changelog/changes/20250818_6.create_promo_code_table.yml'
   - include:
       file: 'db/changelog/changes/20250818_7.create_office_table.yml'
-
+  - include:
+      file: 'db/changelog/changes/20250818_8.create_notification_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_9.create_booking_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_10.create_booking_history_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_11.create_car_feature_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_12.create_car_image_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_13.create_car_location_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_14.create_category_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_15.create_favourite_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_16.create_payment_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250818_17.create_car_categories_table.yml'

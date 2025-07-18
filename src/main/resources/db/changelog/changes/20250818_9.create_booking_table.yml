@@ -1,11 +1,10 @@
 databaseChangeLog:
   - changeSet:
       id: '009-create-booking-table'
-      author: "Ulug'bek"
+      author: "Asrorbek"
       changes:
         - createTable:
             tableName: 'booking'
-            schemaName: 'public'
             columns:
               - column:
                   name: 'id'
@@ -30,23 +29,30 @@ databaseChangeLog:
                   name: 'user_id'
                   type: bigint
                   constraints:
-                    referencedTableName: users
-                    referencedColumnNames: id
-                    foreignKeyName: users_and_booking_rf
+                    nullable: false
+                    foreignKeyName: 'fk_booking_user'
+                    references: users(id)
               - column:
-                  name: 'recipient_full_name'
-                  type: varchar
-
-              - column:
-                  name: 'recipient_phone'
-                  type: varchar
-
-              - column:
-                  name: 'is_for_self'
-                  type: boolean
-                  defaultValue: 'true'
+                  name: 'car_id'
+                  type: bigint
                   constraints:
                     nullable: false
+                    foreignKeyName: 'fk_booking_car'
+                    references: car(id)
+              - column:
+                  name: 'pickup_office_id'
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: 'fk_pickup_office_office'
+                    references: office(id)
+              - column:
+                  name: 'return_office_id'
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: 'fk_return_office_office'
+                    references: office(id)
               - column:
                   name: 'pickup_date'
                   type: datetime
@@ -56,6 +62,27 @@ databaseChangeLog:
                   name: 'return_date'
                   type: datetime
               - column:
+                  name: 'is_for_self'
+                  type: boolean
+                  defaultValue: 'true'
+              - column:
+                  name: 'recipient_full_name'
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'recipient_phone'
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'promo_code_id'
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: 'fk_booking_promo_code'
+                    references: promo_code(id)
+              - column:
                   name: 'total_price'
                   type: bigint
                   constraints:
@@ -64,38 +91,4 @@ databaseChangeLog:
                   name: 'status'
                   type: varchar
                   constraints:
-                    checkConstraint: "status in ('PENDING','CANCELLED','CONFIRMED','COMPLETED')"
-              - column:
-                  name: 'promo_code_id'
-                  type: bigint
-                  constraints:
-                    referencedTableName: 'promo_code'
-                    referencedColumnNames: 'id'
-                    foreignKeyName: booking_promokod_rf
-              - column:
-                  name: 'return_office_id'
-                  type: bigint
-                  constraints:
-                    referencedTableName: 'office'
-                    referencedColumnNames: 'id'
-                    foreignKeyName: booking_and_office_rf
-              - column:
-                  name: 'pickup_office_id'
-                  type: bigint
-                  constraints:
-                    referencedTableName: 'office'
-                    referencedColumnNames: 'id'
-                    foreignKeyName: booking_and_pickup_office_rf
-                    nullable: false
-              - column:
-                  name: 'car_id'
-                  type: bigint
-                  constraints:
-                    referencedTableName: 'car'
-                    referencedColumnNames: 'id'
-                    foreignKeyName: booking_and_car_rf
-                    nullable: false
-
-
-
-
+                    checkConstraint: "status in ('PENDING' , 'CANCELLED' , 'CONFIRMED' , 'COMPLETED')"

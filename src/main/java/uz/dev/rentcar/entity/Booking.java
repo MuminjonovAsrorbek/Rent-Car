@@ -6,7 +6,6 @@ import lombok.experimental.FieldNameConstants;
 import uz.dev.rentcar.entity.template.AbsDeleteEntity;
 import uz.dev.rentcar.enums.BookingStatusEnum;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -48,8 +47,10 @@ public class Booking extends AbsDeleteEntity {
     @Column(nullable = false)
     private boolean isForSelf = true;
 
+    @Column(nullable = false)
     private String recipientFullName;
 
+    @Column(nullable = false)
     private String recipientPhone;
 
     @ManyToOne

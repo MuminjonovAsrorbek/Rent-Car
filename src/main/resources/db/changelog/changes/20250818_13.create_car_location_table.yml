@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: '001-create-user-table'
-      author: 'Asrorbek'
+      id: '013-create-car_location-table'
+      author: "Ulug'bek"
       changes:
         - createTable:
-            tableName: 'users'
+            tableName: 'car_location'
             schemaName: 'public'
             columns:
               - column:
@@ -27,17 +27,19 @@ databaseChangeLog:
                   type: boolean
                   defaultValue: 'false'
               - column:
-                  name: 'username'
-                  type: varchar
+                  name: 'latitude'
+                  type: decimal
                   constraints:
                     nullable: false
               - column:
-                  name: 'password'
-                  type: varchar
+                  name: 'longitude'
+                  type: decimal
                   constraints:
                     nullable: false
               - column:
-                  name: 'role'
-                  type: varchar
+                  name: 'car_id'
+                  type: bigint
                   constraints:
-                    checkConstraint: "role in ('ADMIN' , 'USER')"
+                    referencedTableName: car
+                    referencedColumnNames: 'id'
+                    foreignKeyName: car_car_location_id_rf
