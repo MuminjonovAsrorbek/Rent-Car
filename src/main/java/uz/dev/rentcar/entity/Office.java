@@ -33,9 +33,11 @@ public class Office extends AbsDeleteEntity {
     private BigDecimal longitude;
 
     @OneToMany(mappedBy = "pickupOffice", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Booking> pickupBookings;
 
     @OneToMany(mappedBy = "returnOffice", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Booking> returnBookings;
 
 }

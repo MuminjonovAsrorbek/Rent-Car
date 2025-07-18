@@ -31,6 +31,7 @@ public class PromoCode extends AbsDeleteEntity {
     private LocalDateTime validTo;
 
     @OneToMany(mappedBy = "promoCode", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Booking> bookings;
 
 }
