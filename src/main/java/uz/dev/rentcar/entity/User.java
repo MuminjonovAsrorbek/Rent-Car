@@ -3,6 +3,8 @@ package uz.dev.rentcar.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +28,8 @@ import java.util.List;
 @Table(name = "users")
 @Builder
 @FieldNameConstants
+@SQLDelete(sql = "update users set deleted=true where id=?")
+@SQLRestriction(value = "deleted=false")
 public class User extends AbsDeleteEntity implements UserDetails {
 
     @Column(nullable = false)

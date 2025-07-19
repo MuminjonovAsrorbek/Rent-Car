@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import uz.dev.rentcar.entity.template.AbsDeleteEntity;
 
 import java.util.List;
@@ -21,6 +23,8 @@ import java.util.List;
 @ToString
 @Entity
 @FieldNameConstants
+@SQLDelete(sql = "update category set deleted=true where id=?")
+@SQLRestriction(value = "deleted=false")
 public class Category extends AbsDeleteEntity {
 
     @Column(unique = true, nullable = false)
