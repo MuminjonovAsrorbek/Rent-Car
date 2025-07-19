@@ -26,7 +26,6 @@ import java.util.List;
 @ToString
 @Entity
 @Table(name = "users")
-@Builder
 @FieldNameConstants
 @SQLDelete(sql = "update users set deleted=true where id=?")
 @SQLRestriction(value = "deleted=false")

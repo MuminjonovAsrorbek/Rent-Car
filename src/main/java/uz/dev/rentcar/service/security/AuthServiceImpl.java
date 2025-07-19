@@ -1,5 +1,6 @@
 package uz.dev.rentcar.service.security;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,6 +10,7 @@ import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
 import uz.dev.rentcar.exceptions.PasswordIncorrectException;
+import uz.dev.rentcar.mapper.UserMapper;
 import uz.dev.rentcar.payload.request.LoginDTO;
 import uz.dev.rentcar.payload.request.RegisterDTO;
 import uz.dev.rentcar.payload.response.TokenDTO;
@@ -32,6 +34,7 @@ public class AuthServiceImpl implements AuthService {
     private final JWTService jwtService;
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -69,6 +72,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public TokenDTO registerUser(RegisterDTO registerDTO) {
 
         boolean exists = userRepository.existsByEmail(registerDTO.getEmail());
@@ -76,7 +80,14 @@ public class AuthServiceImpl implements AuthService {
         if (exists)
             throw new EntityAlreadyExistException("User already registered by email :" + registerDTO.getEmail(), HttpStatus.BAD_REQUEST);
 
+        User user = userMapper.toEntity(registerDTO);
 
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+        userRepository.save(user);
+
+        LoginDTO loginDTO = new LoginDTO(user.getUsername(), user.getPassword());
+
+        return getToken(loginDTO);
     }
 }
