@@ -3,7 +3,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/rent_car
     username: postgres
-    password: postgres
+    password: 1305
   liquibase:
     enabled: true
     change-log: 'classpath:db/changelog/db.changelog-master.yml'
@@ -20,3 +20,5 @@ spring:
     properties:
       hibernate:
         format_sql: true
+server:
+  port: 9090
