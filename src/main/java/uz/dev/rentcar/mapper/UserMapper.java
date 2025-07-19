@@ -14,8 +14,12 @@ import uz.dev.rentcar.payload.request.RegisterDTO;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
 
-//    @Mapping(target = "id", ignore = true)
-//    @Mapping(target = "")
-//    User toEntity(RegisterDTO registerDTO);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
+    @Mapping(target = "role", defaultValue = "USER")
+    @Mapping(target = "password", ignore = true)
+    User toEntity(RegisterDTO registerDTO);
 
 }

@@ -27,8 +27,12 @@ public class SecurityUtils {
 
         }
 
-        new User();
-        return User.builder().email("SYSTEM@gmail.com").password(passwordEncoder.encode("SYSTEM")).build();
+        User user = new User();
+
+        user.setEmail("SYSTEM@gmail.com");
+        user.setPassword(passwordEncoder.encode("SYSTEM"));
+
+        return user;
 
     }
 }
