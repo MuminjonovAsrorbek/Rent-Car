@@ -5,10 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import uz.dev.rentcar.exception.CarFeatureNotFoundException;
-import uz.dev.rentcar.exception.CarNotFoundException;
-import uz.dev.rentcar.exception.CategoryNotFoundException;
-import uz.dev.rentcar.exception.ErrorDTO;
+import uz.dev.rentcar.exceptions.CarFeatureNotFoundException;
+import uz.dev.rentcar.exceptions.CarNotFoundException;
+import uz.dev.rentcar.exceptions.CategoryNotFoundException;
+import uz.dev.rentcar.exceptions.ErrorDTO;
 
 @RestControllerAdvice("uz.dev.rentcar")
 @Service

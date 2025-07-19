@@ -1,9 +1,8 @@
-package uz.dev.rentcar.exception;
+package uz.dev.rentcar.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @AllArgsConstructor
 @NoArgsConstructor

@@ -1,7 +1,6 @@
 package uz.dev.rentcar.service;
 
-import uz.dev.rentcar.dto.CategoryDTO;
-import uz.dev.rentcar.entity.CarFeature;
+import uz.dev.rentcar.payload.CategoryDTO;
 
 import java.util.List;
 

@@ -4,10 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
-import uz.dev.rentcar.dto.CarFeatureDTO;
+import uz.dev.rentcar.payload.CarFeatureDTO;
 import uz.dev.rentcar.entity.CarFeature;
-
-import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
         componentModel = MappingConstants.ComponentModel.SPRING)

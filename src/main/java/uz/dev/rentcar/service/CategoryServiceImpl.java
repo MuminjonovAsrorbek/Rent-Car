@@ -2,19 +2,15 @@ package uz.dev.rentcar.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uz.dev.rentcar.dto.CarDTO;
-import uz.dev.rentcar.dto.CategoryDTO;
+import uz.dev.rentcar.payload.CategoryDTO;
 import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.entity.Category;
 import uz.dev.rentcar.mapper.CarMapper;
 import uz.dev.rentcar.mapper.CategoryMapper;
 import uz.dev.rentcar.repository.CategoryRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static uz.dev.rentcar.utils.CommonUtils.getOrDef;
 
 @Service
 @RequiredArgsConstructor

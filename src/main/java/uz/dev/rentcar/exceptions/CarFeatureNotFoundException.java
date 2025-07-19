@@ -1,4 +1,4 @@
-package uz.dev.rentcar.exception;
+package uz.dev.rentcar.exceptions;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

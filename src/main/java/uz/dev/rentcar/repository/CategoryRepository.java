@@ -3,7 +3,7 @@ package uz.dev.rentcar.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import uz.dev.rentcar.entity.Category;
-import uz.dev.rentcar.exception.CategoryNotFoundException;
+import uz.dev.rentcar.exceptions.CategoryNotFoundException;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 

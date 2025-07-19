@@ -1,4 +1,4 @@
-package uz.dev.rentcar.dto;
+package uz.dev.rentcar.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
