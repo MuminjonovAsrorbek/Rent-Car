@@ -1,7 +1,7 @@
 package uz.dev.rentcar.service.template;
 
-import jakarta.validation.Valid;
 import uz.dev.rentcar.payload.UserDTO;
+import uz.dev.rentcar.payload.response.PageableDTO;
 
 /**
  * Created by: asrorbek
@@ -10,4 +10,12 @@ import uz.dev.rentcar.payload.UserDTO;
 
 public interface UserService {
     UserDTO createUser(UserDTO userDTO);
+
+    PageableDTO getAllUsers(int page, int size);
+
+    UserDTO getUserById(Long id);
+
+    UserDTO updateUser(Long id,  UserDTO userDTO);
+
+    void deleteUser(Long id);
 }
