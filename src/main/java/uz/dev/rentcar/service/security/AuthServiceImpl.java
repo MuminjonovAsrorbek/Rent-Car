@@ -2,16 +2,18 @@ package uz.dev.rentcar.service.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.dev.rentcar.entity.User;
+import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
 import uz.dev.rentcar.exceptions.PasswordIncorrectException;
 import uz.dev.rentcar.payload.request.LoginDTO;
+import uz.dev.rentcar.payload.request.RegisterDTO;
 import uz.dev.rentcar.payload.response.TokenDTO;
 import uz.dev.rentcar.repository.UserRepository;
+import uz.dev.rentcar.service.template.AuthService;
 
 import java.util.Date;
 import java.util.Optional;
@@ -23,7 +25,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService implements UserDetailsService {
+public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder passwordEncoder;
 
@@ -44,6 +46,7 @@ public class AuthService implements UserDetailsService {
 
     }
 
+    @Override
     public TokenDTO getToken(LoginDTO loginDTO) {
 
         User user = loadUserByUsername(loginDTO.getUsername());
@@ -63,5 +66,17 @@ public class AuthService implements UserDetailsService {
         String refreshToken = jwtService.generateToken(loginDTO.getUsername(), new Date(System.currentTimeMillis() + 12 * 3600 * 1000));
 
         return new TokenDTO(accessToken, refreshToken);
+    }
+
+    @Override
+    public TokenDTO registerUser(RegisterDTO registerDTO) {
+
+        boolean exists = userRepository.existsByEmail(registerDTO.getEmail());
+
+        if (exists)
+            throw new EntityAlreadyExistException("User already registered by email :" + registerDTO.getEmail(), HttpStatus.BAD_REQUEST);
+
+
+
     }
 }

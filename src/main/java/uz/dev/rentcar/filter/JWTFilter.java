@@ -10,8 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import uz.dev.rentcar.entity.User;
-import uz.dev.rentcar.service.security.AuthService;
 import uz.dev.rentcar.service.security.JWTService;
+import uz.dev.rentcar.service.template.AuthService;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -56,7 +56,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
             String email = jwtService.parseToken(token);
 
-            User user = authService.loadUserByUsername(email);
+            User user = (User) authService.loadUserByUsername(email);
 
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
                     user,

@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uz.dev.rentcar.payload.request.LoginDTO;
+import uz.dev.rentcar.payload.request.RegisterDTO;
 import uz.dev.rentcar.payload.response.TokenDTO;
-import uz.dev.rentcar.service.security.AuthService;
+import uz.dev.rentcar.service.template.AuthService;
 import uz.dev.rentcar.service.template.RecaptchaService;
 
 /**
@@ -18,7 +19,7 @@ import uz.dev.rentcar.service.template.RecaptchaService;
  **/
 
 @Slf4j
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/auth")
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -40,6 +41,13 @@ public class AuthController {
 
 
         return authService.getToken(loginDTO);
+
+    }
+
+    @PostMapping("/register")
+    public TokenDTO register(@RequestBody @Valid RegisterDTO registerDTO) {
+
+        return authService.registerUser(registerDTO);
 
     }
 }
