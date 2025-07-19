@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
 import uz.dev.rentcar.exceptions.InvalidRecaptchaTokenException;
 import uz.dev.rentcar.exceptions.PasswordIncorrectException;
@@ -139,5 +140,18 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(error);
 
+    }
+
+    @ExceptionHandler(value = EntityAlreadyExistException.class)
+    public ResponseEntity<ErrorDTO> handle(EntityAlreadyExistException e) {
+
+        ErrorDTO error = new ErrorDTO(
+                e.getStatus().value(),
+                e.getMessage()
+        );
+
+        return ResponseEntity
+                .status(e.getStatus().value())
+                .body(error);
     }
 }

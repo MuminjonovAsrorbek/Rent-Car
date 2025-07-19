@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.dev.rentcar.entity.User;
+import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
 import uz.dev.rentcar.exceptions.PasswordIncorrectException;
 import uz.dev.rentcar.payload.request.LoginDTO;
@@ -69,6 +70,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public TokenDTO registerUser(RegisterDTO registerDTO) {
+
+        boolean exists = userRepository.existsByEmail(registerDTO.getEmail());
+
+        if (exists)
+            throw new EntityAlreadyExistException("User already registered by email :" + registerDTO.getEmail(), HttpStatus.BAD_REQUEST);
 
 
 
