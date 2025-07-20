@@ -3,10 +3,6 @@ package uz.dev.rentcar.exceptions;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-/**
- * Created by: asrorbek
- * DateTime: 6/20/25 15:49
- **/
 
 @Getter
 public class PasswordIncorrectException extends RuntimeException {

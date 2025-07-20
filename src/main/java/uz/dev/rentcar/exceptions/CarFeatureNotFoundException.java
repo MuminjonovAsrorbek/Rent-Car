@@ -6,15 +6,10 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class CarFeatureNotFoundException extends RuntimeException {
 
-    private HttpStatus status;
+    private final HttpStatus status;
 
-    private CarFeatureNotFoundException(String message) {
+    private CarFeatureNotFoundException(String message,HttpStatus status) {
         super(message);
-    }
-
-    public CarFeatureNotFoundException(HttpStatus status, Long id) {
-        this("CarFeature not found with id " + id);
         this.status = status;
     }
-
 }

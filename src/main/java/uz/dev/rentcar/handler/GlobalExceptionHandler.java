@@ -14,25 +14,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import uz.dev.rentcar.exceptions.CarFeatureNotFoundException;
 import uz.dev.rentcar.exceptions.CarNotFoundException;
 import uz.dev.rentcar.exceptions.CategoryNotFoundException;
-import uz.dev.rentcar.exceptions.ErrorDTO;
+import uz.dev.rentcar.payload.response.ErrorDTO;
 import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
 import uz.dev.rentcar.exceptions.InvalidRecaptchaTokenException;
 import uz.dev.rentcar.exceptions.PasswordIncorrectException;
-import uz.dev.rentcar.payload.response.ErrorDTO;
 import uz.dev.rentcar.payload.response.FieldErrorDTO;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@RestControllerAdvice("uz.dev.rentcar")
 @Service
-
 @RestControllerAdvice(basePackages = "uz.dev.rentcar")
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value = CarNotFoundException.class)
-    public ResponseEntity<ErrorDTO> carNotFound(CarNotFoundException ex) {
     @ExceptionHandler(value = InvalidRecaptchaTokenException.class)
     public ResponseEntity<ErrorDTO> invalidRecaptchaTokenException(InvalidRecaptchaTokenException ex) {
         ErrorDTO errorDTO = new ErrorDTO();
@@ -43,6 +38,33 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = EntityNotFoundException.class)
     public ResponseEntity<ErrorDTO> handle(EntityNotFoundException e) {
+        ErrorDTO errorDTO = new ErrorDTO(
+                e.getStatus().value(),
+                e.getMessage()
+        );
+        return new ResponseEntity<>(errorDTO, e.getStatus());
+    }
+
+    @ExceptionHandler(value = CarNotFoundException.class)
+    public ResponseEntity<ErrorDTO> handle(CarNotFoundException e) {
+        ErrorDTO errorDTO = new ErrorDTO(
+                e.getStatus().value(),
+                e.getMessage()
+        );
+        return new ResponseEntity<>(errorDTO, e.getStatus());
+    }
+
+    @ExceptionHandler(value = CarFeatureNotFoundException.class)
+    public ResponseEntity<ErrorDTO> handle(CarFeatureNotFoundException e) {
+        ErrorDTO errorDTO = new ErrorDTO(
+                e.getStatus().value(),
+                e.getMessage()
+        );
+        return new ResponseEntity<>(errorDTO, e.getStatus());
+    }
+
+    @ExceptionHandler(value = CategoryNotFoundException.class)
+    public ResponseEntity<ErrorDTO> handle(CategoryNotFoundException e) {
         ErrorDTO errorDTO = new ErrorDTO(
                 e.getStatus().value(),
                 e.getMessage()
@@ -113,9 +135,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
     public ResponseEntity<ErrorDTO> handle(ObjectOptimisticLockingFailureException e) {
 
-        ErrorDTO dto = new ErrorDTO(
-                ex.getMessage(),
-                ex.getStatus().value()
         ErrorDTO error = new ErrorDTO(
                 HttpStatus.CONFLICT.value(),
                 "This slot has already been booked. Please select another one."
@@ -125,15 +144,9 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(error);
 
-        return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = CategoryNotFoundException.class)
-    public ResponseEntity<ErrorDTO> carNotFound(CategoryNotFoundException ex) {
 
-        ErrorDTO dto = new ErrorDTO(
-                ex.getMessage(),
-                ex.getStatus().value()
     @ExceptionHandler(value = AuthorizationDeniedException.class)
     public ResponseEntity<ErrorDTO> handle(AuthorizationDeniedException e) {
 
@@ -145,17 +158,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.FORBIDDEN)
                 .body(error);
 
-        return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = CarFeatureNotFoundException.class)
-    public ResponseEntity<ErrorDTO> carNotFound(CarFeatureNotFoundException ex) {
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorDTO> handle(HttpMessageNotReadableException e) {
 
-        ErrorDTO dto = new ErrorDTO(
-                ex.getMessage(),
-                ex.getStatus().value()
         ErrorDTO error = new ErrorDTO(
                 HttpStatus.BAD_REQUEST.value(),
                 "This format not supported . Example 2025-07-01T10:00"
@@ -164,7 +171,6 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(error);
 
-        return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = EntityAlreadyExistException.class)

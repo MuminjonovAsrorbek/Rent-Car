@@ -6,14 +6,10 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class CategoryNotFoundException extends RuntimeException {
 
-    private HttpStatus status;
+    private final HttpStatus status;
 
-    private CategoryNotFoundException(String message) {
+    private CategoryNotFoundException(String message, HttpStatus status) {
         super(message);
-    }
-
-    public CategoryNotFoundException(HttpStatus status, Long id) {
-        this("Category not found with id " + id);
         this.status = status;
     }
 
