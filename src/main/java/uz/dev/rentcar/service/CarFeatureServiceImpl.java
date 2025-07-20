@@ -5,22 +5,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.entity.template.AbsLongEntity;
-import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
 import uz.dev.rentcar.payload.CarFeatureDTO;
 import uz.dev.rentcar.entity.CarFeature;
 import uz.dev.rentcar.mapper.CarFeatureMapper;
 import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.repository.CarFeatureRepository;
 import uz.dev.rentcar.repository.CarRepository;
-import uz.dev.rentcar.service.security.CarFeatureService;
+import uz.dev.rentcar.service.template.CarFeatureService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
