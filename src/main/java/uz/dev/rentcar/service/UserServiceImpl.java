@@ -17,6 +17,7 @@ import uz.dev.rentcar.payload.UserDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.repository.UserRepository;
 import uz.dev.rentcar.service.template.UserService;
+import uz.dev.rentcar.utils.SecurityUtils;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     private final PasswordEncoder passwordEncoder;
+    private final SecurityUtils securityUtils;
 
     @Override
     @Transactional
@@ -109,5 +111,13 @@ public class UserServiceImpl implements UserService {
 
         userRepository.delete(user);
 
+    }
+
+    @Override
+    public UserDTO getUserInfo() {
+
+        User currentUser = securityUtils.getCurrentUser();
+
+        return userMapper.toDTO(currentUser);
     }
 }
