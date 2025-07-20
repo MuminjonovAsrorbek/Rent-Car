@@ -74,7 +74,7 @@ public class Car extends AbsDeleteEntity {
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     @ToString.Exclude
-    private List<CarImage> images;
+    private List<Attachment> attachments;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     @ToString.Exclude

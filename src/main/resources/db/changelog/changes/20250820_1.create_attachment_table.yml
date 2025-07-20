@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: '018-create-attachment-table'
+      author: 'Asrorbek'
+      comment: 'Attachment table yaratilmoqda . Va uni Car(id) bog''lanyabdi'
+      changes:
+        - createTable:
+            tableName: 'attachments'
+            columns:
+              - column:
+                  name: 'id'
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: 'path'
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'original_name'
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'content_type'
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'size'
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'car_id'
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: 'fk_attachment_car'
+                    references: car(id)

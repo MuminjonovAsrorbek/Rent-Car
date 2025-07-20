@@ -33,3 +33,7 @@ databaseChangeLog:
       file: 'db/changelog/changes/20250818_16.create_payment_table.yml'
   - include:
       file: 'db/changelog/changes/20250818_17.create_car_categories_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250820_1.create_attachment_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250820_2.delete_car_image_table.yml'
