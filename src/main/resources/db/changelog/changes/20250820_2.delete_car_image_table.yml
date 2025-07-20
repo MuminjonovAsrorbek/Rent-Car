@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: '019-delete-car-image-table'
+      author: 'Asrorbek'
+      comment: 'Car image table dropped'
+      changes:
+        - dropTable:
+            tableName: 'car_image'
+            schemaName: public
