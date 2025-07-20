@@ -37,13 +37,13 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
 
     @Override
-    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Optional<User> optionalUser = userRepository.findByUsername(username);
+        Optional<User> optionalUser = userRepository.findByEmail(email);
 
         if (optionalUser.isEmpty())
 
-            throw new EntityNotFoundException("User not found with username : " + username, HttpStatus.NOT_FOUND);
+            throw new EntityNotFoundException("User not found with email : " + email, HttpStatus.NOT_FOUND);
 
         return optionalUser.get();
 
