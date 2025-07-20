@@ -10,6 +10,7 @@ import uz.dev.rentcar.exceptions.CarNotFoundException;
 import uz.dev.rentcar.mapper.CarFeatureMapper;
 import uz.dev.rentcar.repository.CarFeatureRepository;
 import uz.dev.rentcar.repository.CarRepository;
+import uz.dev.rentcar.service.security.CarFeatureService;
 
 import java.util.List;
 import java.util.stream.Collectors;

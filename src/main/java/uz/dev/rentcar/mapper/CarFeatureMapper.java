@@ -11,9 +11,9 @@ import uz.dev.rentcar.entity.CarFeature;
         componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CarFeatureMapper {
 
-    @Mapping(target = "carId",source = "car.id")
+    @Mapping(target = "carId", source = "car.id")
     CarFeatureDTO toDTO(CarFeature carFeature);
 
-    @Mapping(target = "car.id",source = "carId")
+    @Mapping(target = "car.id", source = "carId")
     CarFeature toEntity(CarFeatureDTO carFeatureDTO);
 }

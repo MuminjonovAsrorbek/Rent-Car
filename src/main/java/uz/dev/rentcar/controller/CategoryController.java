@@ -3,7 +3,7 @@ package uz.dev.rentcar.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import uz.dev.rentcar.payload.CategoryDTO;
-import uz.dev.rentcar.service.CategoryService;
+import uz.dev.rentcar.service.security.CategoryService;
 
 import java.util.List;
 

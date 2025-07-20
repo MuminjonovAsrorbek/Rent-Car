@@ -1,4 +1,4 @@
-package uz.dev.rentcar.service;
+package uz.dev.rentcar.service.security;
 
 import uz.dev.rentcar.payload.CarFeatureDTO;
 

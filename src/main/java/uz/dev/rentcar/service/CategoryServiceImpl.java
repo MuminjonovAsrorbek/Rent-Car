@@ -8,6 +8,7 @@ import uz.dev.rentcar.entity.Category;
 import uz.dev.rentcar.mapper.CarMapper;
 import uz.dev.rentcar.mapper.CategoryMapper;
 import uz.dev.rentcar.repository.CategoryRepository;
+import uz.dev.rentcar.service.security.CategoryService;
 
 import java.util.List;
 import java.util.stream.Collectors;
