@@ -43,34 +43,26 @@ public class CarFeatureServiceImpl implements CarFeatureService {
 
     @Override
     public CarFeatureDTO create(CarFeatureDTO carFeatureDTO) {
+//
+//        CarFeature carFeature = carFeatureMapper.toEntity(carFeatureDTO);
+//
+//        Car car = carRepository.findById(carFeatureDTO.getCarId())
+//                .orElseThrow(() -> new CarNotFoundException());
+//
+//        carFeature.setCar(car);
+//        carFeature.setFeatureName(carFeatureDTO.getFeatureName());
+//
+//        carFeatureRepository.save(carFeature);
+//
+//        return carFeatureMapper.toDTO(carFeature);
 
-        CarFeature carFeature = carFeatureMapper.toEntity(carFeatureDTO);
-
-        Car car = carRepository.findById(carFeatureDTO.getCarId())
-                .orElseThrow(() -> new CarNotFoundException(HttpStatus.NOT_FOUND, carFeatureDTO.getCarId()));
-
-        carFeature.setCar(car);
-        carFeature.setFeatureName(carFeatureDTO.getFeatureName());
-
-        carFeatureRepository.save(carFeature);
-
-        return carFeatureMapper.toDTO(carFeature);
+        return null;
     }
 
     @Override
     public CarFeatureDTO update(Long id, CarFeatureDTO carFeatureDTO) {
 
-        CarFeature carFeature = carFeatureRepository.getByIdOrThrow(id);
-
-        Car car = carRepository.findById(carFeatureDTO.getCarId())
-                .orElseThrow(() -> new CarNotFoundException(HttpStatus.NOT_FOUND, carFeatureDTO.getCarId()));
-
-        carFeature.setCar(car);
-        carFeature.setFeatureName(carFeatureDTO.getFeatureName());
-
-        carFeatureRepository.save(carFeature);
-
-        return carFeatureMapper.toDTO(carFeature);
+        return null;
     }
 
     @Override
