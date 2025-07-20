@@ -1,10 +1,20 @@
 package uz.dev.rentcar.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import uz.dev.rentcar.entity.Car;
+import uz.dev.rentcar.entity.template.AbsLongEntity;
+import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
 import uz.dev.rentcar.payload.CarFeatureDTO;
 import uz.dev.rentcar.entity.CarFeature;
 import uz.dev.rentcar.mapper.CarFeatureMapper;
+import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.repository.CarFeatureRepository;
 import uz.dev.rentcar.repository.CarRepository;
 import uz.dev.rentcar.service.security.CarFeatureService;
@@ -21,13 +31,25 @@ public class CarFeatureServiceImpl implements CarFeatureService {
     private final CarRepository carRepository;
 
     @Override
-    public List<CarFeatureDTO> readAll() {
+    public PageableDTO readAll(int page, int size) {
 
-        List<CarFeature> carFeatures = carFeatureRepository.findAll();
+        Sort sort = Sort.by(AbsLongEntity.Fields.id).ascending();
 
-        return carFeatures.stream()
-                .map(carFeatureMapper::toDTO)
-                .collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<CarFeature> carFeaturePage = carFeatureRepository.findAll(pageable);
+
+        List<CarFeature> features = carFeaturePage.getContent();
+
+        return new PageableDTO(
+                carFeaturePage.getSize(),
+                carFeaturePage.getTotalElements(),
+                carFeaturePage.getTotalPages(),
+                carFeaturePage.hasNext(),
+                carFeaturePage.hasPrevious(),
+                carFeatureMapper.toDTO(features)
+        );
+
     }
 
     @Override
@@ -39,30 +61,35 @@ public class CarFeatureServiceImpl implements CarFeatureService {
     }
 
     @Override
+    @Transactional
     public CarFeatureDTO create(CarFeatureDTO carFeatureDTO) {
-//
-//        CarFeature carFeature = carFeatureMapper.toEntity(carFeatureDTO);
-//
-//        Car car = carRepository.findById(carFeatureDTO.getCarId())
-//                .orElseThrow(() -> new CarNotFoundException());
-//
-//        carFeature.setCar(car);
-//        carFeature.setFeatureName(carFeatureDTO.getFeatureName());
-//
-//        carFeatureRepository.save(carFeature);
-//
-//        return carFeatureMapper.toDTO(carFeature);
 
-        return null;
+        CarFeature carFeature = carFeatureMapper.toEntity(carFeatureDTO);
+
+        carFeatureRepository.save(carFeature);
+
+        return carFeatureMapper.toDTO(carFeature);
+
     }
 
     @Override
+    @Transactional
     public CarFeatureDTO update(Long id, CarFeatureDTO carFeatureDTO) {
 
-        return null;
+        CarFeature carFeature = carFeatureRepository.getByIdOrThrow(id);
+
+        Car car = carRepository.getByIdOrThrow(carFeatureDTO.getCarId());
+
+        carFeature.setFeatureName(carFeatureDTO.getFeatureName());
+        carFeature.setCar(car);
+
+        carFeatureRepository.save(carFeature);
+
+        return carFeatureMapper.toDTO(carFeature);
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
 
         CarFeature carFeature = carFeatureRepository.getByIdOrThrow(id);

@@ -1,12 +1,13 @@
 package uz.dev.rentcar.service.security;
 
 import uz.dev.rentcar.payload.CarFeatureDTO;
+import uz.dev.rentcar.payload.response.PageableDTO;
 
 import java.util.List;
 
 public interface CarFeatureService {
 
-    List<CarFeatureDTO> readAll();
+    PageableDTO readAll(int page, int size);
 
     CarFeatureDTO read(Long id);
 

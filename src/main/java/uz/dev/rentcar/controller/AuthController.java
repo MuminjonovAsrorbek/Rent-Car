@@ -22,7 +22,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    private final RecaptchaService recaptchaService;
+//    private final RecaptchaService recaptchaService;
 
     @PostMapping("/login")
     public TokenDTO login(@RequestBody @Valid LoginDTO loginDTO) {
