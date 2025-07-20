@@ -13,10 +13,6 @@ import uz.dev.rentcar.payload.response.TokenDTO;
 import uz.dev.rentcar.service.template.AuthService;
 import uz.dev.rentcar.service.template.RecaptchaService;
 
-/**
- * Created by: asrorbek
- * DateTime: 6/21/25 13:34
- **/
 
 @Slf4j
 @RequestMapping("/api/auth")
