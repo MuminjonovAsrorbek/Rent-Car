@@ -2,23 +2,20 @@ package uz.dev.rentcar.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import uz.dev.rentcar.exceptions.CarFeatureNotFoundException;
-import uz.dev.rentcar.exceptions.CarNotFoundException;
-import uz.dev.rentcar.exceptions.CategoryNotFoundException;
-import uz.dev.rentcar.payload.response.ErrorDTO;
 import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
 import uz.dev.rentcar.exceptions.InvalidRecaptchaTokenException;
 import uz.dev.rentcar.exceptions.PasswordIncorrectException;
+import uz.dev.rentcar.payload.response.ErrorDTO;
 import uz.dev.rentcar.payload.response.FieldErrorDTO;
 
 import java.util.ArrayList;
@@ -38,33 +35,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = EntityNotFoundException.class)
     public ResponseEntity<ErrorDTO> handle(EntityNotFoundException e) {
-        ErrorDTO errorDTO = new ErrorDTO(
-                e.getStatus().value(),
-                e.getMessage()
-        );
-        return new ResponseEntity<>(errorDTO, e.getStatus());
-    }
-
-    @ExceptionHandler(value = CarNotFoundException.class)
-    public ResponseEntity<ErrorDTO> handle(CarNotFoundException e) {
-        ErrorDTO errorDTO = new ErrorDTO(
-                e.getStatus().value(),
-                e.getMessage()
-        );
-        return new ResponseEntity<>(errorDTO, e.getStatus());
-    }
-
-    @ExceptionHandler(value = CarFeatureNotFoundException.class)
-    public ResponseEntity<ErrorDTO> handle(CarFeatureNotFoundException e) {
-        ErrorDTO errorDTO = new ErrorDTO(
-                e.getStatus().value(),
-                e.getMessage()
-        );
-        return new ResponseEntity<>(errorDTO, e.getStatus());
-    }
-
-    @ExceptionHandler(value = CategoryNotFoundException.class)
-    public ResponseEntity<ErrorDTO> handle(CategoryNotFoundException e) {
         ErrorDTO errorDTO = new ErrorDTO(
                 e.getStatus().value(),
                 e.getMessage()
