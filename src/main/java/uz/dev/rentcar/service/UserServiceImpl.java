@@ -6,10 +6,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.entity.template.AbsLongEntity;
+import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
 import uz.dev.rentcar.mapper.UserMapper;
 import uz.dev.rentcar.payload.UserDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
@@ -82,13 +84,30 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByIdOrThrowException(id);
 
-        // update qilis kerak user uchun
+        if (userRepository.existsByEmail(userDTO.getEmail()) && !user.getEmail().equals(userDTO.getEmail())) {
 
-        return new UserDTO();
+            throw new EntityAlreadyExistException(userDTO.getEmail(), HttpStatus.CONFLICT);
+
+        }
+
+        user.setEmail(userDTO.getEmail());
+        user.setFullName(userDTO.getFullName());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user.setRole(userDTO.getRole());
+
+        userRepository.save(user);
+
+        return userMapper.toDTO(user);
+
     }
 
     @Override
+    @Transactional
     public void deleteUser(Long id) {
+
+        User user = userRepository.findByIdOrThrowException(id);
+
+        userRepository.delete(user);
 
     }
 }
