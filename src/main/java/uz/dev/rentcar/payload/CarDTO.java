@@ -79,7 +79,7 @@ public class CarDTO implements Serializable {
     private List<ReviewDTO> reviews;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<CarImageDTO> images;
+    private List<AttachmentDTO> attachments;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<CarLocationDTO> locations;

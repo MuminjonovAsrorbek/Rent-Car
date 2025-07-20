@@ -12,11 +12,12 @@ import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
         componentModel = MappingConstants.ComponentModel.SPRING,
-        uses = {CarFeatureMapper.class, BookingMapper.class, ReviewMapper.class, CarImageMapper.class, CarLocationMapper.class, FavoriteMapper.class}
+        uses = {CarFeatureMapper.class, BookingMapper.class, ReviewMapper.class, AttachmentMapper.class, CarLocationMapper.class, FavoriteMapper.class}
 )
 public interface CarMapper {
 
     @Mapping(target = "categories", ignore = true)
+    @Mapping(target = "attachments", ignore = true)
     CarDTO toDTO(Car car);
 
     List<CarDTO> toDTO(List<Car> cars);
@@ -28,7 +29,7 @@ public interface CarMapper {
     @Mapping(target = "categories", ignore = true)
     @Mapping(target = "bookings", ignore = true)
     @Mapping(target = "reviews", ignore = true)
-    @Mapping(target = "images", ignore = true)
+    @Mapping(target = "attachments", ignore = true)
     @Mapping(target = "features", ignore = true)
     @Mapping(target = "locations", ignore = true)
     @Mapping(target = "favorites", ignore = true)
