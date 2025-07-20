@@ -1,5 +1,7 @@
 package uz.dev.rentcar.payload;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,9 +16,20 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FavoriteDTO implements Serializable {
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Timestamp createdAt;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Timestamp updatedAt;
+
+    @JsonIgnore
     private boolean deleted = false;
+
     private Long userId;
+
+    private Long carId;
 }

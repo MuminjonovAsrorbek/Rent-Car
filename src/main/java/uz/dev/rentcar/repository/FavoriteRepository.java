@@ -1,7 +1,19 @@
 package uz.dev.rentcar.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
 import uz.dev.rentcar.entity.Favorite;
+import uz.dev.rentcar.entity.User;
+import uz.dev.rentcar.exceptions.EntityNotFoundException;
+
+import java.util.List;
 
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
+
+    List<Favorite> findAllByUserId(Long userId);
+
+    default Favorite getByIdOrThrow(Long id) {
+        return findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Favorite not found with id : " + id, HttpStatus.NOT_FOUND));
+    }
 }
