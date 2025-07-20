@@ -68,4 +68,10 @@ public class UserController {
         return ResponseEntity.ok("User deleted successfully");
     }
 
+    @GetMapping("/me")
+    public UserDTO getUserInfo() {
+
+        return userService.getUserInfo();
+
+    }
 }
