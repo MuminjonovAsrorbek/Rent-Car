@@ -7,7 +7,7 @@ spring:
   liquibase:
     enabled: true
     change-log: 'classpath:db/changelog/db.changelog-master.yml'
-    contexts: product
+    contexts: dev
     drop-first: false
     default-schema: public
     liquibase-schema: public
