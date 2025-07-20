@@ -1,25 +1,31 @@
 package uz.dev.rentcar.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import uz.dev.rentcar.payload.CategoryDTO;
-import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.entity.Category;
-import uz.dev.rentcar.mapper.CarMapper;
+import uz.dev.rentcar.entity.template.AbsLongEntity;
+import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
 import uz.dev.rentcar.mapper.CategoryMapper;
+import uz.dev.rentcar.payload.CategoryDTO;
+import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.repository.CategoryRepository;
 import uz.dev.rentcar.service.security.CategoryService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+
     private final CategoryMapper categoryMapper;
-    private final CarMapper carMapper;
 
     @Override
     public CategoryDTO read(Long id) {
@@ -30,29 +36,37 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDTO> readAll() {
+    public PageableDTO readAll(int page, int size) {
 
-        List<Category> categories = categoryRepository.findAll();
+        Sort sort = Sort.by(AbsLongEntity.Fields.id).ascending();
 
-        return categories.stream()
-                .map(categoryMapper::toDTO)
-                .collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Category> categoryPage = categoryRepository.findAll(pageable);
+
+        List<Category> categories = categoryPage.getContent();
+
+        return new PageableDTO(
+                categoryPage.getSize(),
+                categoryPage.getTotalElements(),
+                categoryPage.getTotalPages(),
+                categoryPage.hasNext(),
+                categoryPage.hasPrevious(),
+                categoryMapper.toDTO(categories)
+        );
+
     }
 
     @Override
+    @Transactional
     public CategoryDTO create(CategoryDTO categoryDTO) {
 
+        boolean exists = categoryRepository.existsByName(categoryDTO.getName());
+
+        if (exists)
+            throw new EntityAlreadyExistException("Category already exist by name : " + categoryDTO.getName(), HttpStatus.CONFLICT);
+
         Category category = categoryMapper.toEntity(categoryDTO);
-
-        category.setName(category.getName());
-        category.setDescription(category.getDescription());
-
-        List<Car> cars = categoryDTO.getCars()
-                .stream()
-                .map(carMapper::toEntity)
-                .collect(Collectors.toList());
-
-        category.setCars(cars);
 
         categoryRepository.save(category);
 
@@ -60,19 +74,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryDTO update(Long id, CategoryDTO categoryDTO) {
 
         Category category = categoryRepository.getByIdOrThrow(id);
 
         category.setName(categoryDTO.getName());
+
         category.setDescription(categoryDTO.getDescription());
-
-        List<Car> cars = categoryDTO.getCars()
-                .stream()
-                .map(carMapper::toEntity)
-                .collect(Collectors.toList());
-
-        category.setCars(cars);
 
         categoryRepository.save(category);
 
@@ -80,6 +89,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
 
         Category category = categoryRepository.getByIdOrThrow(id);

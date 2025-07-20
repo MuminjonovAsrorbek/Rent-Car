@@ -1,14 +1,13 @@
 package uz.dev.rentcar.service.security;
 
 import uz.dev.rentcar.payload.CategoryDTO;
-
-import java.util.List;
+import uz.dev.rentcar.payload.response.PageableDTO;
 
 public interface CategoryService {
 
     CategoryDTO read(Long id);
 
-    List<CategoryDTO> readAll();
+    PageableDTO readAll(int page, int size);
 
     CategoryDTO create(CategoryDTO categoryDTO);
 
