@@ -1,0 +1,21 @@
+package uz.dev.rentcar.exceptions;
+
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+
+/**
+ * Created by: asrorbek
+ * DateTime: 6/20/25 15:41
+ **/
+
+@Getter
+public class EntityAlreadyExistException extends RuntimeException {
+
+    private final HttpStatus status;
+
+    public EntityAlreadyExistException(String message, HttpStatus status) {
+        super(message);
+        this.status = status;
+
+    }
+}

@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import uz.dev.rentcar.entity.template.AbsDeleteEntity;
 
 import java.math.BigDecimal;
@@ -18,6 +20,8 @@ import java.util.List;
 @ToString
 @Entity
 @FieldNameConstants
+@SQLDelete(sql = "update office set deleted=true where id=?")
+@SQLRestriction(value = "deleted=false")
 public class Office extends AbsDeleteEntity {
 
     @Column(nullable = false)

@@ -3,9 +3,15 @@ package uz.dev.rentcar.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import uz.dev.rentcar.entity.template.AbsDeleteEntity;
 import uz.dev.rentcar.enums.RoleEnum;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -21,7 +27,9 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @FieldNameConstants
-public class User extends AbsDeleteEntity {
+@SQLDelete(sql = "update users set deleted=true where id=?")
+@SQLRestriction(value = "deleted=false")
+public class User extends AbsDeleteEntity implements UserDetails {
 
     @Column(nullable = false)
     private String fullName;
@@ -55,4 +63,13 @@ public class User extends AbsDeleteEntity {
     @ToString.Exclude
     private List<Notification> notifications;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
 }
