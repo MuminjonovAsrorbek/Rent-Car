@@ -1,9 +1,7 @@
-package uz.dev.rentcar.service.security;
+package uz.dev.rentcar.service.template;
 
 import uz.dev.rentcar.payload.CarFeatureDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
-
-import java.util.List;
 
 public interface CarFeatureService {
 

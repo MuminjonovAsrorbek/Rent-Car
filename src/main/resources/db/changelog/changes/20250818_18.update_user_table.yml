@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: '018-update-user-table'
+      author: "Ulug'bek"
+      changes:
+        - addColumn:
+            tableName: 'users'
+            columns:
+              - column:
+                  name: 'full_name'
+                  type: varchar
+                  defaultValue: 'Olim Olimov'
+                  constraints:
+                    nullable: false

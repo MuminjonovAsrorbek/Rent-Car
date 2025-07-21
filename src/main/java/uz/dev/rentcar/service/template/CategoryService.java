@@ -1,4 +1,4 @@
-package uz.dev.rentcar.service.security;
+package uz.dev.rentcar.service.template;
 
 import uz.dev.rentcar.payload.CategoryDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
