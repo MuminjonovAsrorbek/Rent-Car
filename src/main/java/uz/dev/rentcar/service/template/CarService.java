@@ -1,5 +1,6 @@
 package uz.dev.rentcar.service.template;
 
+import org.springframework.web.multipart.MultipartFile;
 import uz.dev.rentcar.payload.CarDTO;
 import uz.dev.rentcar.payload.request.CreateCarDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
@@ -10,7 +11,6 @@ import uz.dev.rentcar.payload.response.PageableDTO;
  **/
 
 public interface CarService {
-    CarDTO createCar(CreateCarDTO carDTO);
 
     CarDTO getCarById(Long id);
 
@@ -20,4 +20,5 @@ public interface CarService {
 
     void deleteCar(Long id);
 
+    CarDTO createCar(CreateCarDTO carDTO, MultipartFile[] images);
 }

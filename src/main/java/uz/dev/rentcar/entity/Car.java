@@ -55,7 +55,7 @@ public class Car extends AbsDeleteEntity {
     @Column(nullable = false)
     private String transmission;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "car_categories",
             joinColumns = @JoinColumn(name = "car_id"),

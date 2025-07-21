@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
 import uz.dev.rentcar.exceptions.InvalidRecaptchaTokenException;
@@ -153,6 +154,19 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(e.getStatus().value())
+                .body(error);
+    }
+
+    @ExceptionHandler(value = MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErrorDTO> handle(MaxUploadSizeExceededException e) {
+
+        ErrorDTO error = new ErrorDTO(
+                HttpStatus.PAYLOAD_TOO_LARGE.value(),
+                e.getMessage()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.PAYLOAD_TOO_LARGE.value())
                 .body(error);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.dev.rentcar.entity.User;
+import uz.dev.rentcar.enums.RoleEnum;
 import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
 import uz.dev.rentcar.exceptions.PasswordIncorrectException;
@@ -82,11 +83,13 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userMapper.toEntity(registerDTO);
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+
+        user.setRole(RoleEnum.USER);
 
         userRepository.save(user);
 
-        LoginDTO loginDTO = new LoginDTO(user.getUsername(), user.getPassword());
+        LoginDTO loginDTO = new LoginDTO(user.getEmail(), registerDTO.getPassword());
 
         return getToken(loginDTO);
     }
