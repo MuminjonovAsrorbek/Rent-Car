@@ -2,21 +2,24 @@ package uz.dev.rentcar.payload;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
- * DTO for {@link uz.dev.rentcar.entity.Review}
+ * DTO for {@link uz.dev.rentcar.entity.Office}
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewDTO implements Serializable {
+public class OfficeDTO implements Serializable {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
@@ -30,12 +33,21 @@ public class ReviewDTO implements Serializable {
     @JsonIgnore
     private boolean deleted = false;
 
+    @NotBlank
+    private String name;
+
+    @NotBlank
+    private String address;
+
     @NotNull
-    private int rating;
+    private BigDecimal latitude;
 
-    private String comment;
+    @NotNull
+    private BigDecimal longitude;
 
-    private Long userId;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private List<BookingDTO> pickupBookings;
 
-    private Long carId;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private List<BookingDTO> returnBookings;
 }

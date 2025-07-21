@@ -15,7 +15,7 @@ import uz.dev.rentcar.mapper.CategoryMapper;
 import uz.dev.rentcar.payload.CategoryDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.repository.CategoryRepository;
-import uz.dev.rentcar.service.security.CategoryService;
+import uz.dev.rentcar.service.template.CategoryService;
 
 import java.util.List;
 

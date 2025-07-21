@@ -4,12 +4,11 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.dev.rentcar.payload.CategoryDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
-import uz.dev.rentcar.service.security.CategoryService;
-
-import java.util.List;
+import uz.dev.rentcar.service.template.CategoryService;
 
 @RestController
 @RequestMapping("/api/category")
@@ -18,6 +17,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/{id}")
     public CategoryDTO read(@PathVariable Long id) {
 
@@ -25,6 +25,7 @@ public class CategoryController {
 
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping
     public PageableDTO readAll(@Parameter(description = "Page number", example = "0")
                                @RequestParam(value = "page", defaultValue = "0") int page,
@@ -35,6 +36,7 @@ public class CategoryController {
 
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public CategoryDTO create(@RequestBody @Valid CategoryDTO categoryDTO) {
 
@@ -42,6 +44,7 @@ public class CategoryController {
 
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public CategoryDTO update(@PathVariable Long id,
                               @RequestBody @Valid CategoryDTO categoryDTO) {
@@ -50,6 +53,7 @@ public class CategoryController {
 
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
 
