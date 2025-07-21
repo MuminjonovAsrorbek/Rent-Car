@@ -2,8 +2,11 @@ package uz.dev.rentcar.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import uz.dev.rentcar.payload.CarDTO;
 import uz.dev.rentcar.payload.request.CreateCarDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
@@ -21,10 +24,12 @@ public class CarController {
 
     private final CarService carService;
 
-    @PostMapping
-    public CarDTO createCar(@RequestBody @Valid CreateCarDTO carDTO) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    public CarDTO createCar(@RequestParam("carDTO") @Valid CreateCarDTO carDTO,
+                            @RequestPart(name = "images", required = false) MultipartFile[] images) {
 
-        return carService.createCar(carDTO);
+        return carService.createCar(carDTO, images);
 
     }
 

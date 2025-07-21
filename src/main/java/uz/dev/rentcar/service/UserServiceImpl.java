@@ -41,9 +41,15 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDTO createUser(UserDTO userDTO) {
 
+        if (userRepository.existsByEmail(userDTO.getEmail())) {
+
+            throw new EntityAlreadyExistException("User already exist by email : " + userDTO.getEmail(), HttpStatus.CONFLICT);
+
+        }
+
         User user = userMapper.toEntity(userDTO);
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
         userRepository.save(user);
 

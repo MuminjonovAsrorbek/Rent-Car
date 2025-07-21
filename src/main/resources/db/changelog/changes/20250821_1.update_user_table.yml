@@ -9,6 +9,5 @@ databaseChangeLog:
               - column:
                   name: 'full_name'
                   type: varchar
-                  defaultValue: 'Olim Olimov'
                   constraints:
                     nullable: false
