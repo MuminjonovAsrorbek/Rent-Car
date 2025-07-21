@@ -15,6 +15,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import uz.dev.rentcar.filter.JWTFilter;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 /**
  * Created by: asrorbek
  * DateTime: 6/22/25 10:02
@@ -35,7 +37,7 @@ public class SecurityConfig {
 
         http.csrf(AbstractHttpConfigurer::disable);
 
-        http.cors(cors -> cors.configurationSource(request -> corsConfiguration));
+        http.cors(withDefaults());
 
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

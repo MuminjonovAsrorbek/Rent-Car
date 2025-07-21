@@ -3,10 +3,11 @@ package uz.dev.rentcar.config.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
- Created by: asrorbek
- DateTime: 28/06/25 21:06
+ * Created by: asrorbek
+ * DateTime: 28/06/25 21:06
  **/
 @Configuration
 public class CorsConfig {
@@ -17,6 +18,11 @@ public class CorsConfig {
         configuration.addAllowedOrigin("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration("/**", configuration);
+
         return configuration;
     }
 
