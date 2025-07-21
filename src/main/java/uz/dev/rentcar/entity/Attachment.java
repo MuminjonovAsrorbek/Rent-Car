@@ -33,6 +33,8 @@ public class Attachment {
     @Column(nullable = false)
     private Long size;
 
+    private boolean isPrimary = false;
+
     @ManyToOne
     private Car car;
 }
