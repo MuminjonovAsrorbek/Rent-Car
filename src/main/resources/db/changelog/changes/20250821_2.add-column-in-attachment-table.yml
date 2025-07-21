@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: '020-add-column-in-attachment-table'
+      author: 'Asrorbek'
+      comment: 'Attachment tablega yangi ustun qo''shish'
+      changes:
+        - addColumn:
+            tableName: 'attachments'
+            columns:
+              - column:
+                  name: 'is_primary'
+                  type: boolean
+                  defaultValue: false
+                  constraints:
+                    nullable: false
