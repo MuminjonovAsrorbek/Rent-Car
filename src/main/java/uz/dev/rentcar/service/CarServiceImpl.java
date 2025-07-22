@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uz.dev.rentcar.entity.Car;
+import uz.dev.rentcar.enums.FuelTypeEnum;
 import uz.dev.rentcar.mapper.CarMapper;
 import uz.dev.rentcar.payload.AttachmentDTO;
 import uz.dev.rentcar.payload.CarDTO;
@@ -20,6 +21,7 @@ import uz.dev.rentcar.service.template.CarService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Created by: asrorbek
@@ -38,7 +40,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     @Transactional
-    public CarDTO createCar(CreateCarDTO carDTO, MultipartFile[] images) {
+    public CarDTO createCar(CreateCarDTO carDTO, List<MultipartFile> images) {
 
         try {
 
@@ -57,6 +59,17 @@ public class CarServiceImpl implements CarService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<String> getAllFuelTypes() {
+
+        FuelTypeEnum[] values = FuelTypeEnum.values();
+
+        return values.length == 0 ? List.of() : Stream.of(values)
+                .map(FuelTypeEnum::name)
+                .toList();
+
     }
 
     @Override

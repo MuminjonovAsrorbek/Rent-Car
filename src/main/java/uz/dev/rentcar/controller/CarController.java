@@ -12,6 +12,8 @@ import uz.dev.rentcar.payload.request.CreateCarDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.service.template.CarService;
 
+import java.util.List;
+
 /**
  * Created by: asrorbek
  * DateTime: 7/20/25 13:40
@@ -27,7 +29,7 @@ public class CarController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public CarDTO createCar(@RequestParam("carDTO") @Valid CreateCarDTO carDTO,
-                            @RequestPart(name = "images", required = false) MultipartFile[] images) {
+                            @RequestPart(name = "images", required = false) List<MultipartFile> images) {
 
         return carService.createCar(carDTO, images);
 
@@ -61,6 +63,13 @@ public class CarController {
         carService.deleteCar(id);
 
         return ResponseEntity.ok("Car deleted successfully");
+
+    }
+
+    @GetMapping("/fuelTypes")
+    public List<String> getAllFuelTypes() {
+
+        return carService.getAllFuelTypes();
 
     }
 
