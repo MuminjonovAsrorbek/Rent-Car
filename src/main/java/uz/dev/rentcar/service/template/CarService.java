@@ -5,6 +5,8 @@ import uz.dev.rentcar.payload.CarDTO;
 import uz.dev.rentcar.payload.request.CreateCarDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
 
+import java.util.List;
+
 /**
  * Created by: asrorbek
  * DateTime: 7/20/25 13:43
@@ -20,5 +22,8 @@ public interface CarService {
 
     void deleteCar(Long id);
 
-    CarDTO createCar(CreateCarDTO carDTO, MultipartFile[] images);
+    CarDTO createCar(CreateCarDTO carDTO, List<MultipartFile> images);
+
+    List<String> getAllFuelTypes();
+
 }

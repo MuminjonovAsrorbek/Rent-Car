@@ -14,7 +14,7 @@ import java.util.List;
  **/
 
 public interface AttachmentService {
-    List<AttachmentDTO> uploadFiles(MultipartFile[] images, Car savedCar) throws IOException;
+    List<AttachmentDTO> uploadFiles(List<MultipartFile> images, Car savedCar) throws IOException;
 
     Attachment downloadFile(Long id);
 }

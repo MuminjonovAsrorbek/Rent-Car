@@ -42,13 +42,13 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     @Override
     @Transactional
-    public List<AttachmentDTO> uploadFiles(MultipartFile[] images, Car savedCar) throws IOException {
+    public List<AttachmentDTO> uploadFiles(List<MultipartFile> images, Car savedCar) throws IOException {
 
         List<AttachmentDTO> attachmentDTOs = new ArrayList<>();
 
         boolean isFirst = true;
 
-        if (images != null && images.length > 0) {
+        if (images != null && !images.isEmpty()) {
 
             for (MultipartFile image : images) {
 
