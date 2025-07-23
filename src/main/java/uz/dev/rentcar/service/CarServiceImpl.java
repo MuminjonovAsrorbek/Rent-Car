@@ -69,6 +69,8 @@ public class CarServiceImpl implements CarService {
 
         Car car = carRepository.getByIdOrThrow(id);
 
+        int size = car.getAttachments().size();
+
         return carMapper.toDTO(car);
     }
 

@@ -1,5 +1,6 @@
 package uz.dev.rentcar.payload;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,10 +14,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AttachmentDTO implements Serializable {
-    private Integer id;
-    private String path;
-    private String originalName;
-    private String contentType;
-    private Long size;
-    private Long carId;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Long id;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String url;
 }

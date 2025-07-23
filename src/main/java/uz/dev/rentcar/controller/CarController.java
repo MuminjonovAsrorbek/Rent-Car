@@ -26,7 +26,7 @@ public class CarController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public CarDTO createCar(@RequestParam @Valid CreateCarDTO carDTO) {
+    public CarDTO createCar(@RequestBody @Valid CreateCarDTO carDTO) {
 
         return carService.createCar(carDTO);
 
