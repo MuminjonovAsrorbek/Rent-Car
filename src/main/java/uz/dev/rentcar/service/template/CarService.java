@@ -1,6 +1,5 @@
 package uz.dev.rentcar.service.template;
 
-import org.springframework.web.multipart.MultipartFile;
 import uz.dev.rentcar.payload.CarDTO;
 import uz.dev.rentcar.payload.request.CreateCarDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
@@ -22,7 +21,7 @@ public interface CarService {
 
     void deleteCar(Long id);
 
-    CarDTO createCar(CreateCarDTO carDTO, List<MultipartFile> images);
+    CarDTO createCar(CreateCarDTO carDTO);
 
     List<String> getAllFuelTypes();
 

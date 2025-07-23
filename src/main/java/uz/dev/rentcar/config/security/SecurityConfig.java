@@ -12,10 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
 import uz.dev.rentcar.filter.JWTFilter;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 /**
  * Created by: asrorbek
@@ -30,14 +27,10 @@ public class SecurityConfig {
 
     private final JWTFilter jwtFilter;
 
-    private final CorsConfiguration corsConfiguration;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable);
-
-        http.cors(withDefaults());
 
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

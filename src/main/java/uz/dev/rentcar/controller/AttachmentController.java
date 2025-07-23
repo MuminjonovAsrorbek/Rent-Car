@@ -5,14 +5,15 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import uz.dev.rentcar.entity.Attachment;
+import uz.dev.rentcar.payload.CarDTO;
 import uz.dev.rentcar.service.template.AttachmentService;
 
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 /**
  * Created by: asrorbek
@@ -41,6 +42,14 @@ public class AttachmentController {
                 .contentType(MediaType.parseMediaType(attachment.getContentType()))
                 .contentLength(attachment.getSize())
                 .body(resource);
+    }
+
+    @PostMapping(path = "/{carId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public CarDTO uploadFiles(@PathVariable Long carId,
+                              @RequestParam("files") List<MultipartFile> files) throws IOException {
+
+        return attachmentService.uploadFiles(files, carId);
+
     }
 
 }

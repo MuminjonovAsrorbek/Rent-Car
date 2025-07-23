@@ -41,3 +41,5 @@ databaseChangeLog:
       file: 'db/changelog/changes/20250820_2.delete_car_image_table.yml'
   - include:
       file: 'db/changelog/changes/20250821_2.add-column-in-attachment-table.yml'
+  - include:
+      file: 'db/changelog/changes/20250823_1.add_enum_column_car_table.yml'

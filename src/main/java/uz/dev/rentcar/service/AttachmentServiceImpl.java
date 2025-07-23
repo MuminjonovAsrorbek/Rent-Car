@@ -10,9 +10,10 @@ import org.springframework.web.server.ResponseStatusException;
 import uz.dev.rentcar.entity.Attachment;
 import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
-import uz.dev.rentcar.mapper.AttachmentMapper;
-import uz.dev.rentcar.payload.AttachmentDTO;
+import uz.dev.rentcar.mapper.CarMapper;
+import uz.dev.rentcar.payload.CarDTO;
 import uz.dev.rentcar.repository.AttachmentRepository;
+import uz.dev.rentcar.repository.CarRepository;
 import uz.dev.rentcar.service.template.AttachmentService;
 
 import java.io.FileNotFoundException;
@@ -35,16 +36,20 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     private final AttachmentRepository attachmentRepository;
 
-    private final AttachmentMapper attachmentMapper;
+    private final CarRepository carRepository;
+
+    private final CarMapper carMapper;
 
     @Value("${myapp.upload-path}")
     private String UPLOAD_PATH;
 
     @Override
     @Transactional
-    public List<AttachmentDTO> uploadFiles(List<MultipartFile> images, Car savedCar) throws IOException {
+    public CarDTO uploadFiles(List<MultipartFile> images, Long carId) throws IOException {
 
-        List<AttachmentDTO> attachmentDTOs = new ArrayList<>();
+        Car car = carRepository.getByIdOrThrow(carId);
+
+        List<Attachment> list = new ArrayList<>();
 
         boolean isFirst = true;
 
@@ -80,14 +85,16 @@ public class AttachmentServiceImpl implements AttachmentService {
                 attachment.setOriginalName(originalFilename);
                 attachment.setContentType(contentType);
                 attachment.setSize(size);
-                attachment.setCar(savedCar);
+                attachment.setCar(car);
                 attachment.setPrimary(isFirst);
 
                 Attachment saved = attachmentRepository.save(attachment);
 
+                list.add(saved);
+
                 if (isFirst) {
 
-                    savedCar.setImageUrl(
+                    car.setImageUrl(
                             "/api/attachments/download/" + saved.getId()
                     );
 
@@ -95,11 +102,13 @@ public class AttachmentServiceImpl implements AttachmentService {
 
                 isFirst = false;
 
-                attachmentDTOs.add(attachmentMapper.toDTO(attachment));
-
             }
 
-            return attachmentDTOs;
+            car.setAttachments(list);
+
+            Car savedCar = carRepository.save(car);
+
+            return carMapper.toDTO(savedCar);
 
         }
 

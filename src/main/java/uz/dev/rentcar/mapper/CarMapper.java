@@ -17,7 +17,7 @@ import java.util.List;
 public interface CarMapper {
 
     @Mapping(target = "categories", ignore = true)
-    @Mapping(target = "attachments", ignore = true)
+    @Mapping(target = "images", source = "attachments")
     CarDTO toDTO(Car car);
 
     List<CarDTO> toDTO(List<Car> cars);

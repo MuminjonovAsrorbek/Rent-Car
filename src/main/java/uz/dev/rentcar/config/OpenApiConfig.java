@@ -30,11 +30,6 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 description = "Spring 6 Wiki Documentation", url = "https://springshop.wiki.github.org/docs"
         ),
         servers = {
-
-                @Server(
-                        url = "http://192.168.100.61:8080",
-                        description = "Production-Server"
-                ),
                 @Server(
                         url = "http://localhost:8080",
                         description = "Development-Server"
