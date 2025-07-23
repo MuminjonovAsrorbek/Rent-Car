@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.dev.rentcar.entity.Attachment;
+import uz.dev.rentcar.payload.AttachmentDTO;
 import uz.dev.rentcar.payload.CarDTO;
 import uz.dev.rentcar.service.template.AttachmentService;
 
@@ -49,6 +50,13 @@ public class AttachmentController {
                               @RequestParam("files") List<MultipartFile> files) throws IOException {
 
         return attachmentService.uploadFiles(files, carId);
+
+    }
+
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public List<AttachmentDTO> createImages(@RequestParam("files") List<MultipartFile> files) throws IOException {
+
+        return attachmentService.createImages(files);
 
     }
 
