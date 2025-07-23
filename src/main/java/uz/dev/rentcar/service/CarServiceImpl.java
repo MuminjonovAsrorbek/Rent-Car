@@ -7,19 +7,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import uz.dev.rentcar.entity.Car;
+import uz.dev.rentcar.entity.Category;
 import uz.dev.rentcar.enums.FuelTypeEnum;
 import uz.dev.rentcar.mapper.CarMapper;
-import uz.dev.rentcar.payload.AttachmentDTO;
 import uz.dev.rentcar.payload.CarDTO;
 import uz.dev.rentcar.payload.request.CreateCarDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.repository.CarRepository;
-import uz.dev.rentcar.service.template.AttachmentService;
+import uz.dev.rentcar.repository.CategoryRepository;
 import uz.dev.rentcar.service.template.CarService;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -36,29 +34,23 @@ public class CarServiceImpl implements CarService {
 
     private final CarMapper carMapper;
 
-    private final AttachmentService attachmentService;
+    private final CategoryRepository categoryRepository;
 
     @Override
     @Transactional
-    public CarDTO createCar(CreateCarDTO carDTO, List<MultipartFile> images) {
+    public CarDTO createCar(CreateCarDTO carDTO) {
 
-        try {
+        Car car = carMapper.toEntity(carDTO);
 
-            Car car = carMapper.toEntity(carDTO);
+        List<Category> categories = carDTO.getCategoriesIds().stream().map(
+                categoryRepository::getByIdOrThrow).toList();
 
-            Car savedCar = carRepository.save(car);
+        car.setCategories(categories);
 
-            List<AttachmentDTO> attachmentDTOS = attachmentService.uploadFiles(images, savedCar);
+        Car savedCar = carRepository.save(car);
 
-            CarDTO dto = carMapper.toDTO(savedCar);
+        return carMapper.toDTO(savedCar);
 
-            dto.setAttachments(attachmentDTOS);
-
-            return dto;
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import uz.dev.rentcar.entity.template.AbsDeleteEntity;
 import uz.dev.rentcar.enums.FuelTypeEnum;
+import uz.dev.rentcar.enums.TransmissionEnum;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -48,12 +49,14 @@ public class Car extends AbsDeleteEntity {
     private int seats;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private FuelTypeEnum fuelType;
 
     private BigDecimal fuelConsumption;
 
     @Column(nullable = false)
-    private String transmission;
+    @Enumerated(EnumType.STRING)
+    private TransmissionEnum transmission;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
