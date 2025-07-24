@@ -2,6 +2,7 @@ package uz.dev.rentcar.service.template;
 
 import uz.dev.rentcar.payload.CarDTO;
 import uz.dev.rentcar.payload.request.CreateCarDTO;
+import uz.dev.rentcar.payload.request.UpdateCarDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface CarService {
 
     PageableDTO getAllCars(int page, int size);
 
-    CarDTO updateCar(Long id, CarDTO carDTO);
+    CarDTO updateCar(Long id, UpdateCarDTO carDTO);
 
     void deleteCar(Long id);
 

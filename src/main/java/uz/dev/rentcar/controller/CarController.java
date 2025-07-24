@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.dev.rentcar.payload.CarDTO;
 import uz.dev.rentcar.payload.request.CreateCarDTO;
+import uz.dev.rentcar.payload.request.UpdateCarDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.service.template.CarService;
 
@@ -48,7 +49,7 @@ public class CarController {
     }
 
     @PutMapping("/{id}")
-    public CarDTO updateCar(@PathVariable Long id, @RequestBody @Valid CarDTO carDTO) {
+    public CarDTO updateCar(@PathVariable Long id, @RequestBody @Valid UpdateCarDTO carDTO) {
 
         return carService.updateCar(id, carDTO);
 

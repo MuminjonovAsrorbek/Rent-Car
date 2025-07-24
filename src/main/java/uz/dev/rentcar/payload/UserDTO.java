@@ -44,6 +44,7 @@ public class UserDTO implements Serializable {
     private String email;
 
     @NotBlank
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @NotNull
