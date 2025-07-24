@@ -7,19 +7,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import uz.dev.rentcar.entity.Attachment;
 import uz.dev.rentcar.entity.Car;
+import uz.dev.rentcar.entity.Category;
 import uz.dev.rentcar.enums.FuelTypeEnum;
 import uz.dev.rentcar.mapper.CarMapper;
-import uz.dev.rentcar.payload.AttachmentDTO;
 import uz.dev.rentcar.payload.CarDTO;
 import uz.dev.rentcar.payload.request.CreateCarDTO;
+import uz.dev.rentcar.payload.request.UpdateCarDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
+import uz.dev.rentcar.repository.AttachmentRepository;
 import uz.dev.rentcar.repository.CarRepository;
-import uz.dev.rentcar.service.template.AttachmentService;
+import uz.dev.rentcar.repository.CategoryRepository;
 import uz.dev.rentcar.service.template.CarService;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -36,29 +38,25 @@ public class CarServiceImpl implements CarService {
 
     private final CarMapper carMapper;
 
-    private final AttachmentService attachmentService;
+    private final CategoryRepository categoryRepository;
+
+    private final AttachmentRepository attachmentRepository;
 
     @Override
     @Transactional
-    public CarDTO createCar(CreateCarDTO carDTO, List<MultipartFile> images) {
+    public CarDTO createCar(CreateCarDTO carDTO) {
 
-        try {
+        Car car = carMapper.toEntity(carDTO);
 
-            Car car = carMapper.toEntity(carDTO);
+        List<Category> categories = carDTO.getCategoriesIds().stream().map(
+                categoryRepository::getByIdOrThrow).toList();
 
-            Car savedCar = carRepository.save(car);
+        car.setCategories(categories);
 
-            List<AttachmentDTO> attachmentDTOS = attachmentService.uploadFiles(images, savedCar);
+        Car savedCar = carRepository.save(car);
 
-            CarDTO dto = carMapper.toDTO(savedCar);
+        return carMapper.toDTO(savedCar);
 
-            dto.setAttachments(attachmentDTOS);
-
-            return dto;
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -76,6 +74,8 @@ public class CarServiceImpl implements CarService {
     public CarDTO getCarById(Long id) {
 
         Car car = carRepository.getByIdOrThrow(id);
+
+        int size = car.getAttachments().size();
 
         return carMapper.toDTO(car);
     }
@@ -103,11 +103,50 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public CarDTO updateCar(Long id, CarDTO carDTO) {
+    @Transactional
+    public CarDTO updateCar(Long id, UpdateCarDTO carDTO) {
+        Car car = carRepository.getByIdOrThrow(id);
 
-        return null;
+        carMapper.updateCar(carDTO, car);
 
+        List<Category> categories = new ArrayList<>(carDTO.getCategoriesIds().stream()
+                .map(categoryRepository::getByIdOrThrow)
+                .toList());
+
+        car.setCategories(categories);
+
+        if (carDTO.getMainImageId() != null) {
+            Attachment mainImage = attachmentRepository.findByIdOrThrowException(carDTO.getMainImageId());
+            mainImage.setPrimary(true);
+            mainImage.setCar(car);
+            car.setImageUrl("/api/attachments/download/" + mainImage.getId());
+        }
+
+        List<Attachment> attachments = new ArrayList<>(carDTO.getAttachmentIds().stream()
+                .map(attachmentRepository::findByIdOrThrowException)
+                .toList());
+
+        if (car.getAttachments() != null) {
+            car.getAttachments().clear();
+        } else {
+            car.setAttachments(new ArrayList<>());
+        }
+
+        attachments.forEach(attachment -> {
+            attachment.setCar(car);
+            if (!car.getAttachments().contains(attachment)) {
+                car.getAttachments().add(attachment);
+            }
+        });
+
+        System.out.println("Before save - Attachments class: " + car.getAttachments().getClass().getName());
+        car.getAttachments().forEach(a -> System.out.println("Attachment ID: " + a.getId() + ", Car: " + a.getCar()));
+
+        Car savedCar = carRepository.save(car);
+
+        return carMapper.toDTO(savedCar);
     }
+
 
     @Override
     @Transactional

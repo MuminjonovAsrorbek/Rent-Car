@@ -1,6 +1,6 @@
 package uz.dev.rentcar.payload.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -14,13 +14,14 @@ import java.util.List;
 
 /**
  * Created by: asrorbek
- * DateTime: 7/20/25 14:18
+ * DateTime: 7/23/25 16:53
  **/
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class CreateCarDTO {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class UpdateCarDTO {
 
     @NotBlank
     private String brand;
@@ -33,13 +34,6 @@ public class CreateCarDTO {
 
     @NotNull
     private Long pricePerDay;
-
-    private boolean available = true;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private String imageUrl;
-
-    private String description;
 
     @NotNull
     private int seats;
@@ -54,5 +48,9 @@ public class CreateCarDTO {
 
     @NotNull
     private List<Long> categoriesIds;
+
+    private Long mainImageId;
+
+    private List<Long> attachmentIds;
 
 }

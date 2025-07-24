@@ -7,8 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.dev.rentcar.payload.CategoryDTO;
+import uz.dev.rentcar.payload.request.CategorySearchDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.service.template.CategoryService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/category")
@@ -35,6 +38,15 @@ public class CategoryController {
         return categoryService.readAll(page, size);
 
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @GetMapping("/search")
+    public List<CategoryDTO> searchCategory(@RequestParam String search) {
+        CategorySearchDTO searchDTO = new CategorySearchDTO();
+        searchDTO.setSearch(search);
+        return categoryService.search(searchDTO);
+    }
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping

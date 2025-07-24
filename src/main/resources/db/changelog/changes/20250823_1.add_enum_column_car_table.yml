@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: '021-add-check-constraint-car-table'
+      author: 'Asrorbek'
+      comment: 'Car tablega check constraint qo''shish'
+      changes:
+        - sql:
+            splitStatements: false
+            stripComments: false
+            sql: |
+              ALTER TABLE car
+                ADD CONSTRAINT check_car_transmission
+                  CHECK (transmission IN ('MANUAL','AUTOMATIC'));
+        - addNotNullConstraint:
+            tableName: 'car'
+            columnName: 'fuel_type'

@@ -7,8 +7,10 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import uz.dev.rentcar.entity.template.AbsDeleteEntity;
 import uz.dev.rentcar.enums.FuelTypeEnum;
+import uz.dev.rentcar.enums.TransmissionEnum;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,12 +50,14 @@ public class Car extends AbsDeleteEntity {
     private int seats;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private FuelTypeEnum fuelType;
 
     private BigDecimal fuelConsumption;
 
     @Column(nullable = false)
-    private String transmission;
+    @Enumerated(EnumType.STRING)
+    private TransmissionEnum transmission;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -64,28 +68,28 @@ public class Car extends AbsDeleteEntity {
     @ToString.Exclude
     private List<Category> categories;
 
-    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "car")
     @ToString.Exclude
-    private List<Booking> bookings;
+    private List<Booking> bookings = new ArrayList<>();
 
-    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private List<Review> reviews;
+    private List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private List<Attachment> attachments;
+    private List<Attachment> attachments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private List<CarFeature> features;
+    private List<CarFeature> features = new ArrayList<>();
 
-    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private List<CarLocation> locations;
+    private List<CarLocation> locations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private List<Favorite> favorites;
+    private List<Favorite> favorites = new ArrayList<>();
 
 }
