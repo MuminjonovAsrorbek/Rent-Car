@@ -33,14 +33,14 @@ public class CarController {
 
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/open/{id}")
     public CarDTO getCarById(@PathVariable Long id) {
 
         return carService.getCarById(id);
 
     }
 
-    @GetMapping
+    @GetMapping("/open")
     public PageableDTO getAllCars(@RequestParam(value = "page", defaultValue = "0") int page,
                                   @RequestParam(value = "size", defaultValue = "10") int size) {
 
