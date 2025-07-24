@@ -44,12 +44,12 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/login",
                                 "/css/**",
+                                "/api/cars/open/**",
                                 "/js/**",
                                 "/images/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated()
-        ).formLogin(form -> form.loginPage("/login").permitAll()
         );
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
