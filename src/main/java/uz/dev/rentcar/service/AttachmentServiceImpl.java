@@ -10,7 +10,9 @@ import org.springframework.web.server.ResponseStatusException;
 import uz.dev.rentcar.entity.Attachment;
 import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
+import uz.dev.rentcar.mapper.AttachmentMapper;
 import uz.dev.rentcar.mapper.CarMapper;
+import uz.dev.rentcar.payload.AttachmentDTO;
 import uz.dev.rentcar.payload.CarDTO;
 import uz.dev.rentcar.repository.AttachmentRepository;
 import uz.dev.rentcar.repository.CarRepository;
@@ -39,6 +41,8 @@ public class AttachmentServiceImpl implements AttachmentService {
     private final CarRepository carRepository;
 
     private final CarMapper carMapper;
+
+    private final AttachmentMapper attachmentMapper;
 
     @Value("${myapp.upload-path}")
     private String UPLOAD_PATH;
@@ -134,6 +138,44 @@ public class AttachmentServiceImpl implements AttachmentService {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while accessing file", e);
         }
+
+    }
+
+    @Override
+    @Transactional
+    public List<AttachmentDTO> createImages(List<MultipartFile> files) throws IOException {
+
+        List<Attachment> attachments = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+
+            String originalFilename = file.getOriginalFilename();
+            long size = file.getSize();
+            String contentType = file.getContentType();
+
+            if (!Objects.requireNonNull(contentType).startsWith("image/")) {
+                throw new RuntimeException("Only image files are allowed");
+            }
+
+            assert originalFilename != null;
+
+            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String fileNewName = UUID.randomUUID() + extension;
+
+            Path path = Path.of(UPLOAD_PATH, fileNewName);
+
+            Files.copy(file.getInputStream(), path);
+
+            Attachment attachment = new Attachment();
+            attachment.setPath(path.toString());
+            attachment.setOriginalName(originalFilename);
+            attachment.setContentType(contentType);
+            attachment.setSize(size);
+
+            attachments.add(attachmentRepository.save(attachment));
+        }
+
+        return attachmentMapper.toDTO(attachments);
 
     }
 }
