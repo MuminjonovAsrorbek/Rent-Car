@@ -53,8 +53,6 @@ public class AttachmentServiceImpl implements AttachmentService {
 
         Car car = carRepository.getByIdOrThrow(carId);
 
-        List<Attachment> list = new ArrayList<>();
-
         boolean isFirst = true;
 
         if (images != null && !images.isEmpty()) {
@@ -94,8 +92,6 @@ public class AttachmentServiceImpl implements AttachmentService {
 
                 Attachment saved = attachmentRepository.save(attachment);
 
-                list.add(saved);
-
                 if (isFirst) {
 
                     car.setImageUrl(
@@ -107,8 +103,6 @@ public class AttachmentServiceImpl implements AttachmentService {
                 isFirst = false;
 
             }
-
-            car.setAttachments(list);
 
             Car savedCar = carRepository.save(car);
 

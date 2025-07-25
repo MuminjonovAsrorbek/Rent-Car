@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.payload.CarDTO;
+import uz.dev.rentcar.payload.request.CarFilterDTO;
 import uz.dev.rentcar.payload.request.CreateCarDTO;
 import uz.dev.rentcar.payload.request.UpdateCarDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
@@ -63,6 +65,21 @@ public class CarController {
         carService.deleteCar(id);
 
         return ResponseEntity.ok("Car deleted successfully");
+
+    }
+
+    @GetMapping("/open/available")
+    public PageableDTO getAvailableCars(@RequestParam(value = "page", defaultValue = "0") int page,
+                                        @RequestParam(value = "size", defaultValue = "10") int size) {
+
+        return carService.getAvailableCars(page, size);
+
+    }
+
+    @GetMapping("/open/filter")
+    public List<CarDTO> getFilterCars(CarFilterDTO carFilterDTO) {
+
+        return carService.getFilteredCars(carFilterDTO);
 
     }
 
