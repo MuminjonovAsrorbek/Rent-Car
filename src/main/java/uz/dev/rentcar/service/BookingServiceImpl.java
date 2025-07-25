@@ -1,9 +1,16 @@
 package uz.dev.rentcar.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.dev.rentcar.config.CaffeineCacheConfig;
 import uz.dev.rentcar.entity.*;
 import uz.dev.rentcar.enums.BookingStatusEnum;
 import uz.dev.rentcar.enums.RoleEnum;
@@ -23,6 +30,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
@@ -39,8 +47,11 @@ public class BookingServiceImpl implements BookingService {
 
     private final BookingMapper bookingMapper;
 
+    private final CacheManager cacheManager;
+
     @Override
     @Transactional
+    @CachePut(value = CaffeineCacheConfig.BOOKINGS, key = "#currentUser.id")
     public BookingDTO createBooking(BookingCreateDTO dto, User currentUser) {
 
         validateBookingDates(dto.getPickupDate(), dto.getReturnDate());
@@ -123,14 +134,18 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Cacheable(value = CaffeineCacheConfig.BOOKINGS, key = "#currentUser.id")
     public List<BookingDTO> getMyBookings(User currentUser) {
 
         List<Booking> bookings = bookingRepository.findAllByUserId(currentUser.getId());
+
+        log.info("Fetching bookings for user: {}", currentUser.getId());
 
         return bookingMapper.toDto(bookings);
     }
 
     @Override
+    @Cacheable(value = CaffeineCacheConfig.BOOKINGS, key = "#userId")
     public List<BookingDTO> getBookingsByUserId(Long userId) {
 
         if (!userRepository.existsById(userId)) {
@@ -146,6 +161,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
+    @Caching(
+            evict = @CacheEvict(value = CaffeineCacheConfig.BOOKINGS, key = "#currentUser.id")
+    )
     public BookingDTO cancelBooking(Long id, User currentUser) {
 
         Booking booking = bookingRepository.getByIdOrThrow(id);
@@ -201,6 +219,10 @@ public class BookingServiceImpl implements BookingService {
 
         carRepository.save(car);
 
+        Long userId = booking.getUser().getId();
+
+        Objects.requireNonNull(cacheManager.getCache(CaffeineCacheConfig.BOOKINGS)).evict(userId);
+
         return bookingMapper.toDto(save);
     }
 
@@ -227,6 +249,10 @@ public class BookingServiceImpl implements BookingService {
         car.setAvailable(true);
 
         carRepository.save(car);
+
+        Long userId = booking.getUser().getId();
+
+        Objects.requireNonNull(cacheManager.getCache(CaffeineCacheConfig.BOOKINGS)).evict(userId);
 
         return bookingMapper.toDto(save);
     }
