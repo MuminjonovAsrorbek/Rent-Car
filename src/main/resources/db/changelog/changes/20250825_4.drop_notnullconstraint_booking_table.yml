@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: '026-bookings_drop_notnullconstraint'
+      author: 'Asrorbek'
+      changes:
+        - dropNotNullConstraint:
+            tableName: booking
+            columnName: 'promo_code_id'
+            columnDataType: bigint

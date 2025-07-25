@@ -50,7 +50,7 @@ public class Booking extends AbsDeleteEntity {
     private LocalDateTime returnDate;
 
     @Column(nullable = false)
-    private boolean isForSelf = true;
+    private Boolean isForSelf = true;
 
     @Column(nullable = false)
     private String recipientFullName;
@@ -68,9 +68,8 @@ public class Booking extends AbsDeleteEntity {
     @Enumerated(EnumType.STRING)
     private BookingStatusEnum status;
 
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
-    @ToString.Exclude
-    private List<Payment> payments = new ArrayList<>();
+    @OneToOne(mappedBy = "booking")
+    private Payment payment;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
     @ToString.Exclude

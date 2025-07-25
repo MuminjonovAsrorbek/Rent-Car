@@ -4,27 +4,39 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import uz.dev.rentcar.entity.Booking;
-import uz.dev.rentcar.entity.Car;
+import uz.dev.rentcar.entity.PromoCode;
 import uz.dev.rentcar.payload.BookingDTO;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        uses = {PaymentMapper.class, CarLocationMapper.class}
+)
 public interface BookingMapper {
 
-    @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "car.id", target = "carId")
-    @Mapping(source = "car", target = "carInfo", qualifiedByName = "carToCarInfo")
-    @Mapping(source = "createdAt", target = "createdAt")
-    BookingDTO toDto(Booking booking);
+    @Mapping(target = "userId", source = "user.id")
+    @Mapping(target = "userFullName", source = "user.fullName")
+    @Mapping(target = "carId", source = "car.id")
+    @Mapping(target = "carBrand", source = "car.brand")
+    @Mapping(target = "carModel", source = "car.model")
+    @Mapping(target = "carSeats", source = "car.seats")
+    @Mapping(target = "carFuelType", source = "car.fuelType")
+    @Mapping(target = "carFuelConsumption", source = "car.fuelConsumption")
+    @Mapping(target = "carTransmission", source = "car.transmission")
+    @Mapping(target = "pickupOfficeId", source = "pickupOffice.id")
+    @Mapping(target = "pickupOfficeName", source = "pickupOffice.name")
+    @Mapping(target = "pickupOfficeAddress", source = "pickupOffice.address")
+    @Mapping(target = "returnOfficeId", source = "returnOffice.id")
+    @Mapping(target = "returnOfficeName", source = "returnOffice.name")
+    @Mapping(target = "returnOfficeAddress", source = "returnOffice.address")
+    @Mapping(target = "hasPromoCode", source = "promoCode", qualifiedByName = "hasPromoCode")
+    BookingDTO toDTO(Booking booking);
 
-    List<BookingDTO> toDto(List<Booking> bookings);
 
-    @Named("carToCarInfo")
-    default String carToCarInfo(Car car) {
-        if (car == null) {
-            return null;
-        }
-        return "Car information not available";
+    List<BookingDTO> toDTO(List<Booking> bookings);
+
+    @Named("hasPromoCode")
+    default boolean hasPromoCode(PromoCode promoCode) {
+        return promoCode != null;
     }
 }

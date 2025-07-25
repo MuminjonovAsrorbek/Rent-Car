@@ -25,7 +25,7 @@ import uz.dev.rentcar.enums.PaymetMethodEnum;
 @SQLRestriction(value = "deleted=false")
 public class Payment extends AbsDeleteEntity {
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
 

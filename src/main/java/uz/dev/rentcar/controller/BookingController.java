@@ -29,9 +29,9 @@ public class BookingController {
 
     @GetMapping("/my")
     @PreAuthorize("hasAnyRole('USER' , 'ADMIN')")
-    public ResponseEntity<List<BookingDTO>> getMyBookings(@AuthenticationPrincipal User currentUser) {
+    public List<BookingDTO> getMyBookings(@AuthenticationPrincipal User currentUser) {
 
-        return ResponseEntity.ok(bookingService.getMyBookings(currentUser));
+        return bookingService.getMyBookings(currentUser);
 
     }
 

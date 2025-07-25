@@ -60,6 +60,8 @@ public class BookingServiceImpl implements BookingService {
 
         Office pickupOffice = officeRepository.getByIdOrThrow(dto.getPickupOfficeId());
 
+        Office returnOffice = officeRepository.getByIdOrThrow(dto.getReturnOfficeId());
+
         List<BookingStatusEnum> activeStatuses = List.of(BookingStatusEnum.PENDING, BookingStatusEnum.CONFIRMED);
 
         if (bookingRepository.existsOverlappingBooking(car.getId(), dto.getPickupDate(), dto.getReturnDate(), activeStatuses)) {
@@ -83,11 +85,12 @@ public class BookingServiceImpl implements BookingService {
         booking.setUser(currentUser);
         booking.setCar(car);
         booking.setPickupOffice(pickupOffice);
+        booking.setReturnOffice(returnOffice);
         booking.setPickupDate(dto.getPickupDate());
         booking.setReturnDate(dto.getReturnDate());
         booking.setTotalPrice(totalPrice);
         booking.setStatus(BookingStatusEnum.PENDING);
-        booking.setForSelf(dto.isForSelf());
+        booking.setIsForSelf(dto.isForSelf());
 
         if (!dto.isForSelf()) {
 
@@ -119,7 +122,7 @@ public class BookingServiceImpl implements BookingService {
         log.info("Booking created successfully for user: {}, car: {}, pickup: {}, return: {}",
                 currentUser.getId(), car.getId(), dto.getPickupDate(), dto.getReturnDate());
 
-        return bookingMapper.toDto(savedBooking);
+        return bookingMapper.toDTO(savedBooking);
     }
 
     @Override
@@ -133,7 +136,7 @@ public class BookingServiceImpl implements BookingService {
 
         }
 
-        return bookingMapper.toDto(booking);
+        return bookingMapper.toDTO(booking);
     }
 
     @Override
@@ -144,7 +147,7 @@ public class BookingServiceImpl implements BookingService {
 
         log.info("Fetching bookings for user: {}", currentUser.getId());
 
-        return bookingMapper.toDto(bookings);
+        return bookingMapper.toDTO(bookings);
     }
 
     @Override
@@ -161,7 +164,7 @@ public class BookingServiceImpl implements BookingService {
 
         log.info("Fetching bookings for user: {}", userId);
 
-        return bookingMapper.toDto(bookings);
+        return bookingMapper.toDTO(bookings);
     }
 
     @Override
@@ -199,7 +202,7 @@ public class BookingServiceImpl implements BookingService {
 
         log.info("Booking cancelled successfully for user: {}, booking ID: {}", currentUser.getId(), id);
 
-        return bookingMapper.toDto(save);
+        return bookingMapper.toDTO(save);
     }
 
     @Override
@@ -232,7 +235,7 @@ public class BookingServiceImpl implements BookingService {
 
         log.info("Booking confirmed successfully for user: {}, booking ID: {}", userId, id);
 
-        return bookingMapper.toDto(save);
+        return bookingMapper.toDTO(save);
     }
 
     @Override
@@ -265,7 +268,7 @@ public class BookingServiceImpl implements BookingService {
 
         log.info("Booking completed successfully for user: {}, booking ID: {}", userId, id);
 
-        return bookingMapper.toDto(save);
+        return bookingMapper.toDTO(save);
     }
 
     @Transactional
