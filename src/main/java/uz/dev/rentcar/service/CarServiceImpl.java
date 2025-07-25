@@ -4,11 +4,17 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import uz.dev.rentcar.config.CaffeineCacheConfig;
 import uz.dev.rentcar.entity.Attachment;
 import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.entity.CarFeature;
@@ -39,6 +45,7 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CarServiceImpl implements CarService {
 
     private final CarRepository carRepository;
@@ -55,6 +62,13 @@ public class CarServiceImpl implements CarService {
 
     @Override
     @Transactional
+    @Caching(
+            put = {@CachePut(value = CaffeineCacheConfig.CARS, key = "#result.id")},
+            evict = {
+                    @CacheEvict(value = CaffeineCacheConfig.CARS, allEntries = true),
+                    @CacheEvict(value = CaffeineCacheConfig.AVAILABLE_CARS, allEntries = true)
+            }
+    )
     public CarDTO createCar(CreateCarDTO carDTO) {
 
         Car car = carMapper.toEntity(carDTO);
@@ -80,6 +94,8 @@ public class CarServiceImpl implements CarService {
 
         Car saved = carRepository.save(savedCar);
 
+        log.info("Car with id: {} was created in the database", saved.getId());
+
         return carMapper.toDTO(saved);
 
     }
@@ -96,6 +112,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    @Cacheable(value = CaffeineCacheConfig.AVAILABLE_CARS, key = "#page + '-' + #size")
     public PageableDTO getAvailableCars(int page, int size) {
 
         Sort sort = Sort.by(Sort.Direction.ASC, "id");
@@ -192,7 +209,10 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    @Cacheable(value = CaffeineCacheConfig.CARS, key = "#id")
     public CarDTO getCarById(Long id) {
+
+        log.info("Car with id: {} was found in the database", id);
 
         Car car = carRepository.getByIdOrThrow(id);
 
@@ -202,7 +222,10 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    @Cacheable(value = CaffeineCacheConfig.CARS, key = "#page + '-' + #size")
     public PageableDTO getAllCars(int page, int size) {
+
+        log.info("All cars were found in the database");
 
         Sort sort = Sort.by(Sort.Direction.ASC, "id");
 
@@ -225,6 +248,13 @@ public class CarServiceImpl implements CarService {
 
     @Override
     @Transactional
+    @Caching(
+            put = {@CachePut(value = CaffeineCacheConfig.CARS, key = "#id")},
+            evict = {
+                    @CacheEvict(value = CaffeineCacheConfig.CARS, allEntries = true),
+                    @CacheEvict(value = CaffeineCacheConfig.AVAILABLE_CARS, allEntries = true)
+            }
+    )
     public CarDTO updateCar(Long id, UpdateCarDTO carDTO) {
 
         Car car = carRepository.getByIdOrThrow(id);
@@ -295,16 +325,25 @@ public class CarServiceImpl implements CarService {
 
         Car savedCar = carRepository.save(car);
 
+        log.info("Car with id: {} was updated in the database", id);
+
         return carMapper.toDTO(savedCar);
     }
 
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = CaffeineCacheConfig.CARS, key = "#id"),
+            @CacheEvict(value = CaffeineCacheConfig.CARS, allEntries = true),
+            @CacheEvict(value = CaffeineCacheConfig.AVAILABLE_CARS, allEntries = true)
+    })
     public void deleteCar(Long id) {
 
         Car car = carRepository.getByIdOrThrow(id);
 
         carRepository.delete(car);
+
+        log.info("Car with id: {} was deleted from the database", id);
     }
 }
