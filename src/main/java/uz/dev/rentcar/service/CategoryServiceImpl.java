@@ -1,6 +1,5 @@
 package uz.dev.rentcar.service;
 
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -29,8 +28,6 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
 
     private final CategoryMapper categoryMapper;
-
-    private final EntityManager entityManager;
 
     @Override
     public CategoryDTO read(Long id) {

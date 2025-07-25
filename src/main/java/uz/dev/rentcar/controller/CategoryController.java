@@ -17,14 +17,14 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/open/{id}")
     public CategoryDTO read(@PathVariable Long id) {
 
         return categoryService.read(id);
 
     }
 
-    @GetMapping
+    @GetMapping("/open")
     public PageableDTO readAll(@Parameter(description = "Page number", example = "0")
                                @RequestParam(value = "page", defaultValue = "0") int page,
                                @Parameter(description = "Page size", example = "10")
