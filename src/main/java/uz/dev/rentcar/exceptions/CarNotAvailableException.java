@@ -5,8 +5,9 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public class CarNotAvailableException extends RuntimeException {
-    private HttpStatus status = null;
-    public CarNotAvailableException(String message, HttpStatus conflict) {
+    private final HttpStatus status;
+
+    public CarNotAvailableException(String message, HttpStatus status) {
         super(message);
         this.status = status;
     }
