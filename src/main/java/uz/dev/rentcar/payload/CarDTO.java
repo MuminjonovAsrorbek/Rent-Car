@@ -83,8 +83,5 @@ public class CarDTO implements Serializable {
     private List<AttachmentDTO> images;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<CarLocationDTO> locations;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<FavoriteDTO> favorites;
 }

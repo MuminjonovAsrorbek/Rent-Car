@@ -5,6 +5,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.dev.rentcar.entity.Attachment;
@@ -28,7 +29,7 @@ public class AttachmentController {
 
     private final AttachmentService attachmentService;
 
-    @GetMapping("/download/{id}")
+    @GetMapping("/open/download/{id}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Long id) {
 
         Attachment attachment = attachmentService.downloadFile(id);
@@ -46,6 +47,7 @@ public class AttachmentController {
     }
 
     @PostMapping(path = "/{carId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
     public CarDTO uploadFiles(@PathVariable Long carId,
                               @RequestParam("files") List<MultipartFile> files) throws IOException {
 
@@ -54,6 +56,7 @@ public class AttachmentController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
     public List<AttachmentDTO> createImages(@RequestParam("files") List<MultipartFile> files) throws IOException {
 
         return attachmentService.createImages(files);

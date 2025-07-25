@@ -29,7 +29,6 @@ public interface CarMapper {
     @Mapping(target = "reviews", ignore = true)
     @Mapping(target = "attachments", ignore = true)
     @Mapping(target = "features", ignore = true)
-    @Mapping(target = "locations", ignore = true)
     @Mapping(target = "favorites", ignore = true)
     Car toEntity(CreateCarDTO carDTO);
 
@@ -42,7 +41,6 @@ public interface CarMapper {
     @Mapping(target = "reviews", ignore = true)
     @Mapping(target = "attachments", ignore = true)
     @Mapping(target = "features", ignore = true)
-    @Mapping(target = "locations", ignore = true)
     @Mapping(target = "favorites", ignore = true)
     Car updateCar(UpdateCarDTO updateCarDTO, @MappingTarget Car car);
 }

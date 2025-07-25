@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.payload.CarDTO;
+import uz.dev.rentcar.payload.request.CarFilterDTO;
 import uz.dev.rentcar.payload.request.CreateCarDTO;
 import uz.dev.rentcar.payload.request.UpdateCarDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
@@ -49,6 +51,7 @@ public class CarController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public CarDTO updateCar(@PathVariable Long id, @RequestBody @Valid UpdateCarDTO carDTO) {
 
         return carService.updateCar(id, carDTO);
@@ -56,6 +59,7 @@ public class CarController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteCar(@PathVariable Long id) {
 
         carService.deleteCar(id);
@@ -64,7 +68,22 @@ public class CarController {
 
     }
 
-    @GetMapping("/fuelTypes")
+    @GetMapping("/open/available")
+    public PageableDTO getAvailableCars(@RequestParam(value = "page", defaultValue = "0") int page,
+                                        @RequestParam(value = "size", defaultValue = "10") int size) {
+
+        return carService.getAvailableCars(page, size);
+
+    }
+
+    @GetMapping("/open/filter")
+    public List<CarDTO> getFilterCars(CarFilterDTO carFilterDTO) {
+
+        return carService.getFilteredCars(carFilterDTO);
+
+    }
+
+    @GetMapping("/open/fuelTypes")
     public List<String> getAllFuelTypes() {
 
         return carService.getAllFuelTypes();
