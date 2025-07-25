@@ -10,7 +10,7 @@ public interface PromoCodeService {
 
     PageableDTO readAll(int page, int size);
 
-    PromoCodeDTO codeValidate(String code);
+    boolean codeValidate(String code);
 
     PromoCodeDTO create(PromoCodeDTO promoCodeDTO);
 
