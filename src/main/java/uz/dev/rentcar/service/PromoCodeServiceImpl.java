@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.dev.rentcar.entity.PromoCode;
 import uz.dev.rentcar.entity.template.AbsLongEntity;
 import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
-import uz.dev.rentcar.exceptions.EntityNotFoundException;
 import uz.dev.rentcar.mapper.PromoCodeMapper;
 import uz.dev.rentcar.payload.PromoCodeDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
@@ -59,20 +58,16 @@ public class PromoCodeServiceImpl implements PromoCodeService {
     }
 
     @Override
-    public PromoCodeDTO codeValidate(String code) {
+    public boolean codeValidate(String code) {
 
         LocalDateTime now = LocalDateTime.now();
 
-        PromoCode promoCode = promoCodeRepository.findByCode(code)
-                .orElseThrow(() -> new EntityNotFoundException("Code not found :" + code, HttpStatus.NOT_FOUND));
+        PromoCode promoCode = promoCodeRepository.findByCodeOrThrow(code);
 
         if (now.isBefore(promoCode.getValidFrom()))
-            throw new RuntimeException("Promo code is not active yet");
+            return false;
 
-        if (now.isAfter(promoCode.getValidTo()))
-            throw new RuntimeException("Promo code has expired");
-
-        return promoCodeMapper.toDTO(promoCode);
+        return !now.isAfter(promoCode.getValidTo());
     }
 
     @Override

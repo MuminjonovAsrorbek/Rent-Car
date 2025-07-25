@@ -33,8 +33,8 @@ public class PromoCodeController {
     }
 
     @GetMapping("/open/validate")
-    public PromoCodeDTO codeValidate(@RequestParam String code) {
-        // shu yerdan davom etamiz
+    public Boolean codeValidate(@RequestParam String code) {
+
         return promoCodeService.codeValidate(code);
     }
 
