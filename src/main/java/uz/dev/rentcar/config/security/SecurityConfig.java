@@ -50,7 +50,8 @@ public class SecurityConfig {
                                 "/api/cars/open/**",
                                 "/api/users/open/**",
                                 "/api/attachments/open/**",
-                                "/api/category/open/**")
+                                "/api/category/open/**",
+                                "/api/office/open/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated()
