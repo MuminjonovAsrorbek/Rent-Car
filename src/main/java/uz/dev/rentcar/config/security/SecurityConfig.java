@@ -52,7 +52,8 @@ public class SecurityConfig {
                                 "/api/attachments/open/**",
                                 "/api/category/open/**",
                                 "/api/office/open/**",
-                                "/api/promo-code/open/**")
+                                "/api/promo-code/open/**",
+                                "/api/review/open/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated()
