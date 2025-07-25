@@ -2,6 +2,7 @@ package uz.dev.rentcar.payload;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,7 +30,9 @@ public class FavoriteDTO implements Serializable {
     @JsonIgnore
     private boolean deleted = false;
 
+    @NotNull
     private Long userId;
 
+    @NotNull
     private Long carId;
 }

@@ -49,7 +49,10 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/api/cars/open/**",
                                 "/api/users/open/**",
-                                "/api/attachments/open/**")
+                                "/api/attachments/open/**",
+                                "/api/category/open/**",
+                                "/api/office/open/**",
+                                "/api/promo-code/open/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated()

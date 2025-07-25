@@ -25,12 +25,5 @@ public interface FavoriteMapper {
 
     List<FavoriteDTO> toDTO(List<Favorite> favorites);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "deleted", ignore = true)
-    @Mapping(target = "car.id", source = "carId")
-    @Mapping(target = "user.id", source = "userId")
-    Favorite toEntity(FavoriteDTO favoriteDTO);
 
 }
