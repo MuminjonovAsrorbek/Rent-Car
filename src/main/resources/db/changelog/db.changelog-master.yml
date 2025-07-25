@@ -47,3 +47,5 @@ databaseChangeLog:
       file: 'db/changelog/changes/20250823_2.drop_notnullconstraint_car_table.yml'
   - include:
       file: 'db/changelog/changes/20250824_1.create_auditLog_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250825_1.drop_column_in_car_location_table.yml'
