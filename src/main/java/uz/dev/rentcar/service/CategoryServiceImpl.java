@@ -1,12 +1,9 @@
 package uz.dev.rentcar.service;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,18 +15,15 @@ import uz.dev.rentcar.entity.template.AbsLongEntity;
 import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
 import uz.dev.rentcar.mapper.CategoryMapper;
 import uz.dev.rentcar.payload.CategoryDTO;
-import uz.dev.rentcar.payload.request.CategorySearchDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.repository.CategoryRepository;
 import uz.dev.rentcar.service.template.CategoryService;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Log4j
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
@@ -66,42 +60,6 @@ public class CategoryServiceImpl implements CategoryService {
                 categoryMapper.toDTO(categories)
         );
 
-    }
-
-    @Override
-    public List<CategoryDTO> search(CategorySearchDTO searchDTO) {
-
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-
-        CriteriaQuery<Category> criteriaQuery = criteriaBuilder.createQuery(Category.class);
-
-        Root<Category> categoryRoot = criteriaQuery.from(Category.class);
-
-        List<Predicate> predicates = new ArrayList<>();
-
-        String search = searchDTO.getSearch();
-
-        if (Objects.nonNull(search)) {
-
-            String name = Category.Fields.name;
-            String description = Category.Fields.description;
-
-            Predicate predicateName = criteriaBuilder.like(categoryRoot.get(name), "%" + search + "%");
-
-            Predicate predicateDescription = criteriaBuilder.like(categoryRoot.get(description), "%" + search + "%");
-
-            Predicate predicate = criteriaBuilder.or(predicateName, predicateDescription);
-
-            predicates.add(predicate);
-        }
-
-        criteriaQuery.where(predicates.toArray(new Predicate[0]));
-
-        List<Category> categories = entityManager.createQuery(criteriaQuery).getResultList();
-
-        return categories.stream()
-                .map(categoryMapper::toDTO)
-                .collect(Collectors.toList());
     }
 
     @Override
