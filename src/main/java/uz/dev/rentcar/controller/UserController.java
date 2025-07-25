@@ -68,7 +68,7 @@ public class UserController {
         return ResponseEntity.ok("User deleted successfully");
     }
 
-    @GetMapping("/me")
+    @GetMapping("/open/me")
     public UserDTO getUserInfo() {
 
         return userService.getUserInfo();

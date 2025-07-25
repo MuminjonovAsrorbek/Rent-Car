@@ -49,6 +49,7 @@ public class CarController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public CarDTO updateCar(@PathVariable Long id, @RequestBody @Valid UpdateCarDTO carDTO) {
 
         return carService.updateCar(id, carDTO);
@@ -56,6 +57,7 @@ public class CarController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteCar(@PathVariable Long id) {
 
         carService.deleteCar(id);
@@ -64,7 +66,7 @@ public class CarController {
 
     }
 
-    @GetMapping("/fuelTypes")
+    @GetMapping("/open/fuelTypes")
     public List<String> getAllFuelTypes() {
 
         return carService.getAllFuelTypes();
