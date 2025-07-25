@@ -116,6 +116,9 @@ public class BookingServiceImpl implements BookingService {
 
         carRepository.save(car);
 
+        log.info("Booking created successfully for user: {}, car: {}, pickup: {}, return: {}",
+                currentUser.getId(), car.getId(), dto.getPickupDate(), dto.getReturnDate());
+
         return bookingMapper.toDto(savedBooking);
     }
 
@@ -124,7 +127,7 @@ public class BookingServiceImpl implements BookingService {
 
         Booking booking = bookingRepository.getByIdOrThrow(id);
 
-        if (!isAdmin(currentUser) && !Objects.equals(booking.getUser().getId(), currentUser.getId())) {
+        if (isAdmin(currentUser) && !Objects.equals(booking.getUser().getId(), currentUser.getId())) {
 
             throw new SecurityException("You do not have permission to view this booking.");
 
@@ -156,6 +159,8 @@ public class BookingServiceImpl implements BookingService {
 
         List<Booking> bookings = bookingRepository.findAllByUserId(userId);
 
+        log.info("Fetching bookings for user: {}", userId);
+
         return bookingMapper.toDto(bookings);
     }
 
@@ -168,7 +173,7 @@ public class BookingServiceImpl implements BookingService {
 
         Booking booking = bookingRepository.getByIdOrThrow(id);
 
-        if (!isAdmin(currentUser) && !Objects.equals(booking.getUser().getId(), currentUser.getId())) {
+        if (isAdmin(currentUser) && !Objects.equals(booking.getUser().getId(), currentUser.getId())) {
 
             throw new SecurityException("You do not have permission to cancel this booking.");
 
@@ -191,6 +196,8 @@ public class BookingServiceImpl implements BookingService {
         car.setAvailable(true);
 
         carRepository.save(car);
+
+        log.info("Booking cancelled successfully for user: {}, booking ID: {}", currentUser.getId(), id);
 
         return bookingMapper.toDto(save);
     }
@@ -223,6 +230,8 @@ public class BookingServiceImpl implements BookingService {
 
         Objects.requireNonNull(cacheManager.getCache(CaffeineCacheConfig.BOOKINGS)).evict(userId);
 
+        log.info("Booking confirmed successfully for user: {}, booking ID: {}", userId, id);
+
         return bookingMapper.toDto(save);
     }
 
@@ -254,6 +263,8 @@ public class BookingServiceImpl implements BookingService {
 
         Objects.requireNonNull(cacheManager.getCache(CaffeineCacheConfig.BOOKINGS)).evict(userId);
 
+        log.info("Booking completed successfully for user: {}, booking ID: {}", userId, id);
+
         return bookingMapper.toDto(save);
     }
 
@@ -276,6 +287,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private boolean isAdmin(User user) {
-        return user.getRole() == RoleEnum.ADMIN;
+        return user.getRole() != RoleEnum.ADMIN;
     }
 }
