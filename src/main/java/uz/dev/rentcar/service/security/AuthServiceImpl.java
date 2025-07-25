@@ -53,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenDTO getToken(LoginDTO loginDTO) {
 
-        User user = loadUserByUsername(loginDTO.getUsername());
+        User user = loadUserByUsername(loginDTO.getEmail());
 
         String encodedPassword = user.getPassword();
 
@@ -65,9 +65,9 @@ public class AuthServiceImpl implements AuthService {
 
         }
 
-        String accessToken = jwtService.generateToken(loginDTO.getUsername(), new Date(System.currentTimeMillis() + 3 * 3600 * 1000));
+        String accessToken = jwtService.generateToken(loginDTO.getEmail(), new Date(System.currentTimeMillis() + 3 * 3600 * 1000));
 
-        String refreshToken = jwtService.generateToken(loginDTO.getUsername(), new Date(System.currentTimeMillis() + 12 * 3600 * 1000));
+        String refreshToken = jwtService.generateToken(loginDTO.getEmail(), new Date(System.currentTimeMillis() + 12 * 3600 * 1000));
 
         return new TokenDTO(accessToken, refreshToken);
     }
