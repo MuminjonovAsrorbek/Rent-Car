@@ -5,12 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.payload.CarDTO;
+import uz.dev.rentcar.payload.CarFeatureDTO;
 import uz.dev.rentcar.payload.request.CarFilterDTO;
 import uz.dev.rentcar.payload.request.CreateCarDTO;
 import uz.dev.rentcar.payload.request.UpdateCarDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
+import uz.dev.rentcar.service.template.CarFeatureService;
 import uz.dev.rentcar.service.template.CarService;
 
 import java.util.List;
@@ -26,6 +27,8 @@ import java.util.List;
 public class CarController {
 
     private final CarService carService;
+
+    private final CarFeatureService carFeatureService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -87,6 +90,20 @@ public class CarController {
     public List<String> getAllFuelTypes() {
 
         return carService.getAllFuelTypes();
+
+    }
+
+    @GetMapping("/open/transmissions")
+    public List<String> getAllTransmissions() {
+
+        return carService.getAllTransmissions();
+
+    }
+
+    @GetMapping("/open/{carId}/features")
+    public List<CarFeatureDTO> getCarFeatures(@PathVariable Long carId) {
+
+        return carFeatureService.getCarFeatures(carId);
 
     }
 

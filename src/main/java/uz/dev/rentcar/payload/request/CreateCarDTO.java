@@ -10,6 +10,7 @@ import uz.dev.rentcar.enums.FuelTypeEnum;
 import uz.dev.rentcar.enums.TransmissionEnum;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,7 +48,11 @@ public class CreateCarDTO {
     @NotNull
     private FuelTypeEnum fuelType;
 
+    @NotNull
     private BigDecimal fuelConsumption;
+
+    @NotNull
+    private List<String> carFeature = new ArrayList<>();
 
     @NotNull
     private TransmissionEnum transmission;
