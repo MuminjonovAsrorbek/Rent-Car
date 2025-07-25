@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class LoginDTO {
 
-    @Schema(description = "Uniques email", defaultValue = "admin", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "Uniques email", defaultValue = "admin@gmail.com", requiredMode = Schema.RequiredMode.REQUIRED)
     private String email;
 
     @Schema(description = "Username password", defaultValue = "admin", requiredMode = Schema.RequiredMode.REQUIRED)

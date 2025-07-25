@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
-      id: '019-add-phone-number-to-user-table'
-      author: 'System'
+      id: '025-add-phone-number-to-user-table'
+      author: 'Malikabonu'
       changes:
         - addColumn:
             tableName: 'users'
@@ -11,4 +11,3 @@ databaseChangeLog:
                   type: varchar
                   constraints:
                     nullable: false
-                  defaultValue: ''
