@@ -27,4 +27,7 @@ public class RegisterDTO implements Serializable {
 
     @NotBlank
     private String password;
+
+    @NotBlank
+    private String phoneNumber;
 }

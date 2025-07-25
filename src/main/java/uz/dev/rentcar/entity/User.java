@@ -40,6 +40,9 @@ public class User extends AbsDeleteEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String phoneNumber;
+
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
