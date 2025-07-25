@@ -48,4 +48,6 @@ databaseChangeLog:
   - include:
       file: 'db/changelog/changes/20250824_1.create_auditLog_table.yml'
   - include:
+      file: 'db/changelog/changes/20250822_1.add_phone_number_to_user_table.yml'
+  - include:
       file: db/changelog/changes/20250825_2.drop_column_in_car_location_table.yml'
