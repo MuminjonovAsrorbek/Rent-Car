@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: '019-add-phone-number-to-user-table'
-      author: 'System'
+      author: 'Malikabonu'
       changes:
         - addColumn:
             tableName: 'users'
