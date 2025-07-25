@@ -51,3 +51,5 @@ databaseChangeLog:
       file: 'db/changelog/changes/20250825_1.drop_column_in_car_location_table.yml'
   - include:
       file: 'db/changelog/changes/20250825_2.add_phone_number_to_user_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250825_3.add_constraint_in_car_location_table.yml'

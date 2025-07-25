@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: '026-add_constraint_in_car_location_table'
+      author: 'Asrorbek'
+      changes:
+        - dropConstraint:
+            constraintName: 'users_role_check'
+            tableName: 'users'
+            schemaName: 'public'
+        - addCheckConstraint:
+            tableName: 'users'
+            schemaName: 'public'
+            constraintName: 'users_role_check'
+            checkConstraint: "role in ('ADMIN', 'USER', 'GPS')"

@@ -25,4 +25,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
         return findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Booking not found with ID : " + id, HttpStatus.NOT_FOUND));
     }
+
+    @Override
+    boolean existsById(Long aLong);
 }

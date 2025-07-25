@@ -12,10 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
-import uz.dev.rentcar.exceptions.EntityNotFoundException;
-import uz.dev.rentcar.exceptions.InvalidRecaptchaTokenException;
-import uz.dev.rentcar.exceptions.PasswordIncorrectException;
+import uz.dev.rentcar.exceptions.*;
 import uz.dev.rentcar.payload.response.ErrorDTO;
 import uz.dev.rentcar.payload.response.FieldErrorDTO;
 
@@ -25,6 +22,32 @@ import java.util.List;
 @Service
 @RestControllerAdvice(basePackages = "uz.dev.rentcar")
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(value = LocationIllegalException.class)
+    public ResponseEntity<ErrorDTO> handle(LocationIllegalException e) {
+
+        ErrorDTO error = new ErrorDTO(
+                e.getStatus().value(),
+                e.getMessage()
+        );
+
+        return ResponseEntity
+                .status(e.getStatus().value())
+                .body(error);
+    }
+
+    @ExceptionHandler(value = SecurityException.class)
+    public ResponseEntity<ErrorDTO> handle(SecurityException e) {
+
+        ErrorDTO error = new ErrorDTO(
+                403,
+                e.getMessage()
+        );
+
+        return ResponseEntity
+                .status(403)
+                .body(error);
+    }
 
     @ExceptionHandler(value = InvalidRecaptchaTokenException.class)
     public ResponseEntity<ErrorDTO> invalidRecaptchaTokenException(InvalidRecaptchaTokenException ex) {

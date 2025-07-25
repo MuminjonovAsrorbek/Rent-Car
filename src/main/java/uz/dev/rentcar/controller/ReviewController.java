@@ -30,13 +30,13 @@ public class ReviewController {
         return reviewService.readAll(carId);
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
     @PostMapping
     public ReviewDTO createReview(@RequestBody @Valid ReviewDTO reviewDTO) {
         return reviewService.create(reviewDTO);
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
     @PutMapping("/{id}")
     public ReviewDTO updateReview(@PathVariable Long id,
                                   @RequestBody @Valid ReviewDTO reviewDTO,
@@ -44,7 +44,7 @@ public class ReviewController {
         return reviewService.update(id, reviewDTO, currentUser);
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteReview(@PathVariable Long id, @AuthenticationPrincipal User currentUser) {
 
