@@ -101,8 +101,12 @@ public class CarServiceImpl implements CarService {
     public List<CarDTO> getFilteredCars(CarFilterDTO carFilterDTO) {
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+
         CriteriaQuery<Car> cq = cb.createQuery(Car.class);
+
         Root<Car> root = cq.from(Car.class);
+
+        Join<Car, Category> categoryJoin = root.join("categories");
 
         List<Predicate> predicates = new ArrayList<>();
 
@@ -144,7 +148,7 @@ public class CarServiceImpl implements CarService {
 
         if (carFilterDTO.getCategoryId() != null) {
 
-            predicates.add(cb.equal(root.get("categories").get("id"), carFilterDTO.getCategoryId())); // shu qismni tekshirish kerak
+            predicates.add(cb.equal(categoryJoin.get("id"), carFilterDTO.getCategoryId()));
 
         }
 
