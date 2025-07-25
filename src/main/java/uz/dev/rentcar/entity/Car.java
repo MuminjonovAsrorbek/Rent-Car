@@ -86,10 +86,6 @@ public class Car extends AbsDeleteEntity {
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private List<CarLocation> locations = new ArrayList<>();
-
-    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
     private List<Favorite> favorites = new ArrayList<>();
 
 }
