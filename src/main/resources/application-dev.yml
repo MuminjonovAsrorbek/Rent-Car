@@ -26,4 +26,4 @@ spring:
       max-request-size: 100MB
 myapp:
   secret-key: 'c0388696-55b0-479c-a142-a2ae7cbe269a'
-  upload-path: '/home/asrorbek/Project''s/JavaProject''s/Rent-Car/uploads'
+  upload-path: '/home/asrorbek/Resources/Rent-Car-images'

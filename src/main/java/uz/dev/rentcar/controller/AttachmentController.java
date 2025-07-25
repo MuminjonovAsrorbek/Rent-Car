@@ -39,7 +39,7 @@ public class AttachmentController {
 
         return ResponseEntity
                 .status(200)
-                .header("Content-Disposition", "attachment; filename=\"%s\"".formatted(attachment.getOriginalName()))
+                .header("Content-Disposition", "inline; filename=\"%s\"".formatted(attachment.getOriginalName()))
                 .contentType(MediaType.parseMediaType(attachment.getContentType()))
                 .contentLength(attachment.getSize())
                 .body(resource);
