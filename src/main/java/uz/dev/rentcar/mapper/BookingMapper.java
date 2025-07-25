@@ -7,6 +7,8 @@ import uz.dev.rentcar.entity.Booking;
 import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.payload.BookingDTO;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface BookingMapper {
 
@@ -15,6 +17,8 @@ public interface BookingMapper {
     @Mapping(source = "car", target = "carInfo", qualifiedByName = "carToCarInfo")
     @Mapping(source = "createdAt", target = "createdAt")
     BookingDTO toDto(Booking booking);
+
+    List<BookingDTO> toDto(List<Booking> bookings);
 
     @Named("carToCarInfo")
     default String carToCarInfo(Car car) {

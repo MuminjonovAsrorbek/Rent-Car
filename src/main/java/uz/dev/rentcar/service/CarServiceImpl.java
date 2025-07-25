@@ -94,6 +94,8 @@ public class CarServiceImpl implements CarService {
 
         Car saved = carRepository.save(savedCar);
 
+        log.info("Car with id: {} was created in the database", saved.getId());
+
         return carMapper.toDTO(saved);
 
     }
@@ -323,6 +325,8 @@ public class CarServiceImpl implements CarService {
 
         Car savedCar = carRepository.save(car);
 
+        log.info("Car with id: {} was updated in the database", id);
+
         return carMapper.toDTO(savedCar);
     }
 
@@ -339,5 +343,7 @@ public class CarServiceImpl implements CarService {
         Car car = carRepository.getByIdOrThrow(id);
 
         carRepository.delete(car);
+
+        log.info("Car with id: {} was deleted from the database", id);
     }
 }

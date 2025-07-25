@@ -1,7 +1,6 @@
 package uz.dev.rentcar.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,6 +9,7 @@ import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.payload.BookingCreateDTO;
 import uz.dev.rentcar.payload.BookingDTO;
 import uz.dev.rentcar.service.template.BookingService;
+
 import java.util.List;
 
 @RestController
@@ -21,15 +21,18 @@ public class BookingController {
 
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<BookingDTO> createBooking(@RequestBody BookingCreateDTO dto, @AuthenticationPrincipal User currentUser) {
-        BookingDTO createdBooking = bookingService.createBooking(dto, currentUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdBooking);
+    public BookingDTO createBooking(@RequestBody BookingCreateDTO dto, @AuthenticationPrincipal User currentUser) {
+
+        return bookingService.createBooking(dto, currentUser);
+
     }
 
     @GetMapping("/my")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<BookingDTO>> getMyBookings(@AuthenticationPrincipal User currentUser) {
+
         return ResponseEntity.ok(bookingService.getMyBookings(currentUser));
+
     }
 
     @GetMapping("/{id}")
