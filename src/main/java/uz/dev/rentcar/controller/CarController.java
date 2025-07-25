@@ -90,4 +90,11 @@ public class CarController {
 
     }
 
+    @GetMapping("/open/transmissions")
+    public List<String> getAllTransmissions() {
+
+        return carService.getAllTransmissions();
+
+    }
+
 }

@@ -11,9 +11,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uz.dev.rentcar.entity.Attachment;
 import uz.dev.rentcar.entity.Car;
+import uz.dev.rentcar.entity.CarFeature;
 import uz.dev.rentcar.entity.Category;
 import uz.dev.rentcar.enums.FuelTypeEnum;
+import uz.dev.rentcar.enums.TransmissionEnum;
 import uz.dev.rentcar.mapper.CarMapper;
+import uz.dev.rentcar.mapper.SingleCarMapper;
 import uz.dev.rentcar.payload.CarDTO;
 import uz.dev.rentcar.payload.request.CarFilterDTO;
 import uz.dev.rentcar.payload.request.CreateCarDTO;
@@ -26,6 +29,7 @@ import uz.dev.rentcar.service.template.CarService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -47,20 +51,36 @@ public class CarServiceImpl implements CarService {
 
     private final EntityManager entityManager;
 
+    private final SingleCarMapper singleCarMapper;
+
     @Override
     @Transactional
     public CarDTO createCar(CreateCarDTO carDTO) {
 
         Car car = carMapper.toEntity(carDTO);
 
-        List<Category> categories = carDTO.getCategoriesIds().stream().map(
-                categoryRepository::getByIdOrThrow).toList();
+        List<Category> categories = new ArrayList<>(carDTO.getCategoriesIds().stream().map(
+                categoryRepository::getByIdOrThrow).toList());
 
         car.setCategories(categories);
 
         Car savedCar = carRepository.save(car);
 
-        return carMapper.toDTO(savedCar);
+        List<String> carFeature = new ArrayList<>(carDTO.getCarFeature());
+
+        List<CarFeature> carFeatures = new ArrayList<>();
+
+        for (String feature : carFeature) {
+
+            carFeatures.add(new CarFeature(savedCar, feature));
+
+        }
+
+        savedCar.setFeatures(carFeatures);
+
+        Car saved = carRepository.save(savedCar);
+
+        return carMapper.toDTO(saved);
 
     }
 
@@ -162,6 +182,16 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    public List<String> getAllTransmissions() {
+
+        TransmissionEnum[] values = TransmissionEnum.values();
+
+        return values.length == 0 ? List.of() : Stream.of(values)
+                .map(TransmissionEnum::name)
+                .toList();
+    }
+
+    @Override
     public CarDTO getCarById(Long id) {
 
         Car car = carRepository.getByIdOrThrow(id);
@@ -196,39 +226,72 @@ public class CarServiceImpl implements CarService {
     @Override
     @Transactional
     public CarDTO updateCar(Long id, UpdateCarDTO carDTO) {
+
         Car car = carRepository.getByIdOrThrow(id);
 
-        carMapper.updateCar(carDTO, car);
+        singleCarMapper.updateCar(carDTO, car);
 
-        List<Category> categories = new ArrayList<>(carDTO.getCategoriesIds().stream()
-                .map(categoryRepository::getByIdOrThrow)
-                .toList());
+        if (Objects.nonNull(carDTO.getCategoriesIds())) {
 
-        car.setCategories(categories);
+            List<Category> categories = new ArrayList<>(carDTO.getCategoriesIds().stream()
+                    .map(categoryRepository::getByIdOrThrow)
+                    .toList());
+
+            car.setCategories(categories);
+
+        }
 
         if (carDTO.getMainImageId() != null) {
+
             Attachment mainImage = attachmentRepository.findByIdOrThrowException(carDTO.getMainImageId());
+
             mainImage.setPrimary(true);
             mainImage.setCar(car);
             car.setImageUrl("/api/attachments/download/" + mainImage.getId());
+
         }
 
-        List<Attachment> attachments = new ArrayList<>(carDTO.getAttachmentIds().stream()
-                .map(attachmentRepository::findByIdOrThrowException)
-                .toList());
+        if (Objects.nonNull(carDTO.getAttachmentIds()) && !carDTO.getAttachmentIds().isEmpty() && car.getAttachments() != null) {
 
-        if (car.getAttachments() != null) {
-            car.getAttachments().clear();
-        } else {
-            car.setAttachments(new ArrayList<>());
-        }
+            List<Attachment> attachments = new ArrayList<>(carDTO.getAttachmentIds().stream()
+                    .map(attachmentRepository::findByIdOrThrowException)
+                    .toList());
 
-        attachments.forEach(attachment -> {
-            attachment.setCar(car);
-            if (!car.getAttachments().contains(attachment)) {
-                car.getAttachments().add(attachment);
+            if (car.getAttachments() != null) {
+
+                car.getAttachments().clear();
+
+            } else {
+
+                car.setAttachments(new ArrayList<>());
+
             }
-        });
+
+            attachments.forEach(attachment -> {
+                attachment.setCar(car);
+                if (!car.getAttachments().contains(attachment)) {
+                    car.getAttachments().add(attachment);
+                }
+            });
+
+        }
+
+        if (Objects.nonNull(carDTO.getCarFeature()) && !carDTO.getCarFeature().isEmpty() && car.getFeatures() != null) {
+
+            List<String> carFeature = carDTO.getCarFeature();
+
+            List<CarFeature> carFeatures = new ArrayList<>();
+
+            for (String feature : carFeature) {
+
+                CarFeature carFeatureEntity = new CarFeature(car, feature);
+
+                carFeatures.add(carFeatureEntity);
+            }
+
+            car.setFeatures(carFeatures);
+
+        }
 
         Car savedCar = carRepository.save(car);
 

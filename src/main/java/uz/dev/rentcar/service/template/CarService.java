@@ -30,4 +30,6 @@ public interface CarService {
     PageableDTO getAvailableCars(int page, int size);
 
     List<CarDTO> getFilteredCars(CarFilterDTO carFilterDTO);
+
+    List<String> getAllTransmissions();
 }
