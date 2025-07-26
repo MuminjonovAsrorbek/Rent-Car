@@ -2,6 +2,7 @@ package uz.dev.rentcar.payload;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import uz.dev.rentcar.enums.PaymetMethodEnum;
 
 import java.time.LocalDateTime;
 
@@ -22,6 +23,9 @@ public class BookingCreateDTO {
 
     @NotNull
     private LocalDateTime returnDate;
+
+    @NotNull
+    private PaymetMethodEnum paymentMethod;
 
     private boolean isForSelf = true;
 
