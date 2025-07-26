@@ -112,4 +112,58 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentMapper.toDTO(payments);
 
     }
+
+    @Override
+    @Transactional
+    public PaymentDTO confirmPayment(Long bookingId) {
+
+        Booking booking = bookingRepository.getByIdOrThrow(bookingId);
+
+        Payment payment = paymentRepository.findByBookingIdOrThrowException(bookingId);
+
+        if (payment.getStatus() != PaymentStatus.PENDING) {
+            throw new IllegalStateException("Payment is not Pending.");
+        }
+
+        payment.setStatus(PaymentStatus.COMPLETED);
+        payment.setBooking(booking);
+
+        Payment updatedPayment = paymentRepository.save(payment);
+
+        return paymentMapper.toDTO(updatedPayment);
+
+    }
+
+    @Override
+    @Transactional
+    public PaymentDTO cancelPayment(Long bookingId, User currentUser) {
+
+        Booking booking = bookingRepository.getByIdOrThrow(bookingId);
+
+        User user = booking.getUser();
+
+        if (!user.getId().equals(currentUser.getId()) || !currentUser.getRole().equals(RoleEnum.ADMIN)) {
+
+            throw new SecurityException("You are not authorized to cancel the payment for this booking.");
+
+        }
+
+        Payment payment = paymentRepository.findByBookingIdOrThrowException(bookingId);
+
+        if (payment.getStatus() != PaymentStatus.PENDING) {
+            throw new IllegalStateException("Payment is not Pending.");
+        }
+
+        payment.setStatus(PaymentStatus.FAILED);
+        payment.setBooking(booking);
+
+        Payment updatedPayment = paymentRepository.save(payment);
+
+        PaymentDTO dto = paymentMapper.toDTO(updatedPayment);
+
+        paymentRepository.delete(payment);
+
+        return dto;
+
+    }
 }

@@ -63,4 +63,21 @@ public class PaymentController {
         return paymentService.getUserPayments(currentUser);
 
     }
+
+    @PatchMapping("/{bookingId}/confirm")
+    @PreAuthorize("hasRole('ADMIN')")
+    public PaymentDTO confirmPayment(@PathVariable Long bookingId) {
+
+        return paymentService.confirmPayment(bookingId);
+
+    }
+
+    @PatchMapping("/{bookingId}/cancel")
+    @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
+    public PaymentDTO cancelPayment(@PathVariable Long bookingId,
+                                    @AuthenticationPrincipal User currentUser) {
+
+        return paymentService.cancelPayment(bookingId, currentUser);
+
+    }
 }

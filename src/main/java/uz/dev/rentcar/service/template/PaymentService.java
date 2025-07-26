@@ -20,4 +20,8 @@ public interface PaymentService {
     PaymentDTO getPaymentByBookingId(Long bookingId, User currentUser);
 
     List<PaymentDTO> getUserPayments(User currentUser);
+
+    PaymentDTO confirmPayment(Long bookingId);
+
+    PaymentDTO cancelPayment(Long bookingId, User currentUser);
 }
