@@ -20,4 +20,9 @@ public interface PromoCodeRepository extends JpaRepository<PromoCode, Long> {
     boolean existsByCodeAndIdNot(String code, Long id);
 
     Optional<PromoCode> findByCode(String code);
+
+    default PromoCode findByCodeOrThrow(String code) {
+        return findByCode(code)
+                .orElseThrow(() -> new EntityNotFoundException("PromoCode not found with name : " + code, HttpStatus.NOT_FOUND));
+    }
 }

@@ -7,6 +7,6 @@ package uz.dev.rentcar.enums;
 
 public enum RoleEnum {
 
-    USER, ADMIN
+    USER, ADMIN, GPS
 
 }

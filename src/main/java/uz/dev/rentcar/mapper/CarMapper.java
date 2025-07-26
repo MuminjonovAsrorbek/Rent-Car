@@ -1,10 +1,12 @@
 package uz.dev.rentcar.mapper;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.payload.CarDTO;
 import uz.dev.rentcar.payload.request.CreateCarDTO;
-import uz.dev.rentcar.payload.request.UpdateCarDTO;
 
 import java.util.List;
 
@@ -29,20 +31,6 @@ public interface CarMapper {
     @Mapping(target = "reviews", ignore = true)
     @Mapping(target = "attachments", ignore = true)
     @Mapping(target = "features", ignore = true)
-    @Mapping(target = "locations", ignore = true)
     @Mapping(target = "favorites", ignore = true)
     Car toEntity(CreateCarDTO carDTO);
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "deleted", ignore = true)
-    @Mapping(target = "categories", ignore = true)
-    @Mapping(target = "bookings", ignore = true)
-    @Mapping(target = "reviews", ignore = true)
-    @Mapping(target = "attachments", ignore = true)
-    @Mapping(target = "features", ignore = true)
-    @Mapping(target = "locations", ignore = true)
-    @Mapping(target = "favorites", ignore = true)
-    Car updateCar(UpdateCarDTO updateCarDTO, @MappingTarget Car car);
 }

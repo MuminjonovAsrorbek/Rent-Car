@@ -1,26 +1,37 @@
 package uz.dev.rentcar.payload;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import uz.dev.rentcar.enums.PaymetMethodEnum;
+
 import java.time.LocalDateTime;
 
 @Data
 public class BookingCreateDTO {
 
-        private Long carId;
+    @NotNull
+    private Long carId;
 
-        private Long pickupOfficeId;
+    @NotNull
+    private Long pickupOfficeId;
 
-        private Long returnOfficeId;
+    @NotNull
+    private Long returnOfficeId;
 
-        private LocalDateTime pickupDate;
+    @NotNull
+    private LocalDateTime pickupDate;
 
-        private LocalDateTime returnDate;
+    @NotNull
+    private LocalDateTime returnDate;
 
-        private boolean isForSelf = true;
+    @NotNull
+    private PaymetMethodEnum paymentMethod;
 
-        private String recipientFullName;
+    private boolean isForSelf = true;
 
-        private String recipientPhone;
+    private String recipientFullName;
 
-        private String promoCode;
+    private String recipientPhone;
+
+    private String promoCode;
 }

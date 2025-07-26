@@ -3,6 +3,7 @@ package uz.dev.rentcar.service.template;
 import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.payload.BookingCreateDTO;
 import uz.dev.rentcar.payload.BookingDTO;
+
 import java.util.List;
 
 public interface BookingService {

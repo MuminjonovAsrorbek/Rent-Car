@@ -21,18 +21,22 @@ public class FavoriteController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user/{userId}")
     public List<FavoriteDTO> read(@PathVariable Long userId) {
+
         return favoriteService.read(userId);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
     @PostMapping
     public FavoriteDTO create(@RequestBody @Valid FavoriteDTO favoriteDTO) {
+
         return favoriteService.create(favoriteDTO);
+
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
+
         favoriteService.delete(id);
 
         return ResponseEntity.ok("Favorite deleted successfully");

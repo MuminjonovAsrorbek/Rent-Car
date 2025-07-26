@@ -1,6 +1,7 @@
 package uz.dev.rentcar.service.template;
 
 import uz.dev.rentcar.payload.CarDTO;
+import uz.dev.rentcar.payload.request.CarFilterDTO;
 import uz.dev.rentcar.payload.request.CreateCarDTO;
 import uz.dev.rentcar.payload.request.UpdateCarDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
@@ -26,4 +27,9 @@ public interface CarService {
 
     List<String> getAllFuelTypes();
 
+    PageableDTO getAvailableCars(int page, int size);
+
+    List<CarDTO> getFilteredCars(CarFilterDTO carFilterDTO);
+
+    List<String> getAllTransmissions();
 }

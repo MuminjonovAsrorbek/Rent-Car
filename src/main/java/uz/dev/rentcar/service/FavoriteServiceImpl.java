@@ -21,8 +21,11 @@ import java.util.stream.Collectors;
 public class FavoriteServiceImpl implements FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
+
     private final FavoriteMapper favoriteMapper;
+
     private final CarRepository carRepository;
+
     private final UserRepository userRepository;
 
     @Override
@@ -39,10 +42,11 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Transactional
     public FavoriteDTO create(FavoriteDTO favoriteDTO) {
 
-        Favorite favorite = favoriteMapper.toEntity(favoriteDTO);
-
         Car car = carRepository.getByIdOrThrow(favoriteDTO.getCarId());
+
         User user = userRepository.findByIdOrThrowException(favoriteDTO.getUserId());
+
+        Favorite favorite = new Favorite();
 
         favorite.setCar(car);
         favorite.setUser(user);

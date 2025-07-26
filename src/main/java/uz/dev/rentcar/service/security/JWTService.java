@@ -45,4 +45,20 @@ public class JWTService {
         return payload.getSubject();
     }
 
+    public String verifyToken(String refreshToken) {
+
+        DefaultClaims payload = (DefaultClaims) Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
+                .build()
+                .parse(refreshToken)
+                .getPayload();
+
+        if (payload.getExpiration().before(new Date())) {
+
+            throw new RuntimeException("Token expired");
+
+        }
+
+        return payload.getSubject();
+    }
 }

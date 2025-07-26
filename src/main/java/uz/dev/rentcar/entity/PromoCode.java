@@ -1,6 +1,8 @@
 package uz.dev.rentcar.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.SQLDelete;
@@ -34,7 +36,7 @@ public class PromoCode extends AbsDeleteEntity {
     @Column(nullable = false)
     private LocalDateTime validTo;
 
-    @OneToMany(mappedBy = "promoCode", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "promoCode")
     @ToString.Exclude
     private List<Booking> bookings;
 

@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: '019-add-phone-number-to-user-table'
+      id: '025-add-phone-number-to-user-table'
       author: 'Malikabonu'
       changes:
         - addColumn:

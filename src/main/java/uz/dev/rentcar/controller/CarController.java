@@ -6,9 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.dev.rentcar.payload.CarDTO;
+import uz.dev.rentcar.payload.CarFeatureDTO;
+import uz.dev.rentcar.payload.request.CarFilterDTO;
 import uz.dev.rentcar.payload.request.CreateCarDTO;
 import uz.dev.rentcar.payload.request.UpdateCarDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
+import uz.dev.rentcar.service.template.CarFeatureService;
 import uz.dev.rentcar.service.template.CarService;
 
 import java.util.List;
@@ -24,6 +27,8 @@ import java.util.List;
 public class CarController {
 
     private final CarService carService;
+
+    private final CarFeatureService carFeatureService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -49,6 +54,7 @@ public class CarController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public CarDTO updateCar(@PathVariable Long id, @RequestBody @Valid UpdateCarDTO carDTO) {
 
         return carService.updateCar(id, carDTO);
@@ -56,6 +62,7 @@ public class CarController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteCar(@PathVariable Long id) {
 
         carService.deleteCar(id);
@@ -64,10 +71,39 @@ public class CarController {
 
     }
 
-    @GetMapping("/fuelTypes")
+    @GetMapping("/open/available")
+    public PageableDTO getAvailableCars(@RequestParam(value = "page", defaultValue = "0") int page,
+                                        @RequestParam(value = "size", defaultValue = "10") int size) {
+
+        return carService.getAvailableCars(page, size);
+
+    }
+
+    @GetMapping("/open/filter")
+    public List<CarDTO> getFilterCars(CarFilterDTO carFilterDTO) {
+
+        return carService.getFilteredCars(carFilterDTO);
+
+    }
+
+    @GetMapping("/open/fuelTypes")
     public List<String> getAllFuelTypes() {
 
         return carService.getAllFuelTypes();
+
+    }
+
+    @GetMapping("/open/transmissions")
+    public List<String> getAllTransmissions() {
+
+        return carService.getAllTransmissions();
+
+    }
+
+    @GetMapping("/open/{carId}/features")
+    public List<CarFeatureDTO> getCarFeatures(@PathVariable Long carId) {
+
+        return carFeatureService.getCarFeatures(carId);
 
     }
 

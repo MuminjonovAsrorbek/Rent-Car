@@ -2,4 +2,4 @@ spring:
   application:
     name: Rent-Car
   profiles:
-    active:  malikabonu-dev
+    active: dev

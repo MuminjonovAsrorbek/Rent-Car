@@ -17,8 +17,7 @@ public class PromoCodeController {
 
     private final PromoCodeService promoCodeService;
 
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    @GetMapping("/{id}")
+    @GetMapping("/open/{id}")
     public PromoCodeDTO read(@PathVariable Long id) {
         return promoCodeService.read(id);
     }
@@ -33,8 +32,9 @@ public class PromoCodeController {
         return promoCodeService.readAll(page, size);
     }
 
-    @GetMapping("/validate")
-    public PromoCodeDTO codeValidate(@RequestParam String code) {
+    @GetMapping("/open/validate")
+    public Boolean codeValidate(@RequestParam String code) {
+
         return promoCodeService.codeValidate(code);
     }
 
