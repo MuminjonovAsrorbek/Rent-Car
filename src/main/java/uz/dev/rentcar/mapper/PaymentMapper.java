@@ -22,4 +22,12 @@ public interface PaymentMapper {
     PaymentDTO toDTO(Payment payment);
 
     List<PaymentDTO> toDTO(List<Payment> payments);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
+    @Mapping(target = "booking", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    Payment toEntity(PaymentDTO paymentDTO);
 }

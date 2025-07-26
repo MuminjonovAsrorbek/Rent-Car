@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.dev.rentcar.config.CaffeineCacheConfig;
 import uz.dev.rentcar.entity.*;
 import uz.dev.rentcar.enums.BookingStatusEnum;
+import uz.dev.rentcar.enums.PaymentStatus;
 import uz.dev.rentcar.enums.RoleEnum;
 import uz.dev.rentcar.exceptions.CarNotAvailableException;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
@@ -119,10 +120,19 @@ public class BookingServiceImpl implements BookingService {
 
         carRepository.save(car);
 
+        Payment payment = new Payment();
+
+        payment.setPaymentMethod(dto.getPaymentMethod());
+        payment.setStatus(PaymentStatus.PENDING);
+        payment.setBooking(savedBooking);
+        payment.setAmount(booking.getTotalPrice());
+
+        booking.setPayment(payment);
+
         log.info("Booking created successfully for user: {}, car: {}, pickup: {}, return: {}",
                 currentUser.getId(), car.getId(), dto.getPickupDate(), dto.getReturnDate());
 
-        return bookingMapper.toDTO(savedBooking);
+        return bookingMapper.toDTO(bookingRepository.save(booking));
     }
 
     @Override
@@ -214,6 +224,14 @@ public class BookingServiceImpl implements BookingService {
         if (booking.getStatus() != BookingStatusEnum.PENDING) {
 
             throw new InvalidRequestException("Only PENDING bookings can be confirmed.", HttpStatus.BAD_REQUEST);
+
+        }
+
+        Payment payment = booking.getPayment();
+
+        if (!payment.getStatus().equals(PaymentStatus.COMPLETED)) {
+
+            throw new InvalidRequestException("Payment is not completed yet.", HttpStatus.BAD_REQUEST);
 
         }
 
