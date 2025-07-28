@@ -44,7 +44,10 @@ public class BookingController {
     @PostMapping("/{id}/cancel")
     @PreAuthorize("hasAnyRole('USER' , 'ADMIN')")
     public ResponseEntity<BookingDTO> cancelBooking(@PathVariable Long id, @AuthenticationPrincipal User currentUser) {
-        return ResponseEntity.ok(bookingService.cancelBooking(id, currentUser));
+
+        BookingDTO bookingDTO = bookingService.cancelBooking(id, currentUser);
+
+        return ResponseEntity.ok(bookingDTO);
     }
 
     // ====== ADMIN ENDPOINTS ======

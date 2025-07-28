@@ -10,6 +10,9 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import uz.dev.rentcar.exceptions.SendEmailErrorException;
+import uz.dev.rentcar.payload.CancelledBookingDTO;
+import uz.dev.rentcar.payload.CompleteBookingDTO;
+import uz.dev.rentcar.payload.ConfirmBookingDTO;
 import uz.dev.rentcar.payload.SendEmailBookingDTO;
 import uz.dev.rentcar.service.template.SendEmailService;
 import uz.dev.rentcar.utils.SendEmailGaps;
@@ -50,6 +53,90 @@ public class SendEmailServiceImpl implements SendEmailService {
         } catch (MessagingException e) {
 
             throw new SendEmailErrorException("Email error occurred: " + sendEmailBookingDTO.getUserEmail(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+
+    }
+
+    @Override
+    @EventListener
+    @Async
+    public void sendEmailCancelledBooking(CancelledBookingDTO cancelledBookingDTO) {
+
+        String html = sendEmailGaps.generateBookingCancelledHtml(cancelledBookingDTO.getBookingId(), cancelledBookingDTO.getCancelledAt());
+
+        String subject = "RentCar - Booking Cancellation";
+
+        try {
+
+            MimeMessage message = javaMailSender.createMimeMessage();
+
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(cancelledBookingDTO.getUserEmail());
+            helper.setSubject(subject);
+            helper.setText(html, true);
+
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+
+            throw new SendEmailErrorException("Email error occurred: " + cancelledBookingDTO.getUserEmail(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+
+    }
+
+    @Override
+    @EventListener
+    @Async
+    public void sendEmailConfirmBooking(ConfirmBookingDTO confirmBookingDTO) {
+
+        String html = sendEmailGaps.generateBookingConfirm(confirmBookingDTO.getBookingId());
+
+        String subject = "RentCar - Booking Confirmation";
+
+        try {
+
+            MimeMessage message = javaMailSender.createMimeMessage();
+
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(confirmBookingDTO.getUserEmail());
+            helper.setSubject(subject);
+            helper.setText(html, true);
+
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+
+            throw new SendEmailErrorException("Email error occurred: " + confirmBookingDTO.getUserEmail(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+
+    }
+
+    @Override
+    @EventListener
+    @Async
+    public void sendEmailCompleteBooking(CompleteBookingDTO completeBookingDTO) {
+
+        String html = sendEmailGaps.generateBookingComplete(completeBookingDTO.getBookingId());
+
+        String subject = "RentCar - Booking Completion";
+
+        try {
+
+            MimeMessage message = javaMailSender.createMimeMessage();
+
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(completeBookingDTO.getUserEmail());
+            helper.setSubject(subject);
+            helper.setText(html, true);
+
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+
+            throw new SendEmailErrorException("Email error occurred: " + completeBookingDTO.getUserEmail(), HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 

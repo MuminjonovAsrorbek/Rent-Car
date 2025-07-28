@@ -221,6 +221,9 @@ public class BookingServiceImpl implements BookingService {
 
         log.info("Booking cancelled successfully for user: {}, booking ID: {}", currentUser.getId(), id);
 
+        notificationService.updateBookingStatus(currentUser, "Your booking has been cancelled successfully.",
+                NotificationTypeEnum.WARNING, id, BookingStatusEnum.CANCELLED);
+
         return bookingMapper.toDTO(save);
     }
 
@@ -262,6 +265,9 @@ public class BookingServiceImpl implements BookingService {
 
         log.info("Booking confirmed successfully for user: {}, booking ID: {}", userId, id);
 
+        notificationService.updateBookingStatus(booking.getUser(), "Your booking has been confirmed successfully.",
+                NotificationTypeEnum.INFO, id, BookingStatusEnum.CONFIRMED);
+
         return bookingMapper.toDTO(save);
     }
 
@@ -294,6 +300,9 @@ public class BookingServiceImpl implements BookingService {
         Objects.requireNonNull(cacheManager.getCache(CaffeineCacheConfig.BOOKINGS)).evict(userId);
 
         log.info("Booking completed successfully for user: {}, booking ID: {}", userId, id);
+
+        notificationService.updateBookingStatus(booking.getUser(), "Your booking has been completed successfully.",
+                NotificationTypeEnum.INFO, id, BookingStatusEnum.COMPLETED);
 
         return bookingMapper.toDTO(save);
     }

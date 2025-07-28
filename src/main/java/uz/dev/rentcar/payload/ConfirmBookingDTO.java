@@ -1,0 +1,21 @@
+package uz.dev.rentcar.payload;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * Created by: asrorbek
+ * DateTime: 7/28/25 17:47
+ **/
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class ConfirmBookingDTO {
+
+    private Long bookingId;
+
+    private String userEmail;
+
+}

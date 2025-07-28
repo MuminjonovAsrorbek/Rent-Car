@@ -2,6 +2,7 @@ package uz.dev.rentcar.service.template;
 
 import uz.dev.rentcar.entity.Booking;
 import uz.dev.rentcar.entity.User;
+import uz.dev.rentcar.enums.BookingStatusEnum;
 import uz.dev.rentcar.enums.NotificationTypeEnum;
 
 /**
@@ -12,5 +13,7 @@ import uz.dev.rentcar.enums.NotificationTypeEnum;
 public interface NotificationService {
 
     void createNotification(User user, String message, NotificationTypeEnum type, Booking booking);
+
+    void updateBookingStatus(User user, String message, NotificationTypeEnum type, Long bookingId, BookingStatusEnum bookingStatus);
 
 }
