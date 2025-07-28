@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.dev.rentcar.config.CaffeineCacheConfig;
 import uz.dev.rentcar.entity.*;
 import uz.dev.rentcar.enums.BookingStatusEnum;
+import uz.dev.rentcar.enums.NotificationTypeEnum;
 import uz.dev.rentcar.enums.PaymentStatus;
 import uz.dev.rentcar.enums.RoleEnum;
 import uz.dev.rentcar.exceptions.CarNotAvailableException;
@@ -23,6 +24,7 @@ import uz.dev.rentcar.payload.BookingCreateDTO;
 import uz.dev.rentcar.payload.BookingDTO;
 import uz.dev.rentcar.repository.*;
 import uz.dev.rentcar.service.template.BookingService;
+import uz.dev.rentcar.service.template.NotificationService;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -49,6 +51,8 @@ public class BookingServiceImpl implements BookingService {
     private final BookingMapper bookingMapper;
 
     private final CacheManager cacheManager;
+
+    private final NotificationService notificationService;
 
     @Override
     @Transactional
@@ -132,7 +136,12 @@ public class BookingServiceImpl implements BookingService {
         log.info("Booking created successfully for user: {}, car: {}, pickup: {}, return: {}",
                 currentUser.getId(), car.getId(), dto.getPickupDate(), dto.getReturnDate());
 
-        return bookingMapper.toDTO(bookingRepository.save(booking));
+        Booking save = bookingRepository.save(booking);
+
+        notificationService.createNotification(currentUser, "Your booking has been created successfully.",
+                NotificationTypeEnum.INFO, save);
+
+        return bookingMapper.toDTO(save);
     }
 
     @Override
