@@ -1,5 +1,6 @@
 package uz.dev.rentcar.payload;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import uz.dev.rentcar.enums.PaymetMethodEnum;
@@ -19,9 +20,11 @@ public class BookingCreateDTO {
     private Long returnOfficeId;
 
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime pickupDate;
 
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime returnDate;
 
     @NotNull
