@@ -1,5 +1,8 @@
 package uz.dev.rentcar.service.template;
 
+import uz.dev.rentcar.payload.CancelledBookingDTO;
+import uz.dev.rentcar.payload.CompleteBookingDTO;
+import uz.dev.rentcar.payload.ConfirmBookingDTO;
 import uz.dev.rentcar.payload.SendEmailBookingDTO;
 
 /**
@@ -10,5 +13,11 @@ import uz.dev.rentcar.payload.SendEmailBookingDTO;
 public interface SendEmailService {
 
     void sendBookingCreationToEmail(SendEmailBookingDTO sendEmailBookingDTO);
+
+    void sendEmailCancelledBooking(CancelledBookingDTO cancelledBookingDTO);
+
+    void sendEmailConfirmBooking(ConfirmBookingDTO confirmBookingDTO);
+
+    void sendEmailCompleteBooking(CompleteBookingDTO completeBookingDTO);
 
 }
