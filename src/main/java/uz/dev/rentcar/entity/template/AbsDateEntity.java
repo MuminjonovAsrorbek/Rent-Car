@@ -1,11 +1,13 @@
 package uz.dev.rentcar.entity.template;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import uz.dev.rentcar.listener.EntityAuditListener;
 
 import java.sql.Timestamp;
 
@@ -21,6 +23,7 @@ import java.sql.Timestamp;
 @ToString
 @MappedSuperclass
 @FieldNameConstants
+@EntityListeners(EntityAuditListener.class)
 public class AbsDateEntity {
 
     @CreationTimestamp
