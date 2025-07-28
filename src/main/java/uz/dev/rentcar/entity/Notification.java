@@ -11,8 +11,6 @@ import org.hibernate.annotations.SQLRestriction;
 import uz.dev.rentcar.entity.template.AbsDeleteEntity;
 import uz.dev.rentcar.enums.NotificationTypeEnum;
 
-import java.math.BigDecimal;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
