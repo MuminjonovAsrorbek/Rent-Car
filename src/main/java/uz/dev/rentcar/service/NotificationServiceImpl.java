@@ -10,15 +10,14 @@ import uz.dev.rentcar.entity.Notification;
 import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.enums.BookingStatusEnum;
 import uz.dev.rentcar.enums.NotificationTypeEnum;
+import uz.dev.rentcar.enums.RoleEnum;
 import uz.dev.rentcar.mapper.NotificationMapper;
-import uz.dev.rentcar.payload.CancelledBookingDTO;
-import uz.dev.rentcar.payload.CompleteBookingDTO;
-import uz.dev.rentcar.payload.ConfirmBookingDTO;
-import uz.dev.rentcar.payload.SendEmailBookingDTO;
+import uz.dev.rentcar.payload.*;
 import uz.dev.rentcar.repository.NotificationRepository;
 import uz.dev.rentcar.service.template.NotificationService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Created by: asrorbek
@@ -102,5 +101,74 @@ public class NotificationServiceImpl implements NotificationService {
             applicationEventPublisher.publishEvent(completeBookingDTO);
 
         }
+    }
+
+    @Override
+    public List<NotificationDTO> getMyAllNotifications(User currentUser) {
+
+        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId());
+
+        return notificationMapper.toDTO(notifications);
+
+    }
+
+    @Override
+    public List<NotificationDTO> getMyUnreadNotifications(User currentUser) {
+
+        List<Notification> notifications = notificationRepository.findByUserIdAndIsReadFalse(currentUser.getId());
+
+        return notificationMapper.toDTO(notifications);
+
+    }
+
+    @Override
+    @Transactional
+    public void markAllNotificationsAsRead(User currentUser) {
+
+        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId());
+
+        for (Notification notification : notifications) {
+            notification.setRead(true);
+        }
+
+        notificationRepository.saveAll(notifications);
+
+        log.info("All notifications marked as read for user: {}", currentUser.getEmail());
+
+    }
+
+    @Override
+    @Transactional
+    public void markAllNotificationsAsUnread(User currentUser) {
+
+        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId());
+
+        for (Notification notification : notifications) {
+            notification.setRead(false);
+        }
+
+        notificationRepository.saveAll(notifications);
+
+        log.info("All notifications marked as unread for user: {}", currentUser.getEmail());
+
+    }
+
+    @Override
+    @Transactional
+    public NotificationDTO markNotificationAsRead(User currentUser, Long notificationId) {
+
+        Notification notification = notificationRepository.findByIdOrThrowException(notificationId);
+
+        if (!notification.getUser().getId().equals(currentUser.getId()) || !currentUser.getRole().equals(RoleEnum.ADMIN)) {
+
+            throw new SecurityException("You do not have permission to mark this notification as read.");
+
+        }
+
+        notification.setRead(true);
+
+        Notification save = notificationRepository.save(notification);
+
+        return notificationMapper.toDTO(save);
     }
 }
