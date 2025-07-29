@@ -61,6 +61,38 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     @Transactional
+    public void checkReturnDeadlines(ReturnDeadlineDTO dto) {
+
+        Notification notification = new Notification();
+
+        notification.setUser(dto.getUser());
+        notification.setMessage("Your return date is over, please pay the remaining amount.");
+        notification.setType(NotificationTypeEnum.WARNING);
+
+        notificationRepository.save(notification);
+
+        applicationEventPublisher.publishEvent(dto);
+
+    }
+
+    @Override
+    @Transactional
+    public void checkOverdueReturns(SendPenaltyDTO dto) {
+
+        Notification notification = new Notification();
+
+        notification.setUser(dto.getUser());
+        notification.setMessage("You have overdue returns. Please pay the penalty amount of " + dto.getPenaltyAmount() + " Tiyin.");
+        notification.setType(NotificationTypeEnum.WARNING);
+
+        notificationRepository.save(notification);
+
+        applicationEventPublisher.publishEvent(dto);
+
+    }
+
+    @Override
+    @Transactional
     public void updateBookingStatus(User user, String message, NotificationTypeEnum type, Long bookingId, BookingStatusEnum bookingStatus) {
 
         Notification notification = new Notification();

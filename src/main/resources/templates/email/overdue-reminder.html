@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'RentCar - Qaytarish Muddati O‘tgan'">RentCar Overdue Reminder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #dc3545;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 20px;
+            color: #333;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .warning {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f4f4f4;
+            font-size: 12px;
+            color: #777;
+        }
+        @media only screen and (max-width: 600px) {
+            .container {
+                width: 100% !important;
+            }
+            .content p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1 th:text="'RentCar - Qaytarish Muddati O‘tgan'">RentCar Overdue Reminder</h1>
+    </div>
+    <div class="content">
+        <p>Assalomu alaykum, hurmatli mijoz!</p>
+        <p class="warning">Diqqat! Sizning <strong th:text="'Bron ID: ' + ${bookingId}">Bron ID: </strong> uchun ijaraga olingan <strong th:text="${carModel}"></strong> avtomobilini qaytarish vaqti o‘tib ketdi!</p>
+        <p><strong th:text="'Qaytarish vaqti: ' + ${returnDateTime}">Qaytarish vaqti: </strong><br>
+            <strong th:text="'Qaytarish punkti: ' + ${returnLocation}">Qaytarish punkti: </strong></p>
+        <p class="warning">Har kuni 25% jarima (penya) qo‘shilmoqda. Joriy jarima: <strong th:text="${penaltyAmount} + ' so\'m'"> so'm</strong> (o‘tgan kunlar soni: <strong th:text="${overdueDays}"></strong> kun).</p>
+        <p>Iltimos, tezroq avtomobilni qaytaring. Savollar bo‘lsa, <a href="mailto:support@rentcar.com">support@rentcar.com</a> ga yozing.</p>
+    </div>
+    <div class="footer">
+        <p th:text="'&copy; ' + ${#dates.format(#dates.createNow(), 'yyyy')} + ' RentCar. Barcha huquqlar himoyalangan.'">&copy; 2025 RentCar. Barcha huquqlar himoyalangan.</p>
+    </div>
+</div>
+</body>
+</html>
