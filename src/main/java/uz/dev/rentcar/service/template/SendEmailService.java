@@ -1,9 +1,6 @@
 package uz.dev.rentcar.service.template;
 
-import uz.dev.rentcar.payload.CancelledBookingDTO;
-import uz.dev.rentcar.payload.CompleteBookingDTO;
-import uz.dev.rentcar.payload.ConfirmBookingDTO;
-import uz.dev.rentcar.payload.SendEmailBookingDTO;
+import uz.dev.rentcar.payload.*;
 
 /**
  * Created by: asrorbek
@@ -19,5 +16,9 @@ public interface SendEmailService {
     void sendEmailConfirmBooking(ConfirmBookingDTO confirmBookingDTO);
 
     void sendEmailCompleteBooking(CompleteBookingDTO completeBookingDTO);
+
+    void checkReturnDeadlines(ReturnDeadlineDTO dto);
+
+    void checkOverdueReturns(SendPenaltyDTO dto);
 
 }

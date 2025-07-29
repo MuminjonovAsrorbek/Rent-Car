@@ -5,6 +5,8 @@ import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.enums.BookingStatusEnum;
 import uz.dev.rentcar.enums.NotificationTypeEnum;
 import uz.dev.rentcar.payload.NotificationDTO;
+import uz.dev.rentcar.payload.ReturnDeadlineDTO;
+import uz.dev.rentcar.payload.SendPenaltyDTO;
 
 import java.util.List;
 
@@ -28,4 +30,8 @@ public interface NotificationService {
     void markAllNotificationsAsUnread(User currentUser);
 
     NotificationDTO markNotificationAsRead(User currentUser, Long notificationId);
+
+    void checkReturnDeadlines(ReturnDeadlineDTO dto);
+
+    void checkOverdueReturns(SendPenaltyDTO dto);
 }

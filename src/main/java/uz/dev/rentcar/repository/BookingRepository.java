@@ -28,4 +28,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Override
     boolean existsById(Long aLong);
+
+    List<Booking> findByStatusAndReturnDateBetween(BookingStatusEnum bookingStatusEnum, LocalDateTime localDateTime, LocalDateTime twoHoursFromNow);
+
+    List<Booking> findByStatusAndReturnDateBefore(BookingStatusEnum bookingStatusEnum, LocalDateTime now);
 }

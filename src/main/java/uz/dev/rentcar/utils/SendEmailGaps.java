@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import uz.dev.rentcar.payload.SendEmailBookingDTO;
+import uz.dev.rentcar.payload.SendPenaltyDTO;
 
 import java.time.LocalDateTime;
 
@@ -61,6 +62,34 @@ public class SendEmailGaps {
         context.setVariable("bookingId", bookingId);
 
         return templateEngine.process("email/complete-booking", context);
+    }
+
+    public String generateBookingReturnReminder(Long bookingId, String carModel, LocalDateTime returnDate, String returnOffice) {
+
+        Context context = new Context();
+
+        context.setVariable("bookingId", bookingId);
+        context.setVariable("carModel", carModel);
+        context.setVariable("returnDate", CommonUtils.formattedDate(returnDate));
+        context.setVariable("returnOffice", returnOffice);
+
+        return templateEngine.process("email/return-reminder", context);
+
+    }
+
+    public String generateBookingOverdueReminder(SendPenaltyDTO dto) {
+
+        Context context = new Context();
+
+        context.setVariable("bookingId", dto.getBookingId());
+        context.setVariable("carModel", dto.getCarBrandAndModel());
+        context.setVariable("overdueDays", dto.getOverdueDays());
+        context.setVariable("penaltyAmount", dto.getPenaltyAmount());
+        context.setVariable("returnDateTime", CommonUtils.formattedDate(dto.getReturnDate()));
+        context.setVariable("returnLocation", dto.getReturnOfficeName());
+
+        return templateEngine.process("email/overdue-reminder", context);
+
     }
 
 }

@@ -10,10 +10,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import uz.dev.rentcar.exceptions.SendEmailErrorException;
-import uz.dev.rentcar.payload.CancelledBookingDTO;
-import uz.dev.rentcar.payload.CompleteBookingDTO;
-import uz.dev.rentcar.payload.ConfirmBookingDTO;
-import uz.dev.rentcar.payload.SendEmailBookingDTO;
+import uz.dev.rentcar.payload.*;
 import uz.dev.rentcar.service.template.SendEmailService;
 import uz.dev.rentcar.utils.SendEmailGaps;
 
@@ -137,6 +134,69 @@ public class SendEmailServiceImpl implements SendEmailService {
         } catch (MessagingException e) {
 
             throw new SendEmailErrorException("Email error occurred: " + completeBookingDTO.getUserEmail(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+
+    }
+
+    @Override
+    @Async
+    @EventListener
+    public void checkReturnDeadlines(ReturnDeadlineDTO dto) {
+
+        String html = sendEmailGaps.generateBookingReturnReminder(
+                dto.getBookingId(),
+                dto.getCarBrandAndModel(),
+                dto.getReturnDate(),
+                dto.getReturnOfficeName()
+        );
+
+        String subject = "RentCar - Return Reminder";
+
+        try {
+
+            MimeMessage message = javaMailSender.createMimeMessage();
+
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(dto.getUser().getEmail());
+            helper.setSubject(subject);
+            helper.setText(html, true);
+
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+
+            throw new SendEmailErrorException("Email error occurred: " + dto.getUser().getEmail(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+
+    }
+
+    @Override
+    @Async
+    @EventListener
+    public void checkOverdueReturns(SendPenaltyDTO dto) {
+
+        String html = sendEmailGaps.generateBookingOverdueReminder(
+                dto
+        );
+
+        String subject = "RentCar - Overdue Return Reminder";
+
+        try {
+
+            MimeMessage message = javaMailSender.createMimeMessage();
+
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(dto.getUser().getEmail());
+            helper.setSubject(subject);
+            helper.setText(html, true);
+
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+
+            throw new SendEmailErrorException("Email error occurred: " + dto.getUser().getEmail(), HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 
