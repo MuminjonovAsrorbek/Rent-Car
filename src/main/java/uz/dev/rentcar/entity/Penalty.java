@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import uz.dev.rentcar.enums.PenaltyStatusEnum;
 
 import java.sql.Timestamp;
 
@@ -35,7 +36,11 @@ public class Penalty {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PenaltyStatusEnum status;
+
+    @OneToOne
     @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
 
