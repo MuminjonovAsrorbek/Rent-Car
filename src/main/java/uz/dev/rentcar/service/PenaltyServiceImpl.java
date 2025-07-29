@@ -5,11 +5,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.dev.rentcar.entity.Booking;
 import uz.dev.rentcar.entity.Penalty;
+import uz.dev.rentcar.entity.User;
+import uz.dev.rentcar.enums.PenaltyStatusEnum;
+import uz.dev.rentcar.mapper.PenaltyMapper;
 import uz.dev.rentcar.payload.PenaltyDTO;
 import uz.dev.rentcar.repository.BookingRepository;
 import uz.dev.rentcar.repository.PenaltyRepository;
 import uz.dev.rentcar.service.template.PenaltyService;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,6 +28,8 @@ public class PenaltyServiceImpl implements PenaltyService {
     private final PenaltyRepository penaltyRepository;
 
     private final BookingRepository bookingRepository;
+
+    private final PenaltyMapper penaltyMapper;
 
     @Override
     @Transactional
@@ -51,6 +57,83 @@ public class PenaltyServiceImpl implements PenaltyService {
             penaltyRepository.save(penalty);
 
         }
+
+    }
+
+    @Override
+    public List<PenaltyDTO> getMyPenalties(User currentUser) {
+
+        List<Penalty> penalties = penaltyRepository.findByBookingUserId(currentUser.getId());
+
+        return penaltyMapper.toDTO(penalties);
+
+    }
+
+    @Override
+    @Transactional
+    public PenaltyDTO confirmPenalty(Long bookingId) {
+
+        Booking booking = bookingRepository.getByIdOrThrow(bookingId);
+
+        Penalty penalty = penaltyRepository.findByBookingIdOrThrowException(booking.getId());
+
+        penalty.setStatus(PenaltyStatusEnum.COMPLETED);
+
+        Penalty save = penaltyRepository.save(penalty);
+
+        return penaltyMapper.toDTO(save);
+    }
+
+    @Override
+    @Transactional
+    public PenaltyDTO confirmPenaltyWithPenaltyId(Long penaltyId) {
+
+        Penalty penalty = penaltyRepository.findByIdOrThrowException(penaltyId);
+
+        penalty.setStatus(PenaltyStatusEnum.COMPLETED);
+
+        Penalty save = penaltyRepository.save(penalty);
+
+        return penaltyMapper.toDTO(save);
+
+    }
+
+    @Override
+    @Transactional
+    public PenaltyDTO cancelPenaltyWithBookingId(Long bookingId) {
+
+        Booking booking = bookingRepository.getByIdOrThrow(bookingId);
+
+        Penalty penalty = penaltyRepository.findByBookingIdOrThrowException(booking.getId());
+
+        penalty.setStatus(PenaltyStatusEnum.CANCELED);
+
+        Penalty save = penaltyRepository.save(penalty);
+
+        return penaltyMapper.toDTO(save);
+
+    }
+
+    @Override
+    @Transactional
+    public PenaltyDTO cancelPenaltyWithPenaltyId(Long penaltyId) {
+
+        Penalty penalty = penaltyRepository.findByIdOrThrowException(penaltyId);
+
+        penalty.setStatus(PenaltyStatusEnum.CANCELED);
+
+        Penalty save = penaltyRepository.save(penalty);
+
+        return penaltyMapper.toDTO(save);
+
+    }
+
+    @Override
+    public List<PenaltyDTO> getMyOverdueReturns(User currentUser) {
+
+        List<Penalty> penalties = penaltyRepository.findByBookingUserIdAndStatus(currentUser.getId(), PenaltyStatusEnum.PENDING);
+
+        return penaltyMapper.toDTO(penalties);
 
     }
 }
