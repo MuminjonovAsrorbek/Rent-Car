@@ -1,13 +1,12 @@
 package uz.dev.rentcar.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
+@FieldNameConstants
 public class AuditLog {
 
     @Id
@@ -32,6 +32,8 @@ public class AuditLog {
 
     private String description;
 
+    @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
 }

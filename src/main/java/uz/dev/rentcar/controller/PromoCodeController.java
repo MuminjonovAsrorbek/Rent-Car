@@ -41,7 +41,9 @@ public class PromoCodeController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public PromoCodeDTO create(@RequestBody @Valid PromoCodeDTO promoCodeDTO) {
+
         return promoCodeService.create(promoCodeDTO);
+
     }
 
     @PreAuthorize("hasRole('ADMIN')")

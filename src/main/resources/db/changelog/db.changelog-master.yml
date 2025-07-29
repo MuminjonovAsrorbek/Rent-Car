@@ -55,3 +55,7 @@ databaseChangeLog:
       file: 'db/changelog/changes/20250825_3.add_constraint_in_car_location_table.yml'
   - include:
       file: 'db/changelog/changes/20250825_4.drop_notnullconstraint_booking_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250829_1.create_penalty_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250829_2.add_column_penalty_table.yml'

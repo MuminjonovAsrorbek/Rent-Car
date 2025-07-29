@@ -1,9 +1,9 @@
 package uz.dev.rentcar.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.SQLDelete;
@@ -19,7 +19,8 @@ import uz.dev.rentcar.entity.template.AbsDeleteEntity;
 @FieldNameConstants
 @SQLDelete(sql = "update favorite set deleted=true where id=?")
 @SQLRestriction(value = "deleted=false")
-public class Favorite  extends AbsDeleteEntity {
+@Table(name = "favorite")
+public class Favorite extends AbsDeleteEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

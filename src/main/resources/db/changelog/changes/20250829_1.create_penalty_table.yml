@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: '027-create_penalty_table'
+      author: 'Asrorbek'
+      changes:
+        - createTable:
+            tableName: 'penalty'
+            columns:
+              - column:
+                  name: 'id'
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: 'booking_id'
+                  type: bigint
+                  constraints:
+                    referencedTableName: booking
+                    referencedColumnNames: id
+                    foreignKeyName: booking_and_penalty_rf
+                    nullable: false
+              - column:
+                  name: 'penalty_date'
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'penalty_amount'
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'overdue_days'
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: 'updated_at'
+                  type: TIMESTAMP

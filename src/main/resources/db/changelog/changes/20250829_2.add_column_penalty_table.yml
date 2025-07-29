@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: '028_add_column_penalty_table'
+      author: 'Asrorbek'
+      changes:
+        - addColumn:
+            tableName: penalty
+            columns:
+              - column:
+                  name: 'status'
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+                    checkConstraint: "status in ('PENDING' , 'CANCELLED' , 'COMPLETED')"

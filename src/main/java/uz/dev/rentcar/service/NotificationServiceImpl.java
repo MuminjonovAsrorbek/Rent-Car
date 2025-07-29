@@ -1,77 +1,206 @@
 package uz.dev.rentcar.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import uz.dev.rentcar.entity.Booking;
 import uz.dev.rentcar.entity.Notification;
 import uz.dev.rentcar.entity.User;
+import uz.dev.rentcar.enums.BookingStatusEnum;
 import uz.dev.rentcar.enums.NotificationTypeEnum;
-import uz.dev.rentcar.exceptions.EntityNotFoundException;
+import uz.dev.rentcar.enums.RoleEnum;
 import uz.dev.rentcar.mapper.NotificationMapper;
-import uz.dev.rentcar.payload.NotificationDTO;
+import uz.dev.rentcar.payload.*;
 import uz.dev.rentcar.repository.NotificationRepository;
 import uz.dev.rentcar.service.template.NotificationService;
+
+import java.time.LocalDateTime;
 import java.util.List;
+
+/**
+ * Created by: asrorbek
+ * DateTime: 7/28/25 16:35
+ **/
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
+
     private final NotificationMapper notificationMapper;
 
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+
     @Override
-    public void createNotification(User user, String message, NotificationTypeEnum type) {
+    @Transactional
+    public void createNotification(User user, String message, NotificationTypeEnum type, Booking booking) {
+
         Notification notification = new Notification();
+
         notification.setUser(user);
         notification.setMessage(message);
         notification.setType(type);
-        notification.setRead(false);
+
         notificationRepository.save(notification);
-    }
 
-    @Override
-    public List<NotificationDTO> getNotificationsForUser(User user) {
-        List<Notification> notifications = notificationRepository.findAllByUserIdOrderByCreatedAtDesc(user.getId());
-        return notificationMapper.toDtoList(notifications);
-    }
+        SendEmailBookingDTO sendEmailBookingDTO = new SendEmailBookingDTO();
 
-    @Override
-    @Transactional
-    public NotificationDTO markAsRead(Long notificationId, User user) {
-        Notification notification = findNotificationByIdAndUser(notificationId, user);
-        notification.setRead(true);
-        return notificationMapper.toDto(notificationRepository.save(notification));
+        sendEmailBookingDTO.setUserEmail(user.getEmail());
+        sendEmailBookingDTO.setCarBrandAndModel(booking.getCar().getBrand() + " " + booking.getCar().getModel());
+        sendEmailBookingDTO.setCreatedAt(booking.getCreatedAt().toLocalDateTime());
+        sendEmailBookingDTO.setTotalPrice(booking.getTotalPrice());
+
+        applicationEventPublisher.publishEvent(sendEmailBookingDTO);
+
     }
 
     @Override
     @Transactional
-    public void markAllAsRead(User user) {
-        List<Notification> notifications = notificationRepository.findAllByUserIdOrderByCreatedAtDesc(user.getId());
-        notifications.stream()
-                .filter(n -> !n.isRead())
-                .forEach(n -> n.setRead(true));
-        notificationRepository.saveAll(notifications);
+    public void checkReturnDeadlines(ReturnDeadlineDTO dto) {
+
+        Notification notification = new Notification();
+
+        notification.setUser(dto.getUser());
+        notification.setMessage("Your return date is over, please pay the remaining amount.");
+        notification.setType(NotificationTypeEnum.WARNING);
+
+        notificationRepository.save(notification);
+
+        applicationEventPublisher.publishEvent(dto);
+
     }
 
     @Override
-    public long getUnreadNotificationCount(User user) {
-        return notificationRepository.countByUserAndIsReadFalse(user);
+    @Transactional
+    public void checkOverdueReturns(SendPenaltyDTO dto) {
+
+        Notification notification = new Notification();
+
+        notification.setUser(dto.getUser());
+        notification.setMessage("You have overdue returns. Please pay the penalty amount of " + dto.getPenaltyAmount() + " Tiyin.");
+        notification.setType(NotificationTypeEnum.WARNING);
+
+        notificationRepository.save(notification);
+
+        applicationEventPublisher.publishEvent(dto);
+
     }
 
     @Override
-    public void deleteNotification(Long notificationId, User user) {
-        if (!notificationRepository.existsById(notificationId)) {
-            throw new EntityNotFoundException("Notification not found", HttpStatus.NOT_FOUND);
+    @Transactional
+    public void updateBookingStatus(User user, String message, NotificationTypeEnum type, Long bookingId, BookingStatusEnum bookingStatus) {
+
+        Notification notification = new Notification();
+
+        notification.setUser(user);
+        notification.setMessage(message);
+        notification.setType(type);
+
+        notificationRepository.save(notification);
+
+
+        if (bookingStatus.equals(BookingStatusEnum.CANCELLED)) {
+
+            CancelledBookingDTO cancelledBookingDTO = new CancelledBookingDTO(
+                    bookingId,
+                    LocalDateTime.now(),
+                    user.getEmail()
+            );
+
+            applicationEventPublisher.publishEvent(cancelledBookingDTO);
+
+        } else if (bookingStatus.equals(BookingStatusEnum.CONFIRMED)) {
+
+            ConfirmBookingDTO confirmBookingDTO = new ConfirmBookingDTO(
+                    bookingId,
+                    user.getEmail()
+            );
+
+            applicationEventPublisher.publishEvent(confirmBookingDTO);
+
+        } else {
+
+            CompleteBookingDTO completeBookingDTO = new CompleteBookingDTO(
+                    bookingId,
+                    user.getEmail()
+            );
+
+            applicationEventPublisher.publishEvent(completeBookingDTO);
+
         }
-        findNotificationByIdAndUser(notificationId, user);
-        notificationRepository.deleteById(notificationId);
     }
 
-    private Notification findNotificationByIdAndUser(Long notificationId, User user) {
-        return notificationRepository.findById(notificationId)
-                .filter(n -> n.getUser().getId().equals(user.getId()))
-                .orElseThrow(() -> new EntityNotFoundException("Notification not found or access denied", HttpStatus.FORBIDDEN));
+    @Override
+    public List<NotificationDTO> getMyAllNotifications(User currentUser) {
+
+        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId());
+
+        return notificationMapper.toDTO(notifications);
+
+    }
+
+    @Override
+    public List<NotificationDTO> getMyUnreadNotifications(User currentUser) {
+
+        List<Notification> notifications = notificationRepository.findByUserIdAndIsReadFalse(currentUser.getId());
+
+        return notificationMapper.toDTO(notifications);
+
+    }
+
+    @Override
+    @Transactional
+    public void markAllNotificationsAsRead(User currentUser) {
+
+        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId());
+
+        for (Notification notification : notifications) {
+            notification.setRead(true);
+        }
+
+        notificationRepository.saveAll(notifications);
+
+        log.info("All notifications marked as read for user: {}", currentUser.getEmail());
+
+    }
+
+    @Override
+    @Transactional
+    public void markAllNotificationsAsUnread(User currentUser) {
+
+        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId());
+
+        for (Notification notification : notifications) {
+            notification.setRead(false);
+        }
+
+        notificationRepository.saveAll(notifications);
+
+        log.info("All notifications marked as unread for user: {}", currentUser.getEmail());
+
+    }
+
+    @Override
+    @Transactional
+    public NotificationDTO markNotificationAsRead(User currentUser, Long notificationId) {
+
+        Notification notification = notificationRepository.findByIdOrThrowException(notificationId);
+
+        if (!notification.getUser().getId().equals(currentUser.getId()) || !currentUser.getRole().equals(RoleEnum.ADMIN)) {
+
+            throw new SecurityException("You do not have permission to mark this notification as read.");
+
+        }
+
+        notification.setRead(true);
+
+        Notification save = notificationRepository.save(notification);
+
+        return notificationMapper.toDTO(save);
     }
 }

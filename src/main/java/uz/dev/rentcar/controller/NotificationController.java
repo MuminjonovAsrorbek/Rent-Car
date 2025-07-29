@@ -8,37 +8,61 @@ import org.springframework.web.bind.annotation.*;
 import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.payload.NotificationDTO;
 import uz.dev.rentcar.service.template.NotificationService;
+
 import java.util.List;
 
+/**
+ * Created by: asrorbek
+ * DateTime: 7/28/25 18:40
+ **/
+
 @RestController
-@RequestMapping("/api/notifications")
 @RequiredArgsConstructor
-@PreAuthorize("isAuthenticated()")
+@RequestMapping("/api/notification")
 public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @GetMapping("/user/{userId}")
-    @PreAuthorize("hasRole('ADMIN') or #currentUser.id == #userId")
-    public ResponseEntity<List<NotificationDTO>> getNotificationsForUser(
-            @PathVariable Long userId,
-            @AuthenticationPrincipal User currentUser) {
-        return ResponseEntity.ok(notificationService.getNotificationsForUser(currentUser));
+    @GetMapping("/my/all-notifications")
+    @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
+    public List<NotificationDTO> getMyAllNotifications(@AuthenticationPrincipal User currentUser) {
+
+        return notificationService.getMyAllNotifications(currentUser);
+
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<NotificationDTO> markNotificationAsRead(@PathVariable Long id, @AuthenticationPrincipal User currentUser) {
-        return ResponseEntity.ok(notificationService.markAsRead(id, currentUser));
+    @GetMapping("/my/unread-notifications")
+    @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
+    public List<NotificationDTO> getMyUnreadNotifications(@AuthenticationPrincipal User currentUser) {
+
+        return notificationService.getMyUnreadNotifications(currentUser);
+
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteNotification(@PathVariable Long id, @AuthenticationPrincipal User currentUser) {
-        notificationService.deleteNotification(id, currentUser);
-        return ResponseEntity.noContent().build();
+    @PatchMapping("/my/mark-all-as-read")
+    @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
+    public ResponseEntity<?> markAllNotificationsAsRead(@AuthenticationPrincipal User currentUser) {
+
+        notificationService.markAllNotificationsAsRead(currentUser);
+
+        return ResponseEntity.ok("All notifications marked as read.");
     }
 
-    @GetMapping("/unread-count")
-    public ResponseEntity<Long> getUnreadCount(@AuthenticationPrincipal User currentUser) {
-        return ResponseEntity.ok(notificationService.getUnreadNotificationCount(currentUser));
+    @PatchMapping("/my/mark-all-as-unread")
+    @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
+    public ResponseEntity<?> markAllNotificationsAsUnread(@AuthenticationPrincipal User currentUser) {
+
+        notificationService.markAllNotificationsAsUnread(currentUser);
+
+        return ResponseEntity.ok("All notifications marked as unread.");
+
+    }
+
+    @PatchMapping("/my/mark-as-read/{notificationId}")
+    @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
+    public NotificationDTO markNotificationAsRead(@AuthenticationPrincipal User currentUser, @PathVariable Long notificationId) {
+
+        return notificationService.markNotificationAsRead(currentUser, notificationId);
+
     }
 }
