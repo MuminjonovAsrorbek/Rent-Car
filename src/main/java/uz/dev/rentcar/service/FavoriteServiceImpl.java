@@ -1,8 +1,8 @@
 package uz.dev.rentcar.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.entity.Favorite;
 import uz.dev.rentcar.entity.User;
@@ -63,6 +63,8 @@ public class FavoriteServiceImpl implements FavoriteService {
         Favorite favorite = favoriteRepository.getByIdOrThrow(id);
 
         favoriteRepository.delete(favorite);
+
+        favoriteRepository.flush();
     }
 
 }
