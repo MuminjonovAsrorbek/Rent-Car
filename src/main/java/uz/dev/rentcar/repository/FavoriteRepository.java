@@ -3,7 +3,6 @@ package uz.dev.rentcar.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import uz.dev.rentcar.entity.Favorite;
-import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
 
 import java.util.List;

@@ -79,14 +79,17 @@ public class BookingServiceImpl implements BookingService {
 
         long totalPrice = (long) (car.getPricePerDay() / 24.0 * hours);
 
+        Booking booking = new Booking();
+
         if (dto.getPromoCode() != null && !dto.getPromoCode().isBlank()) {
 
             PromoCode promoCode = promoCodeRepository.findByCodeOrThrow(dto.getPromoCode());
 
             totalPrice -= (long) (totalPrice * (promoCode.getDiscount().doubleValue() / 100.0));
+
+            booking.setPromoCode(promoCode);
         }
 
-        Booking booking = new Booking();
         booking.setUser(currentUser);
         booking.setCar(car);
         booking.setPickupOffice(pickupOffice);

@@ -147,7 +147,7 @@ public class CarServiceImpl implements CarService {
 
         List<Predicate> predicates = new ArrayList<>();
 
-        if (!carFilterDTO.getBrand().isBlank()) {
+        if (carFilterDTO.getBrand() != null) {
 
             predicates.add(cb.like(cb.lower(root.get(Car.Fields.brand)), "%" + carFilterDTO.getBrand().toLowerCase() + "%"));
 
