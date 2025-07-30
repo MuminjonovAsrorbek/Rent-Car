@@ -1,5 +1,6 @@
 package uz.dev.rentcar.repository;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +13,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
-    List<Booking> findAllByUserId(Long userId);
 
     @Query("SELECT COUNT(b) > 0 FROM Booking b WHERE b.car.id = :carId AND b.status IN :statuses AND b.pickupDate < :returnDate AND b.returnDate > :pickupDate")
     boolean existsOverlappingBooking(
@@ -32,4 +32,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByStatusAndReturnDateBetween(BookingStatusEnum bookingStatusEnum, LocalDateTime localDateTime, LocalDateTime twoHoursFromNow);
 
     List<Booking> findByStatusAndReturnDateBefore(BookingStatusEnum bookingStatusEnum, LocalDateTime now);
+
+    List<Booking> findByUserId(Long id, Sort sort);
 }
