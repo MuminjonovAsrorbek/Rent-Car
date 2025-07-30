@@ -23,6 +23,19 @@ import java.util.List;
 @RestControllerAdvice(basePackages = "uz.dev.rentcar")
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(value = CarNotAvailableException.class)
+    public ResponseEntity<ErrorDTO> handle(CarNotAvailableException e) {
+
+        ErrorDTO error = new ErrorDTO(
+                e.getStatus().value(),
+                e.getMessage()
+        );
+
+        return ResponseEntity
+                .status(e.getStatus().value())
+                .body(error);
+    }
+
     @ExceptionHandler(value = InvalidRequestException.class)
     public ResponseEntity<ErrorDTO> handle(InvalidRequestException e) {
 
