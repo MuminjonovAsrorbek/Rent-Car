@@ -20,7 +20,7 @@ import uz.dev.rentcar.exceptions.CarNotAvailableException;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
 import uz.dev.rentcar.exceptions.InvalidRequestException;
 import uz.dev.rentcar.mapper.BookingMapper;
-import uz.dev.rentcar.payload.BookingCreateDTO;
+import uz.dev.rentcar.payload.request.BookingCreateDTO;
 import uz.dev.rentcar.payload.BookingDTO;
 import uz.dev.rentcar.repository.*;
 import uz.dev.rentcar.service.template.BookingService;

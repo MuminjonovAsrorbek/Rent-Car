@@ -16,7 +16,7 @@ import java.util.List;
 
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,
-        uses = {BookingMapper.class, FavoriteMapper.class, NotificationMapper.class, UserAddressMapper.class, ReviewMapper.class}
+        uses = {BookingMapper.class, FavoriteMapper.class, NotificationMapper.class, ReviewMapper.class}
 )
 public interface UserMapper {
 
@@ -26,7 +26,6 @@ public interface UserMapper {
     @Mapping(target = "deleted", ignore = true)
 //    @Mapping(target = "role", defaultValue = "USER")
     @Mapping(target = "password", ignore = true)
-    @Mapping(target = "addresses", ignore = true)
     @Mapping(target = "bookings", ignore = true)
     @Mapping(target = "reviews", ignore = true)
     @Mapping(target = "favorites", ignore = true)
@@ -42,7 +41,6 @@ public interface UserMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "deleted", ignore = true)
     @Mapping(target = "password", ignore = true)
-    @Mapping(target = "addresses", ignore = true)
     @Mapping(target = "bookings", ignore = true)
     @Mapping(target = "reviews", ignore = true)
     @Mapping(target = "favorites", ignore = true)

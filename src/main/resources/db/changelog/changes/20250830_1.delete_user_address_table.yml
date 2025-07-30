@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: '029-delete_user_address_table'
+      author: 'Asrorbek'
+      comment: 'User address table is no longer needed'
+      changes:
+        - dropTable:
+            tableName: 'user_address'
+            schemaName: public

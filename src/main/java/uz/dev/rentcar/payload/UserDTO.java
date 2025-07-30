@@ -1,5 +1,6 @@
 package uz.dev.rentcar.payload;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,9 +26,11 @@ import java.util.List;
 public class UserDTO implements Serializable {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp createdAt;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp updatedAt;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -58,9 +61,6 @@ public class UserDTO implements Serializable {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<ReviewDTO> reviews;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<UserAddressDTO> addresses;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<FavoriteDTO> favorites;
