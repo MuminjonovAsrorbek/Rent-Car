@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/api/penalties")
 public class PenaltyController {
 
-    private PenaltyService penaltyService;
+    private final PenaltyService penaltyService;
 
     @GetMapping("/me/all-penalties")
     @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
