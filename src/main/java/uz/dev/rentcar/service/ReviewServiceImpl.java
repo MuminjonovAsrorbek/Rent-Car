@@ -62,7 +62,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         Car car = carRepository.getByIdOrThrow(reviewDTO.getCarId());
 
-        if (bookingRepository.existsByCarIdAndUserIdAndStatus(reviewDTO.getCarId(), user.getId(), BookingStatusEnum.COMPLETED)) {
+        if (!bookingRepository.existsByCarIdAndUserIdAndStatus(reviewDTO.getCarId(), user.getId(), BookingStatusEnum.COMPLETED)) {
 
             throw new AccessDeniedException("You can only review cars you have booked");
         }
