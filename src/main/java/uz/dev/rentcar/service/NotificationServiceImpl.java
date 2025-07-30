@@ -52,9 +52,11 @@ public class NotificationServiceImpl implements NotificationService {
         SendEmailBookingDTO sendEmailBookingDTO = new SendEmailBookingDTO();
 
         sendEmailBookingDTO.setUserEmail(user.getEmail());
+        sendEmailBookingDTO.setBookingId(booking.getId());
         sendEmailBookingDTO.setCarBrandAndModel(booking.getCar().getBrand() + " " + booking.getCar().getModel());
         sendEmailBookingDTO.setCreatedAt(booking.getCreatedAt().toLocalDateTime());
         sendEmailBookingDTO.setTotalPrice(booking.getTotalPrice());
+        sendEmailBookingDTO.setPaymentMethod(booking.getPayment().getPaymentMethod());
 
         applicationEventPublisher.publishEvent(sendEmailBookingDTO);
 

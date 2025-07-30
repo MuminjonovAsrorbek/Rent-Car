@@ -3,6 +3,7 @@ package uz.dev.rentcar.payload;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uz.dev.rentcar.enums.PaymetMethodEnum;
 
 import java.time.LocalDateTime;
 
@@ -25,5 +26,7 @@ public class SendEmailBookingDTO {
     private LocalDateTime createdAt;
 
     private Long totalPrice;
+
+    private PaymetMethodEnum paymentMethod;
 
 }

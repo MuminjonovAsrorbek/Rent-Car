@@ -30,6 +30,7 @@ public class SendEmailGaps {
         context.setVariable("createdAt", CommonUtils.formattedDate(dto.getCreatedAt()));
         context.setVariable("totalPrice", dto.getTotalPrice());
         context.setVariable("paymentUrl", "http://localhost:8080/api/payments/" + dto.getBookingId() + "/confirm");
+        context.setVariable("paymentMethod", dto.getPaymentMethod().name());
 
         return templateEngine.process("email/create-booking", context);
 
