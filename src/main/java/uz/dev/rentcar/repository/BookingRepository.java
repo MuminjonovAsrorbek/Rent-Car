@@ -34,4 +34,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByStatusAndReturnDateBefore(BookingStatusEnum bookingStatusEnum, LocalDateTime now);
 
     List<Booking> findByUserId(Long id, Sort sort);
+
+    boolean existsByCarIdAndUserIdAndStatus(Long id, Long id1, BookingStatusEnum status);
 }

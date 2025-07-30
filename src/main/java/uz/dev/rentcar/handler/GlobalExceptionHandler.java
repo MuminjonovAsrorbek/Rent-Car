@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -22,6 +23,19 @@ import java.util.List;
 @Service
 @RestControllerAdvice(basePackages = "uz.dev.rentcar")
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ResponseEntity<ErrorDTO> handle(AccessDeniedException e) {
+
+        ErrorDTO error = new ErrorDTO(
+                403,
+                e.getMessage()
+        );
+
+        return ResponseEntity
+                .status(403)
+                .body(error);
+    }
 
     @ExceptionHandler(value = CarNotAvailableException.class)
     public ResponseEntity<ErrorDTO> handle(CarNotAvailableException e) {
