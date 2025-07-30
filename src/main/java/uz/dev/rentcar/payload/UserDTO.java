@@ -63,9 +63,6 @@ public class UserDTO implements Serializable {
     private List<ReviewDTO> reviews;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<UserAddressDTO> addresses;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<FavoriteDTO> favorites;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
