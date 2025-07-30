@@ -3,11 +3,13 @@ package uz.dev.rentcar.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.dev.rentcar.config.CaffeineCacheConfig;
 import uz.dev.rentcar.entity.*;
+import uz.dev.rentcar.entity.template.AbsLongEntity;
 import uz.dev.rentcar.enums.BookingStatusEnum;
 import uz.dev.rentcar.enums.NotificationTypeEnum;
 import uz.dev.rentcar.enums.PaymentStatus;
@@ -159,7 +161,9 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDTO> getMyBookings(User currentUser) {
 
-        List<Booking> bookings = bookingRepository.findByUserId(currentUser.getId());
+        Sort sort = Sort.by(AbsLongEntity.Fields.id).descending();
+
+        List<Booking> bookings = bookingRepository.findByUserId(currentUser.getId(), sort);
 
         log.info("Fetching bookings for user: {}", currentUser.getId());
 
@@ -175,7 +179,9 @@ public class BookingServiceImpl implements BookingService {
 
         }
 
-        List<Booking> bookings = bookingRepository.findByUserId(userId);
+        Sort sort = Sort.by(AbsLongEntity.Fields.id).descending();
+
+        List<Booking> bookings = bookingRepository.findByUserId(userId, sort);
 
         log.info("Fetching bookings for user: {}", userId);
 

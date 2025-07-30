@@ -1,5 +1,6 @@
 package uz.dev.rentcar.repository;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -32,5 +33,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByStatusAndReturnDateBefore(BookingStatusEnum bookingStatusEnum, LocalDateTime now);
 
-    List<Booking> findByUserId(Long id);
+    List<Booking> findByUserId(Long id, Sort sort);
 }
