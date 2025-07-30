@@ -7,9 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.entity.Review;
 import uz.dev.rentcar.entity.User;
+import uz.dev.rentcar.enums.BookingStatusEnum;
 import uz.dev.rentcar.enums.RoleEnum;
 import uz.dev.rentcar.mapper.ReviewMapper;
 import uz.dev.rentcar.payload.ReviewDTO;
+import uz.dev.rentcar.repository.BookingRepository;
 import uz.dev.rentcar.repository.CarRepository;
 import uz.dev.rentcar.repository.ReviewRepository;
 import uz.dev.rentcar.repository.UserRepository;
@@ -23,9 +25,14 @@ import java.util.stream.Collectors;
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
+
     private final ReviewMapper reviewMapper;
+
     private final UserRepository userRepository;
+
     private final CarRepository carRepository;
+
+    private final BookingRepository bookingRepository;
 
     @Override
     public ReviewDTO read(Long id) {
@@ -54,6 +61,11 @@ public class ReviewServiceImpl implements ReviewService {
         User user = userRepository.findByIdOrThrowException(reviewDTO.getUserId());
 
         Car car = carRepository.getByIdOrThrow(reviewDTO.getCarId());
+
+        if (bookingRepository.existsByCarIdAndUserIdAndStatus(reviewDTO.getCarId(), user.getId(), BookingStatusEnum.COMPLETED)) {
+
+            throw new AccessDeniedException("You can only review cars you have booked");
+        }
 
         review.setRating(reviewDTO.getRating());
         review.setComment(reviewDTO.getComment());
