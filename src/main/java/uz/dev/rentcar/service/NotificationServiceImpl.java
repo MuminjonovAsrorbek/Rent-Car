@@ -4,10 +4,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uz.dev.rentcar.entity.Booking;
 import uz.dev.rentcar.entity.Notification;
 import uz.dev.rentcar.entity.User;
+import uz.dev.rentcar.entity.template.AbsLongEntity;
 import uz.dev.rentcar.enums.BookingStatusEnum;
 import uz.dev.rentcar.enums.NotificationTypeEnum;
 import uz.dev.rentcar.enums.RoleEnum;
@@ -141,7 +143,9 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public List<NotificationDTO> getMyAllNotifications(User currentUser) {
 
-        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId());
+        Sort sort = Sort.by((AbsLongEntity.Fields.id)).descending();
+
+        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId(), sort);
 
         return notificationMapper.toDTO(notifications);
 
@@ -150,7 +154,9 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public List<NotificationDTO> getMyUnreadNotifications(User currentUser) {
 
-        List<Notification> notifications = notificationRepository.findByUserIdAndIsReadFalse(currentUser.getId());
+        Sort sort = Sort.by((AbsLongEntity.Fields.id)).descending();
+
+        List<Notification> notifications = notificationRepository.findByUserIdAndIsReadFalse(currentUser.getId() , sort);
 
         return notificationMapper.toDTO(notifications);
 
@@ -160,7 +166,9 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional
     public void markAllNotificationsAsRead(User currentUser) {
 
-        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId());
+        Sort sort = Sort.by((AbsLongEntity.Fields.id)).descending();
+
+        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId(), sort);
 
         for (Notification notification : notifications) {
             notification.setRead(true);
@@ -176,7 +184,9 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional
     public void markAllNotificationsAsUnread(User currentUser) {
 
-        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId());
+        Sort sort = Sort.by((AbsLongEntity.Fields.id)).descending();
+
+        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId(), sort);
 
         for (Notification notification : notifications) {
             notification.setRead(false);
