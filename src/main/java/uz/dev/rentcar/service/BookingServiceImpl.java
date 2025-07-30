@@ -3,10 +3,6 @@ package uz.dev.rentcar.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +16,8 @@ import uz.dev.rentcar.exceptions.CarNotAvailableException;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
 import uz.dev.rentcar.exceptions.InvalidRequestException;
 import uz.dev.rentcar.mapper.BookingMapper;
-import uz.dev.rentcar.payload.request.BookingCreateDTO;
 import uz.dev.rentcar.payload.BookingDTO;
+import uz.dev.rentcar.payload.request.BookingCreateDTO;
 import uz.dev.rentcar.repository.*;
 import uz.dev.rentcar.service.template.BookingService;
 import uz.dev.rentcar.service.template.NotificationService;
@@ -56,7 +52,6 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    @CachePut(value = CaffeineCacheConfig.BOOKINGS, key = "#currentUser.id")
     public BookingDTO createBooking(BookingCreateDTO dto, User currentUser) {
 
         validateBookingDates(dto.getPickupDate(), dto.getReturnDate());
@@ -162,10 +157,9 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    @Cacheable(value = CaffeineCacheConfig.BOOKINGS, key = "#currentUser.id")
     public List<BookingDTO> getMyBookings(User currentUser) {
 
-        List<Booking> bookings = bookingRepository.findAllByUserId(currentUser.getId());
+        List<Booking> bookings = bookingRepository.findByUserId(currentUser.getId());
 
         log.info("Fetching bookings for user: {}", currentUser.getId());
 
@@ -173,7 +167,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    @Cacheable(value = CaffeineCacheConfig.BOOKINGS, key = "#userId")
     public List<BookingDTO> getBookingsByUserId(Long userId) {
 
         if (!userRepository.existsById(userId)) {
@@ -182,7 +175,7 @@ public class BookingServiceImpl implements BookingService {
 
         }
 
-        List<Booking> bookings = bookingRepository.findAllByUserId(userId);
+        List<Booking> bookings = bookingRepository.findByUserId(userId);
 
         log.info("Fetching bookings for user: {}", userId);
 
@@ -191,9 +184,6 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    @Caching(
-            evict = @CacheEvict(value = CaffeineCacheConfig.BOOKINGS, key = "#currentUser.id")
-    )
     public BookingDTO cancelBooking(Long id, User currentUser) {
 
         Booking booking = bookingRepository.getByIdOrThrow(id);
