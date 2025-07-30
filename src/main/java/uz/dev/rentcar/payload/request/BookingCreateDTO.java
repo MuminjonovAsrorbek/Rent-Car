@@ -1,4 +1,4 @@
-package uz.dev.rentcar.payload;
+package uz.dev.rentcar.payload.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

@@ -13,6 +13,7 @@ import uz.dev.rentcar.enums.NotificationTypeEnum;
 import uz.dev.rentcar.enums.RoleEnum;
 import uz.dev.rentcar.mapper.NotificationMapper;
 import uz.dev.rentcar.payload.*;
+import uz.dev.rentcar.payload.request.CancelledBookingDTO;
 import uz.dev.rentcar.repository.NotificationRepository;
 import uz.dev.rentcar.service.template.NotificationService;
 

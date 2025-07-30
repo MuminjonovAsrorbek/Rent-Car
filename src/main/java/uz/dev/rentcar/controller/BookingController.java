@@ -6,7 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import uz.dev.rentcar.entity.User;
-import uz.dev.rentcar.payload.BookingCreateDTO;
+import uz.dev.rentcar.payload.request.BookingCreateDTO;
 import uz.dev.rentcar.payload.BookingDTO;
 import uz.dev.rentcar.service.template.BookingService;
 
