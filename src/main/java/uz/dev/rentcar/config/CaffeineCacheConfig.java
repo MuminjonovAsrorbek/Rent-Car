@@ -28,6 +28,8 @@ public class CaffeineCacheConfig {
 
     public static final String CATEGORIES = "categories";
 
+    public static final String OFFICES = "offices";
+
     @Bean
     public CacheManager cacheManager() {
         List<CaffeineCache> caches = Arrays.stream(CacheType.values())
@@ -51,7 +53,9 @@ public class CaffeineCacheConfig {
 
         AVAILABLE_CAR(AVAILABLE_CARS, 10),
 
-        BOOKING(CATEGORIES, 5 * 60);
+        CATEGORY(CATEGORIES, 5 * 60),
+
+        OFFICE(OFFICES, 5 * 60);
 
         private final String cacheName;
 
