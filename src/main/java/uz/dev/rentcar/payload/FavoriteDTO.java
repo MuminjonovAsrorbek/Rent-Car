@@ -3,6 +3,7 @@ package uz.dev.rentcar.payload;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,8 +35,16 @@ public class FavoriteDTO implements Serializable {
     private boolean deleted = false;
 
     @NotNull
+    @Schema(
+            description = "ID of the user who added the favorite",
+            example = "1"
+    )
     private Long userId;
 
     @NotNull
+    @Schema(
+            description = "ID of the car that is marked as favorite",
+            example = "1"
+    )
     private Long carId;
 }

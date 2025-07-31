@@ -70,4 +70,12 @@ public class FavoriteServiceImpl implements FavoriteService {
         favoriteRepository.delete(favorite);
     }
 
+    @Override
+    public List<FavoriteDTO> getMyFavorites(User currentUser) {
+
+        List<Favorite> favorites = favoriteRepository.findAllByUserId(currentUser.getId());
+
+        return favoriteMapper.toDTO(favorites);
+    }
+
 }
