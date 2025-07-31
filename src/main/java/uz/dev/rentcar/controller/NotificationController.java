@@ -1,5 +1,9 @@
 package uz.dev.rentcar.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,12 +23,18 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/notification")
+@Tag(name = "Notification API", description = "Notification API")
+@SecurityRequirement(name = "bearerAuth")
 public class NotificationController {
 
     private final NotificationService notificationService;
 
     @GetMapping("/my/all-notifications")
     @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
+    @Operation(
+            summary = "Get all notifications for the current user",
+            description = "This endpoint retrieves all notifications for the authenticated user."
+    )
     public List<NotificationDTO> getMyAllNotifications(@AuthenticationPrincipal User currentUser) {
 
         return notificationService.getMyAllNotifications(currentUser);
@@ -33,6 +43,10 @@ public class NotificationController {
 
     @GetMapping("/my/unread-notifications")
     @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
+    @Operation(
+            summary = "Get unread notifications for the current user",
+            description = "This endpoint retrieves all unread notifications for the authenticated user."
+    )
     public List<NotificationDTO> getMyUnreadNotifications(@AuthenticationPrincipal User currentUser) {
 
         return notificationService.getMyUnreadNotifications(currentUser);
@@ -41,6 +55,10 @@ public class NotificationController {
 
     @PatchMapping("/my/mark-all-as-read")
     @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
+    @Operation(
+            summary = "Mark all notifications as read",
+            description = "This endpoint marks all notifications for the authenticated user as read."
+    )
     public ResponseEntity<?> markAllNotificationsAsRead(@AuthenticationPrincipal User currentUser) {
 
         notificationService.markAllNotificationsAsRead(currentUser);
@@ -50,6 +68,10 @@ public class NotificationController {
 
     @PatchMapping("/my/mark-all-as-unread")
     @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
+    @Operation(
+            summary = "Mark all notifications as unread",
+            description = "This endpoint marks all notifications for the authenticated user as unread."
+    )
     public ResponseEntity<?> markAllNotificationsAsUnread(@AuthenticationPrincipal User currentUser) {
 
         notificationService.markAllNotificationsAsUnread(currentUser);
@@ -60,7 +82,13 @@ public class NotificationController {
 
     @PatchMapping("/my/mark-as-read/{notificationId}")
     @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
-    public NotificationDTO markNotificationAsRead(@AuthenticationPrincipal User currentUser, @PathVariable Long notificationId) {
+    @Operation(
+            summary = "Mark a specific notification as read",
+            description = "This endpoint marks a specific notification as read for the authenticated user."
+    )
+
+    public NotificationDTO markNotificationAsRead(@AuthenticationPrincipal User currentUser,
+                                                  @Parameter(description = "Notification id", example = "1") @PathVariable Long notificationId) {
 
         return notificationService.markNotificationAsRead(currentUser, notificationId);
 
