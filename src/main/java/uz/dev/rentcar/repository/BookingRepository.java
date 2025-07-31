@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import uz.dev.rentcar.entity.Booking;
 import uz.dev.rentcar.enums.BookingStatusEnum;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,6 +18,15 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             @Param("carId") Long carId,
             @Param("pickupDate") LocalDateTime pickupDate,
             @Param("returnDate") LocalDateTime returnDate,
+            @Param("statuses") List<BookingStatusEnum> statuses);
+
+
+    @Query("SELECT COUNT(b) > 0 FROM Booking b WHERE b.id != :bookingId AND b.car.id = :carId AND b.status IN :statuses AND b.pickupDate < :newReturnDate AND b.returnDate > :oldReturnDate")
+    boolean existsOverlappingBookingForExtension(
+            @Param("bookingId") Long bookingId,
+            @Param("carId") Long carId,
+            @Param("oldReturnDate") LocalDateTime oldReturnDate,
+            @Param("newReturnDate") LocalDateTime newReturnDate,
             @Param("statuses") List<BookingStatusEnum> statuses);
 
     default Booking getByIdOrThrow(Long id) {
