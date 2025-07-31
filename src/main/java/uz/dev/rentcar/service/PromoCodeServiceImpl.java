@@ -25,6 +25,7 @@ import java.util.List;
 public class PromoCodeServiceImpl implements PromoCodeService {
 
     private final PromoCodeRepository promoCodeRepository;
+
     private final PromoCodeMapper promoCodeMapper;
 
     @Override

@@ -14,9 +14,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.dev.rentcar.config.CaffeineCacheConfig;
+import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.entity.Category;
 import uz.dev.rentcar.entity.template.AbsLongEntity;
 import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
+import uz.dev.rentcar.exceptions.EntityNotDeleteException;
 import uz.dev.rentcar.mapper.CategoryMapper;
 import uz.dev.rentcar.payload.CategoryDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
@@ -24,6 +26,7 @@ import uz.dev.rentcar.repository.CategoryRepository;
 import uz.dev.rentcar.service.template.CategoryService;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +43,8 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category category = categoryRepository.getByIdOrThrow(id);
 
+        log.info("Category with id {} found", id);
+
         return categoryMapper.toDTO(category);
     }
 
@@ -54,6 +59,8 @@ public class CategoryServiceImpl implements CategoryService {
         Page<Category> categoryPage = categoryRepository.findAll(pageable);
 
         List<Category> categories = categoryPage.getContent();
+
+        log.info("Found {} categories on page {} with size {}", categories.size(), page, size);
 
         return new PageableDTO(
                 categoryPage.getSize(),
@@ -85,13 +92,14 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryRepository.save(category);
 
+        log.info("Category with name {} created", category.getName());
+
         return categoryMapper.toDTO(category);
     }
 
     @Override
     @Transactional
     @Caching(
-            put = {@CachePut(value = CaffeineCacheConfig.CATEGORIES, key = "#id")},
             evict = {
                     @CacheEvict(value = CaffeineCacheConfig.CATEGORIES, allEntries = true)
             }
@@ -106,20 +114,29 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryRepository.save(category);
 
+        log.info("Category with id {} updated", id);
+
         return categoryMapper.toDTO(category);
     }
 
     @Override
     @Transactional
     @Caching(evict = {
-            @CacheEvict(value = CaffeineCacheConfig.CATEGORIES, key = "#id"),
             @CacheEvict(value = CaffeineCacheConfig.CATEGORIES, allEntries = true)
     })
     public void delete(Long id) {
 
         Category category = categoryRepository.getByIdOrThrow(id);
 
+        List<Car> cars = category.getCars();
+
+        if (Objects.nonNull(cars) && !cars.isEmpty()) {
+            throw new EntityNotDeleteException("Category cannot be deleted because it is associated with cars", HttpStatus.BAD_REQUEST);
+        }
+
         categoryRepository.delete(category);
+
+        log.info("Category with id {} deleted", id);
     }
 
 }
