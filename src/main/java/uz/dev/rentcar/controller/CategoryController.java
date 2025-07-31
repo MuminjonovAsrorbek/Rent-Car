@@ -64,7 +64,7 @@ public class CategoryController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = CategoryDTO.class)
-                    )
+                    ))
             @RequestBody @Valid CategoryDTO categoryDTO) {
 
         return categoryService.create(categoryDTO);
