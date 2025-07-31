@@ -3,12 +3,17 @@ package uz.dev.rentcar.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import uz.dev.rentcar.config.CaffeineCacheConfig;
 import uz.dev.rentcar.entity.Category;
 import uz.dev.rentcar.entity.template.AbsLongEntity;
 import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
@@ -30,6 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
 
     @Override
+    @Cacheable(value = CaffeineCacheConfig.CATEGORIES, key = "#id")
     public CategoryDTO read(Long id) {
 
         Category category = categoryRepository.getByIdOrThrow(id);
@@ -38,6 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Cacheable(value = CaffeineCacheConfig.CATEGORIES, key = "#page + '-' + #size")
     public PageableDTO readAll(int page, int size) {
 
         Sort sort = Sort.by(AbsLongEntity.Fields.id).ascending();
@@ -61,6 +68,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
+    @Caching(
+            put = {@CachePut(value = CaffeineCacheConfig.CATEGORIES, key = "#result.id")},
+            evict = {
+                    @CacheEvict(value = CaffeineCacheConfig.CATEGORIES, allEntries = true)
+            }
+    )
     public CategoryDTO create(CategoryDTO categoryDTO) {
 
         boolean exists = categoryRepository.existsByName(categoryDTO.getName());
@@ -77,6 +90,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
+    @Caching(
+            put = {@CachePut(value = CaffeineCacheConfig.CATEGORIES, key = "#id")},
+            evict = {
+                    @CacheEvict(value = CaffeineCacheConfig.CATEGORIES, allEntries = true)
+            }
+    )
     public CategoryDTO update(Long id, CategoryDTO categoryDTO) {
 
         Category category = categoryRepository.getByIdOrThrow(id);
@@ -92,6 +111,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = CaffeineCacheConfig.CATEGORIES, key = "#id"),
+            @CacheEvict(value = CaffeineCacheConfig.CATEGORIES, allEntries = true)
+    })
     public void delete(Long id) {
 
         Category category = categoryRepository.getByIdOrThrow(id);

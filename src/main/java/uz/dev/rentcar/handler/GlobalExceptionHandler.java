@@ -24,6 +24,19 @@ import java.util.List;
 @RestControllerAdvice(basePackages = "uz.dev.rentcar")
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(value = EntityNotDeleteException.class)
+    public ResponseEntity<ErrorDTO> handle(EntityNotDeleteException e) {
+
+        ErrorDTO error = new ErrorDTO(
+                e.getStatus().value(),
+                e.getMessage()
+        );
+
+        return ResponseEntity
+                .status(e.getStatus().value())
+                .body(error);
+    }
+
     @ExceptionHandler(value = AccessDeniedException.class)
     public ResponseEntity<ErrorDTO> handle(AccessDeniedException e) {
 

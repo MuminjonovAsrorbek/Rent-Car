@@ -26,7 +26,9 @@ public class CaffeineCacheConfig {
 
     public static final String AVAILABLE_CARS = "availableCars";
 
-    public static final String BOOKINGS = "bookings";
+    public static final String CATEGORIES = "categories";
+
+    public static final String OFFICES = "offices";
 
     @Bean
     public CacheManager cacheManager() {
@@ -51,7 +53,9 @@ public class CaffeineCacheConfig {
 
         AVAILABLE_CAR(AVAILABLE_CARS, 10),
 
-        BOOKING(BOOKINGS, 5 * 60);
+        CATEGORY(CATEGORIES, 5 * 60),
+
+        OFFICE(OFFICES, 5 * 60);
 
         private final String cacheName;
 

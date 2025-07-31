@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.List;
 
 /**
  * DTO for {@link uz.dev.rentcar.entity.Office}
@@ -49,10 +48,4 @@ public class OfficeDTO implements Serializable {
 
     @NotNull
     private BigDecimal longitude;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<BookingDTO> pickupBookings;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<BookingDTO> returnBookings;
 }
