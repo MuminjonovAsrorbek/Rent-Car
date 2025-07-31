@@ -9,7 +9,6 @@ import uz.dev.rentcar.entity.CarLocation;
 import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.enums.BookingStatusEnum;
 import uz.dev.rentcar.enums.RoleEnum;
-import uz.dev.rentcar.exceptions.EntityNotFoundException;
 import uz.dev.rentcar.exceptions.LocationIllegalException;
 import uz.dev.rentcar.mapper.CarLocationMapper;
 import uz.dev.rentcar.payload.CarLocationDTO;
