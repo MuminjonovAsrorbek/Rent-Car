@@ -8,9 +8,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.dev.rentcar.entity.Booking;
 import uz.dev.rentcar.entity.PromoCode;
 import uz.dev.rentcar.entity.template.AbsLongEntity;
 import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
+import uz.dev.rentcar.exceptions.EntityNotDeleteException;
 import uz.dev.rentcar.mapper.PromoCodeMapper;
 import uz.dev.rentcar.payload.PromoCodeDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
@@ -19,12 +21,14 @@ import uz.dev.rentcar.service.template.PromoCodeService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class PromoCodeServiceImpl implements PromoCodeService {
 
     private final PromoCodeRepository promoCodeRepository;
+
     private final PromoCodeMapper promoCodeMapper;
 
     @Override
@@ -110,6 +114,14 @@ public class PromoCodeServiceImpl implements PromoCodeService {
     public void delete(Long id) {
 
         PromoCode promoCode = promoCodeRepository.getByIdOrThrow(id);
+
+        List<Booking> bookings = promoCode.getBookings();
+
+        if (Objects.nonNull(bookings) && !bookings.isEmpty()) {
+
+            throw new EntityNotDeleteException("Promo code cannot be deleted because it is associated with bookings.", HttpStatus.BAD_REQUEST);
+
+        }
 
         promoCodeRepository.delete(promoCode);
     }

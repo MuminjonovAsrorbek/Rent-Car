@@ -25,9 +25,11 @@ import java.util.List;
 public class BookingDTO implements Serializable {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp createdAt;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp updatedAt;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -51,18 +53,6 @@ public class BookingDTO implements Serializable {
 
     private TransmissionEnum carTransmission;
 
-    private Long pickupOfficeId;
-
-    private String pickupOfficeName;
-
-    private String pickupOfficeAddress;
-
-    private Long returnOfficeId;
-
-    private String returnOfficeName;
-
-    private String returnOfficeAddress;
-
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime pickupDate;
 
@@ -83,5 +73,12 @@ public class BookingDTO implements Serializable {
 
     private PaymentDTO payment;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<CarLocationDTO> locations = new ArrayList<>();
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private OfficeDTO pickupOffice;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private OfficeDTO returnOffice;
 }

@@ -16,6 +16,11 @@ import uz.dev.rentcar.service.template.FavoriteService;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Created by: asrorbek
+ * DateTime: 7/30/25 22:44
+ **/
+
 @Service
 @RequiredArgsConstructor
 public class FavoriteServiceImpl implements FavoriteService {
@@ -63,8 +68,14 @@ public class FavoriteServiceImpl implements FavoriteService {
         Favorite favorite = favoriteRepository.getByIdOrThrow(id);
 
         favoriteRepository.delete(favorite);
+    }
 
-        favoriteRepository.flush();
+    @Override
+    public List<FavoriteDTO> getMyFavorites(User currentUser) {
+
+        List<Favorite> favorites = favoriteRepository.findAllByUserId(currentUser.getId());
+
+        return favoriteMapper.toDTO(favorites);
     }
 
 }

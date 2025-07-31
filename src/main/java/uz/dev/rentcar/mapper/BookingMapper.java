@@ -10,7 +10,7 @@ import uz.dev.rentcar.payload.BookingDTO;
 import java.util.List;
 
 @Mapper(componentModel = "spring",
-        uses = {PaymentMapper.class, CarLocationMapper.class}
+        uses = {PaymentMapper.class, CarLocationMapper.class, OfficeMapper.class}
 )
 public interface BookingMapper {
 
@@ -23,12 +23,6 @@ public interface BookingMapper {
     @Mapping(target = "carFuelType", source = "car.fuelType")
     @Mapping(target = "carFuelConsumption", source = "car.fuelConsumption")
     @Mapping(target = "carTransmission", source = "car.transmission")
-    @Mapping(target = "pickupOfficeId", source = "pickupOffice.id")
-    @Mapping(target = "pickupOfficeName", source = "pickupOffice.name")
-    @Mapping(target = "pickupOfficeAddress", source = "pickupOffice.address")
-    @Mapping(target = "returnOfficeId", source = "returnOffice.id")
-    @Mapping(target = "returnOfficeName", source = "returnOffice.name")
-    @Mapping(target = "returnOfficeAddress", source = "returnOffice.address")
     @Mapping(target = "hasPromoCode", source = "promoCode", qualifiedByName = "hasPromoCode")
     BookingDTO toDTO(Booking booking);
 

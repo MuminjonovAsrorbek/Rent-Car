@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service;
 import uz.dev.rentcar.entity.Booking;
 import uz.dev.rentcar.entity.Payment;
 import uz.dev.rentcar.entity.User;
+import uz.dev.rentcar.enums.BookingStatusEnum;
 import uz.dev.rentcar.enums.PaymentStatus;
 import uz.dev.rentcar.enums.PaymetMethodEnum;
 import uz.dev.rentcar.enums.RoleEnum;
 import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
+import uz.dev.rentcar.exceptions.InvalidRequestException;
 import uz.dev.rentcar.mapper.PaymentMapper;
 import uz.dev.rentcar.payload.PaymentDTO;
 import uz.dev.rentcar.repository.BookingRepository;
@@ -121,8 +123,14 @@ public class PaymentServiceImpl implements PaymentService {
 
         Payment payment = paymentRepository.findByBookingIdOrThrowException(bookingId);
 
+        if (booking.getStatus() != BookingStatusEnum.PENDING) {
+
+            throw new InvalidRequestException("Booking is not Pending.", HttpStatus.BAD_REQUEST);
+
+        }
+
         if (payment.getStatus() != PaymentStatus.PENDING) {
-            throw new IllegalStateException("Payment is not Pending.");
+            throw new InvalidRequestException("Payment is not Pending.", HttpStatus.BAD_REQUEST);
         }
 
         payment.setStatus(PaymentStatus.COMPLETED);

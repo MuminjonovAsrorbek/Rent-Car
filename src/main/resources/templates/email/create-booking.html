@@ -12,6 +12,7 @@
             padding: 0;
             color: #333;
         }
+
         .container {
             width: 100%;
             max-width: 600px;
@@ -21,25 +22,30 @@
             overflow: hidden;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
+
         .header {
             background-color: #007bff;
             color: #ffffff;
             text-align: center;
             padding: 20px;
         }
+
         .header h1 {
             margin: 0;
             font-size: 24px;
         }
+
         .content {
             padding: 20px;
             color: #333;
         }
+
         .content p {
             font-size: 16px;
             line-height: 1.5;
             margin-bottom: 15px;
         }
+
         .btn {
             display: inline-block;
             padding: 12px 25px;
@@ -50,9 +56,11 @@
             font-size: 16px;
             margin-top: 20px;
         }
+
         .btn:hover {
             background-color: #0056b3;
         }
+
         .footer {
             text-align: center;
             padding: 10px;
@@ -69,15 +77,30 @@
     </div>
     <div class="content">
         <p>Assalomu alaykum, hurmatli mijoz!</p>
-        <p>Sizning yangi bron qilish so‘rovingiz muvaffaqiyatli qabul qilindi. Quyidagi avtomobil uchun booking holati hozircha <strong>To'lov kutilyabdi</strong> holatida:</p>
+        <p>Sizning yangi bron qilish so‘rovingiz muvaffaqiyatli qabul qilindi. Quyidagi avtomobil uchun booking holati
+            hozircha <strong>To'lov kutilyabdi</strong> holatida:</p>
         <p>
             <strong>Avtomobil:</strong> <span th:text="${carBrandAndModel}"></span> <br>
             <strong>Bron ID:</strong> <span th:text="${bookingId}"></span> <br>
             <strong>Sana:</strong> <span th:text="${createdAt}"></span> <br>
             <strong>Jami narx:</strong> <span th:text="${totalPrice}"></span> so'm
         </p>
-        <p>Bronni tasdiqlash uchun iltimos, to‘lovni amalga oshiring. To‘lovni bajarish uchun quyidagi tugmani bosing:</p>
-        <a th:href="${paymentUrl}" class="btn">To‘lovni Bajarish</a>
+        <p>Bronni tasdiqlash uchun iltimos, to‘lovni amalga oshiring.</p>
+        <div th:switch="${paymentMethod}">
+            <div th:case="'CREDIT_CARD'">
+                <p>To‘lovni amalga oshirish uchun saytimizga kirib, kredit kartangizni qo‘shing va to‘lovni
+                    bajaring:</p>
+                <a th:href="${paymentUrl}" class="btn">Kredit karta orqali to‘lov</a>
+            </div>
+            <div th:case="'GOOGLE_PAY', 'CLICK', 'PAYNET'">
+                <p>
+                    To‘lovni amalga oshirish uchun <span th:text="${paymentMethod}"></span> ilovasiga kirib, quyidagi
+                    bron ID raqamini kiriting:
+                    <br>
+                    <strong>Bron ID:</strong> <span th:text="${bookingId}"></span>
+                </p>
+            </div>
+        </div>
         <p>Agar savollaringiz bo‘lsa, bizning qo‘llab-quvvatlash jamoamiz bilan bog‘laning:
             <a href="mailto:support@rentcar.com">support@rentcar.com</a>
         </p>

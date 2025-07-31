@@ -1,6 +1,0 @@
-spring:
-  datasource:
-    password: malika
-
-myapp:
-  upload-path: 'C:\Users\User\Desktop\rent-car'

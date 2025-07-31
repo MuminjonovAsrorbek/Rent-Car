@@ -1,6 +1,7 @@
 package uz.dev.rentcar.service.template;
 
 import uz.dev.rentcar.payload.*;
+import uz.dev.rentcar.payload.request.CancelledBookingDTO;
 
 /**
  * Created by: asrorbek
