@@ -3,6 +3,7 @@ package uz.dev.rentcar.payload;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,12 +37,15 @@ public class PaymentDTO implements Serializable {
     private boolean deleted = false;
 
     @NotNull
+    @Schema(description = "ID of the booking associated with this payment", example = "12345")
     private Long bookingId;
 
     @NotNull
+    @Schema(description = "Amount of the payment in cents", example = "15000")
     private Long amount;
 
     @NotNull
+    @Schema(description = "Payment method used for this payment", example = "CREDIT_CARD")
     private PaymetMethodEnum paymentMethod;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
