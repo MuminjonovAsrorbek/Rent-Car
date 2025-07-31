@@ -14,8 +14,7 @@ import java.util.List;
  **/
 
 @Mapper(
-        componentModel = MappingConstants.ComponentModel.SPRING,
-        uses = {BookingMapper.class}
+        componentModel = MappingConstants.ComponentModel.SPRING
 )
 public interface OfficeMapper {
 
