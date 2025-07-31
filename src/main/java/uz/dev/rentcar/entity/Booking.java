@@ -9,6 +9,7 @@ import uz.dev.rentcar.entity.template.AbsDeleteEntity;
 import uz.dev.rentcar.enums.BookingStatusEnum;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,7 +50,7 @@ public class Booking extends AbsDeleteEntity {
     private LocalDateTime returnDate;
 
     @Column(nullable = false)
-    private boolean isForSelf = true;
+    private Boolean isForSelf = true;
 
     @Column(nullable = false)
     private String recipientFullName;
@@ -67,12 +68,15 @@ public class Booking extends AbsDeleteEntity {
     @Enumerated(EnumType.STRING)
     private BookingStatusEnum status;
 
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
-    @ToString.Exclude
-    private List<Payment> payments;
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Payment payment;
 
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @ToString.Exclude
-    private List<BookingHistory> history;
+    private List<BookingHistory> history = new ArrayList<>();
+
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ToString.Exclude
+    private List<CarLocation> locations = new ArrayList<>();
 
 }

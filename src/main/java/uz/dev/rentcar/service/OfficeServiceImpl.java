@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import uz.dev.rentcar.entity.CarFeature;
 import uz.dev.rentcar.entity.Office;
 import uz.dev.rentcar.entity.template.AbsLongEntity;
 import uz.dev.rentcar.mapper.OfficeMapper;
@@ -35,6 +34,7 @@ public class OfficeServiceImpl implements OfficeService {
 
     @Override
     public PageableDTO readAll(int page, int size) {
+
         Sort sort = Sort.by(AbsLongEntity.Fields.id).ascending();
 
         Pageable pageable = PageRequest.of(page, size, sort);

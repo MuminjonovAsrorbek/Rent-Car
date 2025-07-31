@@ -2,15 +2,16 @@ package uz.dev.rentcar.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.entity.Review;
 import uz.dev.rentcar.entity.User;
-import uz.dev.rentcar.exceptions.EntityNotFoundException;
+import uz.dev.rentcar.enums.BookingStatusEnum;
+import uz.dev.rentcar.enums.RoleEnum;
 import uz.dev.rentcar.mapper.ReviewMapper;
 import uz.dev.rentcar.payload.ReviewDTO;
+import uz.dev.rentcar.repository.BookingRepository;
 import uz.dev.rentcar.repository.CarRepository;
 import uz.dev.rentcar.repository.ReviewRepository;
 import uz.dev.rentcar.repository.UserRepository;
@@ -24,9 +25,14 @@ import java.util.stream.Collectors;
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
+
     private final ReviewMapper reviewMapper;
+
     private final UserRepository userRepository;
+
     private final CarRepository carRepository;
+
+    private final BookingRepository bookingRepository;
 
     @Override
     public ReviewDTO read(Long id) {
@@ -53,7 +59,13 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = reviewMapper.toEntity(reviewDTO);
 
         User user = userRepository.findByIdOrThrowException(reviewDTO.getUserId());
+
         Car car = carRepository.getByIdOrThrow(reviewDTO.getCarId());
+
+        if (!bookingRepository.existsByCarIdAndUserIdAndStatus(reviewDTO.getCarId(), user.getId(), BookingStatusEnum.COMPLETED)) {
+
+            throw new AccessDeniedException("You can only review cars you have booked");
+        }
 
         review.setRating(reviewDTO.getRating());
         review.setComment(reviewDTO.getComment());
@@ -67,19 +79,15 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public ReviewDTO update(Long id, ReviewDTO reviewDTO) {
+    public ReviewDTO update(Long id, ReviewDTO reviewDTO, User currentUser) {
 
         Review review = reviewRepository.getByIdOrThrow(id);
 
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found " + email));
-
-        if (!review.getUser().getId().equals(user.getId()))
+        if (!review.getUser().equals(currentUser) || !currentUser.getRole().equals(RoleEnum.ADMIN))
             throw new AccessDeniedException("You are not allowed to update this review");
 
         review.setRating(reviewDTO.getRating());
+
         review.setComment(reviewDTO.getComment());
 
         reviewRepository.save(review);
@@ -89,17 +97,12 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public void delete(Long id) {
+    public void delete(Long id, User currentUser) {
 
         Review review = reviewRepository.getByIdOrThrow(id);
 
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found " + email));
-
-        if (!review.getUser().getId().equals(user.getId()))
-            throw new AccessDeniedException("You are not allowed to update this review");
+        if (!review.getUser().equals(currentUser) || !currentUser.getRole().equals(RoleEnum.ADMIN))
+            throw new AccessDeniedException("You are not allowed to delete this review");
 
         reviewRepository.delete(review);
     }

@@ -1,13 +1,13 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/rent_car
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://${DB_HOSTNAME}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   liquibase:
     enabled: true
     change-log: 'classpath:db/changelog/db.changelog-master.yml'
-    contexts: product
+    contexts: dev
     drop-first: false
     default-schema: public
     liquibase-schema: public
@@ -24,6 +24,17 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 100MB
+  mail:
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_NAME}
+    password: ${EMAIL_APP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 myapp:
-  secret-key: 'c0388696-55b0-479c-a142-a2ae7cbe269a'
-  upload-path: '/home/asrorbek/Project''s/JavaProject''s/Rent-Car/uploads'
+  secret-key: ${SECRET_KEY}
+  upload-path: ${UPLOAD_PATH}

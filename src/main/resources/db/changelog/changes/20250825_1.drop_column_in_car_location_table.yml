@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: '024-drop_column-in-car_location-table'
+      author: 'Asrorbek'
+      comment: 'CarLocation tabledagi car_id ustuni o''chirilmoqda va uni o'' booking_id column qo''shilyabdi va reference bo''lyabdi'
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: 'car_location'
+            constraintName: 'car_car_location_id_rf'
+        - dropColumn:
+            tableName: 'car_location'
+            columnName: 'car_id'
+        - addColumn:
+            tableName: 'car_location'
+            columns:
+              - column:
+                  name: 'booking_id'
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    referencedTableName: booking
+                    referencedColumnNames: 'id'
+                    foreignKeyName: 'booking_car_location_id_rf'

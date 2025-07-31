@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import uz.dev.rentcar.entity.User;
+import uz.dev.rentcar.enums.RoleEnum;
 
 import java.util.Objects;
 
@@ -31,6 +32,7 @@ public class SecurityUtils {
 
         user.setEmail("SYSTEM@gmail.com");
         user.setPassword(passwordEncoder.encode("SYSTEM"));
+        user.setRole(RoleEnum.ADMIN);
 
         return user;
 

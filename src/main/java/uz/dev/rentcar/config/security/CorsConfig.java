@@ -3,7 +3,6 @@ package uz.dev.rentcar.config.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
  * Created by: asrorbek
@@ -15,15 +14,9 @@ public class CorsConfig {
     @Bean
     public CorsConfiguration corsConfiguration() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*");
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        source.registerCorsConfiguration("/**", configuration);
-
+        configuration.addAllowedOrigin("*");//domenlar
+        configuration.addAllowedHeader("*");//header
+        configuration.addAllowedMethod("*");//GET, POST
         return configuration;
     }
-
 }

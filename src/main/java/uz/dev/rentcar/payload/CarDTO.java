@@ -1,5 +1,6 @@
 package uz.dev.rentcar.payload;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uz.dev.rentcar.enums.FuelTypeEnum;
+import uz.dev.rentcar.enums.TransmissionEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -28,9 +30,11 @@ public class CarDTO implements Serializable {
     private Long id;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp createdAt;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp updatedAt;
 
     @JsonIgnore
@@ -64,7 +68,7 @@ public class CarDTO implements Serializable {
     private BigDecimal fuelConsumption;
 
     @NotNull
-    private String transmission;
+    private TransmissionEnum transmission;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<CategoryDTO> categories;
@@ -79,10 +83,7 @@ public class CarDTO implements Serializable {
     private List<ReviewDTO> reviews;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<AttachmentDTO> attachments;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<CarLocationDTO> locations;
+    private List<AttachmentDTO> images;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<FavoriteDTO> favorites;

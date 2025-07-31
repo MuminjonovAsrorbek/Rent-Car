@@ -5,14 +5,17 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import uz.dev.rentcar.entity.Attachment;
+import uz.dev.rentcar.payload.AttachmentDTO;
+import uz.dev.rentcar.payload.CarDTO;
 import uz.dev.rentcar.service.template.AttachmentService;
 
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 /**
  * Created by: asrorbek
@@ -26,7 +29,7 @@ public class AttachmentController {
 
     private final AttachmentService attachmentService;
 
-    @GetMapping("/download/{id}")
+    @GetMapping("/open/download/{id}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Long id) {
 
         Attachment attachment = attachmentService.downloadFile(id);
@@ -37,10 +40,27 @@ public class AttachmentController {
 
         return ResponseEntity
                 .status(200)
-                .header("Content-Disposition", "attachment; filename=\"%s\"".formatted(attachment.getOriginalName()))
+                .header("Content-Disposition", "inline; filename=\"%s\"".formatted(attachment.getOriginalName()))
                 .contentType(MediaType.parseMediaType(attachment.getContentType()))
                 .contentLength(attachment.getSize())
                 .body(resource);
+    }
+
+    @PostMapping(path = "/{carId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    public CarDTO uploadFiles(@PathVariable Long carId,
+                              @RequestParam("files") List<MultipartFile> files) throws IOException {
+
+        return attachmentService.uploadFiles(files, carId);
+
+    }
+
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<AttachmentDTO> createImages(@RequestParam("files") List<MultipartFile> files) throws IOException {
+
+        return attachmentService.createImages(files);
+
     }
 
 }

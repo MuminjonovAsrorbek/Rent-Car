@@ -7,8 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uz.dev.rentcar.enums.FuelTypeEnum;
+import uz.dev.rentcar.enums.TransmissionEnum;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,10 +48,14 @@ public class CreateCarDTO {
     @NotNull
     private FuelTypeEnum fuelType;
 
+    @NotNull
     private BigDecimal fuelConsumption;
 
     @NotNull
-    private String transmission;
+    private List<String> carFeature = new ArrayList<>();
+
+    @NotNull
+    private TransmissionEnum transmission;
 
     @NotNull
     private List<Long> categoriesIds;

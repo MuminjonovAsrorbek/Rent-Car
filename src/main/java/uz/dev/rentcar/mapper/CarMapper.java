@@ -17,7 +17,7 @@ import java.util.List;
 public interface CarMapper {
 
     @Mapping(target = "categories", ignore = true)
-    @Mapping(target = "attachments", ignore = true)
+    @Mapping(target = "images", source = "attachments")
     CarDTO toDTO(Car car);
 
     List<CarDTO> toDTO(List<Car> cars);
@@ -31,7 +31,6 @@ public interface CarMapper {
     @Mapping(target = "reviews", ignore = true)
     @Mapping(target = "attachments", ignore = true)
     @Mapping(target = "features", ignore = true)
-    @Mapping(target = "locations", ignore = true)
     @Mapping(target = "favorites", ignore = true)
     Car toEntity(CreateCarDTO carDTO);
 }

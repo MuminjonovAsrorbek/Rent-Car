@@ -11,8 +11,11 @@ import uz.dev.rentcar.entity.Attachment;
 import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
 import uz.dev.rentcar.mapper.AttachmentMapper;
+import uz.dev.rentcar.mapper.CarMapper;
 import uz.dev.rentcar.payload.AttachmentDTO;
+import uz.dev.rentcar.payload.CarDTO;
 import uz.dev.rentcar.repository.AttachmentRepository;
+import uz.dev.rentcar.repository.CarRepository;
 import uz.dev.rentcar.service.template.AttachmentService;
 
 import java.io.FileNotFoundException;
@@ -35,6 +38,10 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     private final AttachmentRepository attachmentRepository;
 
+    private final CarRepository carRepository;
+
+    private final CarMapper carMapper;
+
     private final AttachmentMapper attachmentMapper;
 
     @Value("${myapp.upload-path}")
@@ -42,9 +49,9 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     @Override
     @Transactional
-    public List<AttachmentDTO> uploadFiles(List<MultipartFile> images, Car savedCar) throws IOException {
+    public CarDTO uploadFiles(List<MultipartFile> images, Long carId) throws IOException {
 
-        List<AttachmentDTO> attachmentDTOs = new ArrayList<>();
+        Car car = carRepository.getByIdOrThrow(carId);
 
         boolean isFirst = true;
 
@@ -80,14 +87,14 @@ public class AttachmentServiceImpl implements AttachmentService {
                 attachment.setOriginalName(originalFilename);
                 attachment.setContentType(contentType);
                 attachment.setSize(size);
-                attachment.setCar(savedCar);
+                attachment.setCar(car);
                 attachment.setPrimary(isFirst);
 
                 Attachment saved = attachmentRepository.save(attachment);
 
                 if (isFirst) {
 
-                    savedCar.setImageUrl(
+                    car.setImageUrl(
                             "/api/attachments/download/" + saved.getId()
                     );
 
@@ -95,11 +102,11 @@ public class AttachmentServiceImpl implements AttachmentService {
 
                 isFirst = false;
 
-                attachmentDTOs.add(attachmentMapper.toDTO(attachment));
-
             }
 
-            return attachmentDTOs;
+            Car savedCar = carRepository.save(car);
+
+            return carMapper.toDTO(savedCar);
 
         }
 
@@ -125,6 +132,44 @@ public class AttachmentServiceImpl implements AttachmentService {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while accessing file", e);
         }
+
+    }
+
+    @Override
+    @Transactional
+    public List<AttachmentDTO> createImages(List<MultipartFile> files) throws IOException {
+
+        List<Attachment> attachments = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+
+            String originalFilename = file.getOriginalFilename();
+            long size = file.getSize();
+            String contentType = file.getContentType();
+
+            if (!Objects.requireNonNull(contentType).startsWith("image/")) {
+                throw new RuntimeException("Only image files are allowed");
+            }
+
+            assert originalFilename != null;
+
+            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String fileNewName = UUID.randomUUID() + extension;
+
+            Path path = Path.of(UPLOAD_PATH, fileNewName);
+
+            Files.copy(file.getInputStream(), path);
+
+            Attachment attachment = new Attachment();
+            attachment.setPath(path.toString());
+            attachment.setOriginalName(originalFilename);
+            attachment.setContentType(contentType);
+            attachment.setSize(size);
+
+            attachments.add(attachmentRepository.save(attachment));
+        }
+
+        return attachmentMapper.toDTO(attachments);
 
     }
 }

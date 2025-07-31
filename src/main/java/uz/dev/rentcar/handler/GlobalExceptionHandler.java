@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -12,10 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
-import uz.dev.rentcar.exceptions.EntityNotFoundException;
-import uz.dev.rentcar.exceptions.InvalidRecaptchaTokenException;
-import uz.dev.rentcar.exceptions.PasswordIncorrectException;
+import uz.dev.rentcar.exceptions.*;
 import uz.dev.rentcar.payload.response.ErrorDTO;
 import uz.dev.rentcar.payload.response.FieldErrorDTO;
 
@@ -25,6 +23,84 @@ import java.util.List;
 @Service
 @RestControllerAdvice(basePackages = "uz.dev.rentcar")
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ResponseEntity<ErrorDTO> handle(AccessDeniedException e) {
+
+        ErrorDTO error = new ErrorDTO(
+                403,
+                e.getMessage()
+        );
+
+        return ResponseEntity
+                .status(403)
+                .body(error);
+    }
+
+    @ExceptionHandler(value = CarNotAvailableException.class)
+    public ResponseEntity<ErrorDTO> handle(CarNotAvailableException e) {
+
+        ErrorDTO error = new ErrorDTO(
+                e.getStatus().value(),
+                e.getMessage()
+        );
+
+        return ResponseEntity
+                .status(e.getStatus().value())
+                .body(error);
+    }
+
+    @ExceptionHandler(value = InvalidRequestException.class)
+    public ResponseEntity<ErrorDTO> handle(InvalidRequestException e) {
+
+        ErrorDTO error = new ErrorDTO(
+                e.getStatus().value(),
+                e.getMessage()
+        );
+
+        return ResponseEntity
+                .status(e.getStatus().value())
+                .body(error);
+    }
+
+    @ExceptionHandler(value = LocationIllegalException.class)
+    public ResponseEntity<ErrorDTO> handle(LocationIllegalException e) {
+
+        ErrorDTO error = new ErrorDTO(
+                e.getStatus().value(),
+                e.getMessage()
+        );
+
+        return ResponseEntity
+                .status(e.getStatus().value())
+                .body(error);
+    }
+
+    @ExceptionHandler(value = SendEmailErrorException.class)
+    public ResponseEntity<ErrorDTO> handle(SendEmailErrorException e) {
+
+        ErrorDTO error = new ErrorDTO(
+                e.getStatus().value(),
+                e.getMessage()
+        );
+
+        return ResponseEntity
+                .status(e.getStatus().value())
+                .body(error);
+    }
+
+    @ExceptionHandler(value = SecurityException.class)
+    public ResponseEntity<ErrorDTO> handle(SecurityException e) {
+
+        ErrorDTO error = new ErrorDTO(
+                403,
+                e.getMessage()
+        );
+
+        return ResponseEntity
+                .status(403)
+                .body(error);
+    }
 
     @ExceptionHandler(value = InvalidRecaptchaTokenException.class)
     public ResponseEntity<ErrorDTO> invalidRecaptchaTokenException(InvalidRecaptchaTokenException ex) {

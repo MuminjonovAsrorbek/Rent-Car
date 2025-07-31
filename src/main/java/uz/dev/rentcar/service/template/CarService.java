@@ -1,8 +1,9 @@
 package uz.dev.rentcar.service.template;
 
-import org.springframework.web.multipart.MultipartFile;
 import uz.dev.rentcar.payload.CarDTO;
+import uz.dev.rentcar.payload.request.CarFilterDTO;
 import uz.dev.rentcar.payload.request.CreateCarDTO;
+import uz.dev.rentcar.payload.request.UpdateCarDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
 
 import java.util.List;
@@ -18,12 +19,17 @@ public interface CarService {
 
     PageableDTO getAllCars(int page, int size);
 
-    CarDTO updateCar(Long id, CarDTO carDTO);
+    CarDTO updateCar(Long id, UpdateCarDTO carDTO);
 
     void deleteCar(Long id);
 
-    CarDTO createCar(CreateCarDTO carDTO, List<MultipartFile> images);
+    CarDTO createCar(CreateCarDTO carDTO);
 
     List<String> getAllFuelTypes();
 
+    PageableDTO getAvailableCars(int page, int size);
+
+    List<CarDTO> getFilteredCars(CarFilterDTO carFilterDTO);
+
+    List<String> getAllTransmissions();
 }

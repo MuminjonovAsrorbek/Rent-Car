@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: '025-add-phone-number-to-user-table'
+      author: 'Malikabonu'
+      changes:
+        - addColumn:
+            tableName: 'users'
+            columns:
+              - column:
+                  name: 'phone_number'
+                  type: varchar
+                  constraints:
+                    nullable: false

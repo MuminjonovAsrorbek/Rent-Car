@@ -35,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
     private final JWTService jwtService;
 
     private final UserRepository userRepository;
+
     private final UserMapper userMapper;
 
     @Override
@@ -53,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenDTO getToken(LoginDTO loginDTO) {
 
-        User user = loadUserByUsername(loginDTO.getUsername());
+        User user = loadUserByUsername(loginDTO.getEmail());
 
         String encodedPassword = user.getPassword();
 
@@ -65,9 +66,9 @@ public class AuthServiceImpl implements AuthService {
 
         }
 
-        String accessToken = jwtService.generateToken(loginDTO.getUsername(), new Date(System.currentTimeMillis() + 3 * 3600 * 1000));
+        String accessToken = jwtService.generateToken(loginDTO.getEmail(), new Date(System.currentTimeMillis() + 3 * 3600 * 1000));
 
-        String refreshToken = jwtService.generateToken(loginDTO.getUsername(), new Date(System.currentTimeMillis() + 12 * 3600 * 1000));
+        String refreshToken = jwtService.generateToken(loginDTO.getEmail(), new Date(System.currentTimeMillis() + 12 * 3600 * 1000));
 
         return new TokenDTO(accessToken, refreshToken);
     }
@@ -92,5 +93,22 @@ public class AuthServiceImpl implements AuthService {
         LoginDTO loginDTO = new LoginDTO(user.getEmail(), registerDTO.getPassword());
 
         return getToken(loginDTO);
+    }
+
+    @Override
+    public TokenDTO verifyRefreshToken(String refreshToken) {
+
+        String email = jwtService.verifyToken(refreshToken);
+
+        if (email == null) {
+            throw new EntityNotFoundException("Invalid refresh token", HttpStatus.UNAUTHORIZED);
+        }
+
+        User user = loadUserByUsername(email);
+
+        String accessToken = jwtService.generateToken(email, new Date(System.currentTimeMillis() + 3 * 3600 * 1000));
+
+        return new TokenDTO(accessToken, refreshToken);
+
     }
 }

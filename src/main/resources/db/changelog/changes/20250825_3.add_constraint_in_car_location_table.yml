@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: '026-add_constraint_in_car_location_table'
+      author: 'Asrorbek'
+      changes:
+        - sql: |
+            ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check;
+        - sql: |
+            ALTER TABLE users
+            ADD CONSTRAINT users_role_check
+            CHECK (role in ('ADMIN', 'USER', 'GPS'));

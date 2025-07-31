@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: '022-drop_notnullconstraint_car_table'
+      author: 'Asrorbek'
+      comment: 'Car tablening car_id columndan not null cheklovini olib tashlash'
+      changes:
+        - dropNotNullConstraint:
+            tableName: attachments
+            columnName: car_id
+            columnDataType: bigint

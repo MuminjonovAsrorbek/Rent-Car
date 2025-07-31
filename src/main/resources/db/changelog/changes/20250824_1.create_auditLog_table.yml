@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: '023-create-auditLog-table'
+      author: 'Asrorbek'
+      comment: 'AudtiLog table yaratilmoqda '
+      changes:
+        - createTable:
+            tableName: 'audit_log'
+            columns:
+              - column:
+                  name: 'id'
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: 'email'
+                  type: varchar
+              - column:
+                  name: 'entity_name'
+                  type: varchar
+              - column:
+                  name: 'entity_id'
+                  type: bigint
+              - column:
+                  name: 'action'
+                  type: varchar
+              - column:
+                  name: 'description'
+                  type: varchar
+              - column:
+                  name: 'created_at'
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false

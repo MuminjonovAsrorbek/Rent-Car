@@ -33,6 +33,7 @@ public class DataInitializer implements ApplicationRunner {
             admin.setFullName("Administrator");
             admin.setEmail("admin@gmail.com");
             admin.setPassword(passwordEncoder.encode("admin"));
+            admin.setPhoneNumber("+998900000000");
             admin.setRole(RoleEnum.ADMIN);
 
             userRepository.save(admin);

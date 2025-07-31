@@ -41,3 +41,23 @@ databaseChangeLog:
       file: 'db/changelog/changes/20250820_2.delete_car_image_table.yml'
   - include:
       file: 'db/changelog/changes/20250821_2.add-column-in-attachment-table.yml'
+  - include:
+      file: 'db/changelog/changes/20250823_1.add_enum_column_car_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250823_2.drop_notnullconstraint_car_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250824_1.create_auditLog_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250825_1.drop_column_in_car_location_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250825_2.add_phone_number_to_user_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250825_3.add_constraint_in_car_location_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250825_4.drop_notnullconstraint_booking_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250829_1.create_penalty_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250829_2.add_column_penalty_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250830_1.delete_user_address_table.yml'
