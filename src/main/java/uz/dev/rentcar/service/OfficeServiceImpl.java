@@ -2,6 +2,7 @@ package uz.dev.rentcar.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -10,10 +11,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.dev.rentcar.config.CaffeineCacheConfig;
+import uz.dev.rentcar.entity.Booking;
 import uz.dev.rentcar.entity.Office;
 import uz.dev.rentcar.entity.template.AbsLongEntity;
+import uz.dev.rentcar.exceptions.EntityNotDeleteException;
 import uz.dev.rentcar.mapper.OfficeMapper;
 import uz.dev.rentcar.payload.OfficeDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
@@ -21,12 +25,15 @@ import uz.dev.rentcar.repository.OfficeRepository;
 import uz.dev.rentcar.service.template.OfficeService;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OfficeServiceImpl implements OfficeService {
 
     private final OfficeMapper officeMapper;
+
     private final OfficeRepository officeRepository;
 
     @Override
@@ -34,6 +41,8 @@ public class OfficeServiceImpl implements OfficeService {
     public OfficeDTO read(Long id) {
 
         Office office = officeRepository.getByIdOrThrow(id);
+
+        log.info("read office {}", office);
 
         return officeMapper.toDTO(office);
     }
@@ -49,6 +58,8 @@ public class OfficeServiceImpl implements OfficeService {
         Page<Office> officePage = officeRepository.findAll(pageable);
 
         List<Office> offices = officePage.getContent();
+
+        log.info("read all offices {}", offices);
 
         return new PageableDTO(
                 officePage.getSize(),
@@ -74,6 +85,8 @@ public class OfficeServiceImpl implements OfficeService {
 
         officeRepository.save(office);
 
+        log.info("create office {}", office);
+
         return officeMapper.toDTO(office);
     }
 
@@ -96,18 +109,32 @@ public class OfficeServiceImpl implements OfficeService {
 
         officeRepository.save(office);
 
+        log.info("update office {}", office);
+
         return officeMapper.toDTO(office);
     }
 
     @Override
     @Transactional
     @Caching(evict = {
-            @CacheEvict(value = CaffeineCacheConfig.OFFICES, key = "#id"),
             @CacheEvict(value = CaffeineCacheConfig.OFFICES, allEntries = true)
     })
     public void delete(Long id) {
 
         Office office = officeRepository.getByIdOrThrow(id);
+
+        List<Booking> pickupBookings = office.getPickupBookings();
+
+        List<Booking> returnBookings = office.getReturnBookings();
+
+        if ((Objects.nonNull(pickupBookings) && !pickupBookings.isEmpty()) ||
+                (Objects.nonNull(returnBookings) && !returnBookings.isEmpty())) {
+
+            throw new EntityNotDeleteException("Cannot delete office with existing pickup bookings", HttpStatus.BAD_REQUEST);
+
+        }
+
+        log.info("delete office {}", office);
 
         officeRepository.delete(office);
     }

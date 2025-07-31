@@ -4,10 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import uz.dev.rentcar.entity.Office;
-import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.payload.OfficeDTO;
-import uz.dev.rentcar.payload.UserDTO;
-import uz.dev.rentcar.payload.request.RegisterDTO;
 
 import java.util.List;
 
