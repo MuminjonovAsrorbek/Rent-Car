@@ -97,7 +97,10 @@ public class AuthController {
                     })
             }
     )
-    public TokenDTO register(@RequestBody @Valid RegisterDTO registerDTO) {
+    public TokenDTO register(@io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Register information",
+            content = @Content(schema = @Schema(implementation = RegisterDTO.class), mediaType = "application/json"))
+                             @RequestBody @Valid RegisterDTO registerDTO) {
 
         return authService.registerUser(registerDTO);
 
