@@ -2,11 +2,16 @@ package uz.dev.rentcar.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import uz.dev.rentcar.config.CaffeineCacheConfig;
 import uz.dev.rentcar.entity.Office;
 import uz.dev.rentcar.entity.template.AbsLongEntity;
 import uz.dev.rentcar.mapper.OfficeMapper;
@@ -25,6 +30,7 @@ public class OfficeServiceImpl implements OfficeService {
     private final OfficeRepository officeRepository;
 
     @Override
+    @Cacheable(value = CaffeineCacheConfig.OFFICES, key = "#id")
     public OfficeDTO read(Long id) {
 
         Office office = officeRepository.getByIdOrThrow(id);
@@ -33,6 +39,7 @@ public class OfficeServiceImpl implements OfficeService {
     }
 
     @Override
+    @Cacheable(value = CaffeineCacheConfig.OFFICES, key = "#page + '-' + #size")
     public PageableDTO readAll(int page, int size) {
 
         Sort sort = Sort.by(AbsLongEntity.Fields.id).ascending();
@@ -55,6 +62,12 @@ public class OfficeServiceImpl implements OfficeService {
 
     @Override
     @Transactional
+    @Caching(
+            put = {@CachePut(value = CaffeineCacheConfig.OFFICES, key = "#result.id")},
+            evict = {
+                    @CacheEvict(value = CaffeineCacheConfig.OFFICES, allEntries = true)
+            }
+    )
     public OfficeDTO create(OfficeDTO officeDTO) {
 
         Office office = officeMapper.toEntity(officeDTO);
@@ -66,6 +79,12 @@ public class OfficeServiceImpl implements OfficeService {
 
     @Override
     @Transactional
+    @Caching(
+            put = {@CachePut(value = CaffeineCacheConfig.OFFICES, key = "#id")},
+            evict = {
+                    @CacheEvict(value = CaffeineCacheConfig.OFFICES, allEntries = true)
+            }
+    )
     public OfficeDTO update(Long id, OfficeDTO officeDTO) {
 
         Office office = officeRepository.getByIdOrThrow(id);
@@ -82,6 +101,10 @@ public class OfficeServiceImpl implements OfficeService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = CaffeineCacheConfig.OFFICES, key = "#id"),
+            @CacheEvict(value = CaffeineCacheConfig.OFFICES, allEntries = true)
+    })
     public void delete(Long id) {
 
         Office office = officeRepository.getByIdOrThrow(id);
