@@ -1,6 +1,7 @@
 package uz.dev.rentcar.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,8 @@ public class AttachmentController {
             summary = "Download Attachment",
             description = "Download an attachment by its ID. This endpoint is open to all users."
     )
-    public ResponseEntity<Resource> downloadFile(@PathVariable Long id) {
+    public ResponseEntity<Resource> downloadFile(@Parameter(description = "id", example = "1")
+                                                 @PathVariable Long id) {
 
         Attachment attachment = attachmentService.downloadFile(id);
 
