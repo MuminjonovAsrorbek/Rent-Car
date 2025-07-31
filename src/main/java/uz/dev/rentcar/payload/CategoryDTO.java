@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,8 +38,17 @@ public class CategoryDTO implements Serializable {
     private boolean deleted = false;
 
     @NotBlank
+    @Schema(
+            description = "Name of the category",
+            example = "SUV",
+            requiredMode = Schema.RequiredMode.REQUIRED
+    )
     private String name;
 
+    @Schema(
+            description = "Description of the category",
+            example = "Sport Utility Vehicle"
+    )
     private String description;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
