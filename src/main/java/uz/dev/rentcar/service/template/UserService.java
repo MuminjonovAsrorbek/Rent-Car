@@ -20,4 +20,6 @@ public interface UserService {
     void deleteUser(Long id);
 
     UserDTO getUserInfo();
+
+    UserDTO getUserByPhoneNumber(String phoneNumber);
 }

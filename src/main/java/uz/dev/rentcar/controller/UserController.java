@@ -129,4 +129,12 @@ public class UserController {
         return userService.getUserInfo();
 
     }
+
+    @GetMapping("/find-by-number/{phoneNumber}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserDTO getUserByPhoneNumber(@PathVariable String phoneNumber) {
+
+        return userService.getUserByPhoneNumber(phoneNumber);
+
+    }
 }
