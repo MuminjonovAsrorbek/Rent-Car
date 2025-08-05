@@ -46,4 +46,4 @@ eureka:
     service-url:
       defaultZone: http://${EUREKA_HOSTNAME}:${EUREKA_PORT}/eureka
   instance:
-    hostname: localhost
+    hostname: ${EUREKA_HOSTNAME}
