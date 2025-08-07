@@ -129,18 +129,4 @@ public class UserController {
         return userService.getUserInfo();
 
     }
-
-    @GetMapping("/find-by-number/{phoneNumber}")
-    @PreAuthorize("hasRole('ADMIN')")
-    @Operation(
-            summary = "Find user by PhoneNumber on Telegram service",
-            description = "Only Telegram Service"
-    )
-    public UserDTO getUserByPhoneNumber(
-            @Parameter(description = "User phoneNumber", example = "+998944466404")
-            @PathVariable String phoneNumber) {
-
-        return userService.getUserByPhoneNumber(phoneNumber);
-
-    }
 }
