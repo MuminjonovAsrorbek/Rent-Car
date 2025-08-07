@@ -129,4 +129,11 @@ public class UserController {
         return userService.getUserInfo();
 
     }
+
+    @GetMapping("/open/telegram/get-by-phoneNumber/{phoneNumber}")
+    public UserDTO getByPhoneNumber(@PathVariable String phoneNumber) {
+
+        return userService.getUserByPhoneNumber(phoneNumber);
+
+    }
 }
