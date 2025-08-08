@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * Created by: asrorbek
  * DateTime: 6/22/25 10:58
@@ -24,6 +26,6 @@ public class PageableDTO {
 
     private boolean hasPrevious;
 
-    private Object object;
+    private List<?> objects;
 
 }
