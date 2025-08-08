@@ -20,7 +20,7 @@ public interface AttachmentMapper {
 
     @Mapping(
             target = "url",
-            expression = "java(\"/api/attachments/download/\" + attachment.getId())"
+            expression = "java(\"/api/attachments/open/download/\" + attachment.getId())"
     )
     AttachmentDTO toDTO(Attachment attachment);
 
