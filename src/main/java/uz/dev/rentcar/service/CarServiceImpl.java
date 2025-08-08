@@ -189,7 +189,10 @@ public class CarServiceImpl implements CarService {
 
         }
 
-        cq.where(cb.and(predicates.toArray(new Predicate[0])));
+        cq.where(cb.and(
+                cb.equal(root.get(Car.Fields.available), true),
+                cb.and(predicates.toArray(new Predicate[0]))
+        ));
 
         cq.orderBy(cb.asc(root.get("id")));
 
