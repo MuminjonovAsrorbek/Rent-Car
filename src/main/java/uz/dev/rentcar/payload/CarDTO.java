@@ -77,14 +77,9 @@ public class CarDTO implements Serializable {
     private List<CarFeatureDTO> features;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<BookingDTO> bookings;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<ReviewDTO> reviews;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<AttachmentDTO> images;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<FavoriteDTO> favorites;
 }
