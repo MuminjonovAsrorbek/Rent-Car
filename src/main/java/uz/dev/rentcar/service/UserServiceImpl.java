@@ -20,6 +20,7 @@ import uz.dev.rentcar.service.template.UserService;
 import uz.dev.rentcar.utils.SecurityUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by: asrorbek
@@ -130,11 +131,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO getUserByPhoneNumber(String phoneNumber) {
+    public Boolean getUserByPhoneNumber(String phoneNumber) {
 
-        User user = userRepository.findByPhoneNumberOrThrowException(phoneNumber);
+        Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
 
-        return userMapper.toDTO(user);
-
+        return optionalUser.isPresent();
     }
 }

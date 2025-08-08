@@ -131,7 +131,7 @@ public class UserController {
     }
 
     @GetMapping("/open/telegram/get-by-phoneNumber/{phoneNumber}")
-    public UserDTO getByPhoneNumber(@PathVariable String phoneNumber) {
+    public Boolean getByPhoneNumber(@PathVariable String phoneNumber) {
 
         return userService.getUserByPhoneNumber(phoneNumber);
 
