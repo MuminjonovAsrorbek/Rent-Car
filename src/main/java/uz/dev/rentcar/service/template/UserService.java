@@ -15,11 +15,11 @@ public interface UserService {
 
     UserDTO getUserById(Long id);
 
-    UserDTO updateUser(Long id,  UserDTO userDTO);
+    UserDTO updateUser(Long id, UserDTO userDTO);
 
     void deleteUser(Long id);
 
     UserDTO getUserInfo();
 
-    UserDTO getUserByPhoneNumber(String phoneNumber);
+    Boolean getUserByPhoneNumber(String phoneNumber);
 }

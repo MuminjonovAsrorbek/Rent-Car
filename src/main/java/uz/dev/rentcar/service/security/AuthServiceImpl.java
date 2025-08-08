@@ -111,4 +111,24 @@ public class AuthServiceImpl implements AuthService {
         return new TokenDTO(accessToken, refreshToken);
 
     }
+
+    @Override
+    public TokenDTO getTokenByPhoneNumber(String phoneNumber) {
+
+        Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
+
+        if (optionalUser.isEmpty()) {
+
+            throw new EntityNotFoundException("User not found with email : " + phoneNumber, HttpStatus.NOT_FOUND);
+
+        }
+
+        User user = optionalUser.get();
+
+        String accessToken = jwtService.generateToken(user.getEmail(), new Date(System.currentTimeMillis() + 3 * 3600 * 1000));
+
+        String refreshToken = jwtService.generateToken(user.getEmail(), new Date(System.currentTimeMillis() + 12 * 3600 * 1000));
+
+        return new TokenDTO(accessToken, refreshToken);
+    }
 }
