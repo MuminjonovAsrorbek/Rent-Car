@@ -13,6 +13,7 @@ import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.entity.template.AbsLongEntity;
 import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
 import uz.dev.rentcar.mapper.UserMapper;
+import uz.dev.rentcar.payload.TgUserDTO;
 import uz.dev.rentcar.payload.UserDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.repository.UserRepository;
@@ -131,10 +132,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean getUserByPhoneNumber(String phoneNumber) {
+    public TgUserDTO getUserByPhoneNumber(String phoneNumber) {
 
         Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
 
-        return optionalUser.isPresent();
+        return optionalUser.map(user -> new TgUserDTO(user.getId(), true)).orElseGet(() -> new TgUserDTO(null, false));
+
     }
 }

@@ -1,5 +1,6 @@
 package uz.dev.rentcar.service.template;
 
+import uz.dev.rentcar.payload.TgUserDTO;
 import uz.dev.rentcar.payload.UserDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
 
@@ -21,5 +22,5 @@ public interface UserService {
 
     UserDTO getUserInfo();
 
-    Boolean getUserByPhoneNumber(String phoneNumber);
+    TgUserDTO getUserByPhoneNumber(String phoneNumber);
 }
