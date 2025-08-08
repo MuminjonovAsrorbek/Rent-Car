@@ -137,4 +137,11 @@ public class AuthController {
         return authService.verifyRefreshToken(refreshToken);
 
     }
+
+    @GetMapping("/telegram/get-token/{phoneNumber}")
+    public TokenDTO getTokenByPhoneNumber(@PathVariable String phoneNumber) {
+
+        return authService.getTokenByPhoneNumber(phoneNumber);
+
+    }
 }
