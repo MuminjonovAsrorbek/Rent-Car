@@ -53,18 +53,6 @@ public class BookingDTO implements Serializable {
 
     private TransmissionEnum carTransmission;
 
-    private Long pickupOfficeId;
-
-    private String pickupOfficeName;
-
-    private String pickupOfficeAddress;
-
-    private Long returnOfficeId;
-
-    private String returnOfficeName;
-
-    private String returnOfficeAddress;
-
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime pickupDate;
 
@@ -85,5 +73,12 @@ public class BookingDTO implements Serializable {
 
     private PaymentDTO payment;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<CarLocationDTO> locations = new ArrayList<>();
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private OfficeDTO pickupOffice;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private OfficeDTO returnOffice;
 }

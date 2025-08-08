@@ -1,5 +1,9 @@
 package uz.dev.rentcar.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,12 +22,18 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/penalties")
+@Tag(name = "Penalty API", description = "Penalty API")
+@SecurityRequirement(name = "bearerAuth")
 public class PenaltyController {
 
     private final PenaltyService penaltyService;
 
     @GetMapping("/me/all-penalties")
     @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
+    @Operation(
+            summary = "Get all penalties for the authenticated user",
+            description = "This endpoint retrieves all penalties associated with the currently authenticated user."
+    )
     public List<PenaltyDTO> getMyPenalties(@AuthenticationPrincipal User currentUser) {
 
         return penaltyService.getMyPenalties(currentUser);
@@ -32,6 +42,10 @@ public class PenaltyController {
 
     @GetMapping("/me/overdue-returns")
     @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
+    @Operation(
+            summary = "Get overdue returns for the authenticated user",
+            description = "This endpoint retrieves all overdue returns associated with the currently authenticated user."
+    )
     public List<PenaltyDTO> getMyOverdueReturns(@AuthenticationPrincipal User currentUser) {
 
         return penaltyService.getMyOverdueReturns(currentUser);
@@ -40,7 +54,13 @@ public class PenaltyController {
 
     @PatchMapping("/confirm/{bookingId}/booking")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public PenaltyDTO confirmPenalty(@PathVariable Long bookingId) {
+    @Operation(
+            summary = "Confirm penalty for a booking",
+            description = "This endpoint confirms a penalty for a specific booking by its ID."
+    )
+    public PenaltyDTO confirmPenalty(
+            @Parameter(description = "ID of the booking to confirm penalty for", example = "12345")
+            @PathVariable Long bookingId) {
 
         return penaltyService.confirmPenalty(bookingId);
 
@@ -48,7 +68,13 @@ public class PenaltyController {
 
     @PatchMapping("/confirm/{penaltyId}/penalty")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public PenaltyDTO confirmPenaltyWithPenaltyId(@PathVariable Long penaltyId) {
+    @Operation(
+            summary = "Confirm penalty by penalty ID",
+            description = "This endpoint confirms a penalty using its unique ID."
+    )
+    public PenaltyDTO confirmPenaltyWithPenaltyId(
+            @Parameter(description = "ID of the penalty to confirm", example = "6")
+            @PathVariable Long penaltyId) {
 
         return penaltyService.confirmPenaltyWithPenaltyId(penaltyId);
 
@@ -56,7 +82,13 @@ public class PenaltyController {
 
     @PatchMapping("/cancel/{bookingId}/booking")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public PenaltyDTO cancelPenaltyWithBookingId(@PathVariable Long bookingId) {
+    @Operation(
+            summary = "Cancel penalty for a booking",
+            description = "This endpoint cancels a penalty associated with a specific booking by its ID."
+    )
+    public PenaltyDTO cancelPenaltyWithBookingId(
+            @Parameter(description = "ID of the booking to cancel penalty for", example = "12345")
+            @PathVariable Long bookingId) {
 
         return penaltyService.cancelPenaltyWithBookingId(bookingId);
 
@@ -64,7 +96,13 @@ public class PenaltyController {
 
     @PatchMapping("/cancel/{penaltyId}/penalty")
     @PreAuthorize("hasAnyRole('ADMIN' )")
-    public PenaltyDTO cancelPenaltyWithPenaltyId(@PathVariable Long penaltyId) {
+    @Operation(
+            summary = "Cancel penalty by penalty ID",
+            description = "This endpoint cancels a penalty using its unique ID."
+    )
+    public PenaltyDTO cancelPenaltyWithPenaltyId(
+            @Parameter(description = "ID of the penalty to cancel", example = "6")
+            @PathVariable Long penaltyId) {
 
         return penaltyService.cancelPenaltyWithPenaltyId(penaltyId);
 

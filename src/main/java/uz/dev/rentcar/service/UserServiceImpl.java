@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     private final PasswordEncoder passwordEncoder;
+
     private final SecurityUtils securityUtils;
 
     @Override
@@ -126,5 +127,14 @@ public class UserServiceImpl implements UserService {
         User currentUser = securityUtils.getCurrentUser();
 
         return userMapper.toDTO(currentUser);
+    }
+
+    @Override
+    public UserDTO getUserByPhoneNumber(String phoneNumber) {
+
+        User user = userRepository.findByPhoneNumberOrThrowException(phoneNumber);
+
+        return userMapper.toDTO(user);
+
     }
 }

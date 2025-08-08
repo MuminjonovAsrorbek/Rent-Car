@@ -1,5 +1,6 @@
 package uz.dev.rentcar.service.template;
 
+import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.payload.FavoriteDTO;
 
 import java.util.List;
@@ -11,4 +12,7 @@ public interface FavoriteService {
     FavoriteDTO create(FavoriteDTO favoriteDTO);
 
     void delete(Long id);
+
+    List<FavoriteDTO> getMyFavorites(User currentUser);
+
 }

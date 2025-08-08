@@ -249,7 +249,6 @@ public class CarServiceImpl implements CarService {
     @Override
     @Transactional
     @Caching(
-            put = {@CachePut(value = CaffeineCacheConfig.CARS, key = "#id")},
             evict = {
                     @CacheEvict(value = CaffeineCacheConfig.CARS, allEntries = true),
                     @CacheEvict(value = CaffeineCacheConfig.AVAILABLE_CARS, allEntries = true)
@@ -334,7 +333,6 @@ public class CarServiceImpl implements CarService {
     @Override
     @Transactional
     @Caching(evict = {
-            @CacheEvict(value = CaffeineCacheConfig.CARS, key = "#id"),
             @CacheEvict(value = CaffeineCacheConfig.CARS, allEntries = true),
             @CacheEvict(value = CaffeineCacheConfig.AVAILABLE_CARS, allEntries = true)
     })

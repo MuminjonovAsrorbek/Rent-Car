@@ -2,12 +2,10 @@ package uz.dev.rentcar.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uz.dev.rentcar.config.CaffeineCacheConfig;
 import uz.dev.rentcar.entity.*;
 import uz.dev.rentcar.entity.template.AbsLongEntity;
 import uz.dev.rentcar.enums.BookingStatusEnum;
@@ -47,8 +45,6 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
 
     private final BookingMapper bookingMapper;
-
-    private final CacheManager cacheManager;
 
     private final NotificationService notificationService;
 
@@ -260,8 +256,6 @@ public class BookingServiceImpl implements BookingService {
 
         Long userId = booking.getUser().getId();
 
-        Objects.requireNonNull(cacheManager.getCache(CaffeineCacheConfig.BOOKINGS)).evict(userId);
-
         log.info("Booking confirmed successfully for user: {}, booking ID: {}", userId, id);
 
         notificationService.updateBookingStatus(booking.getUser(), "Your booking has been confirmed successfully.",
@@ -295,8 +289,6 @@ public class BookingServiceImpl implements BookingService {
         carRepository.save(car);
 
         Long userId = booking.getUser().getId();
-
-        Objects.requireNonNull(cacheManager.getCache(CaffeineCacheConfig.BOOKINGS)).evict(userId);
 
         log.info("Booking completed successfully for user: {}, booking ID: {}", userId, id);
 

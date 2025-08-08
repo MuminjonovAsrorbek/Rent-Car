@@ -17,4 +17,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
         return findById(id).orElseThrow(() -> new EntityNotFoundException("User not found with ID : " + id, HttpStatus.NOT_FOUND));
 
     }
+
+    Optional<User> findByPhoneNumber(String phoneNumber);
+
+    default User findByPhoneNumberOrThrowException(String phoneNumber) {
+
+        return findByPhoneNumber(phoneNumber).orElseThrow(() -> new EntityNotFoundException("User not found with phoneNumber : " + phoneNumber, HttpStatus.NOT_FOUND));
+
+    }
 }

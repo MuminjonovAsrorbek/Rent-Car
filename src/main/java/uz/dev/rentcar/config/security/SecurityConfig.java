@@ -53,7 +53,8 @@ public class SecurityConfig {
                                 "/api/category/open/**",
                                 "/api/office/open/**",
                                 "/api/promo-code/open/**",
-                                "/api/review/open/**")
+                                "/api/review/open/**",
+                                "/api/payments/open/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated()

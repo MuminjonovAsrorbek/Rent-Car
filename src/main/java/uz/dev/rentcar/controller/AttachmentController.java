@@ -1,5 +1,9 @@
 package uz.dev.rentcar.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -25,12 +29,19 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/attachments")
+@Tag(name = "Attachment API", description = "Endpoints for managing attachments")
+@SecurityRequirement(name = "bearerAuth")
 public class AttachmentController {
 
     private final AttachmentService attachmentService;
 
     @GetMapping("/open/download/{id}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable Long id) {
+    @Operation(
+            summary = "Download Attachment",
+            description = "Download an attachment by its ID. This endpoint is open to all users."
+    )
+    public ResponseEntity<Resource> downloadFile(@Parameter(description = "id", example = "1")
+                                                 @PathVariable Long id) {
 
         Attachment attachment = attachmentService.downloadFile(id);
 
@@ -48,6 +59,10 @@ public class AttachmentController {
 
     @PostMapping(path = "/{carId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(
+            summary = "Upload Files",
+            description = "Upload files for a specific car by its ID. Only accessible to users with ADMIN role."
+    )
     public CarDTO uploadFiles(@PathVariable Long carId,
                               @RequestParam("files") List<MultipartFile> files) throws IOException {
 
@@ -57,6 +72,10 @@ public class AttachmentController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(
+            summary = "Create Images",
+            description = "Create images from uploaded files. Only accessible to users with ADMIN role."
+    )
     public List<AttachmentDTO> createImages(@RequestParam("files") List<MultipartFile> files) throws IOException {
 
         return attachmentService.createImages(files);
