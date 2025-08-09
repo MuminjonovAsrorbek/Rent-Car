@@ -46,11 +46,11 @@ public class User extends AbsDeleteEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<Booking> bookings;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<Review> reviews;
 
@@ -58,7 +58,7 @@ public class User extends AbsDeleteEntity implements UserDetails {
     @ToString.Exclude
     private List<Favorite> favorites;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<Notification> notifications;
 
