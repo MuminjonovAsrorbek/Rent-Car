@@ -24,7 +24,6 @@ import uz.dev.rentcar.repository.UserRepository;
 import uz.dev.rentcar.service.template.ReviewService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
