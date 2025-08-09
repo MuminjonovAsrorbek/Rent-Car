@@ -61,3 +61,5 @@ databaseChangeLog:
       file: 'db/changelog/changes/20250829_2.add_column_penalty_table.yml'
   - include:
       file: 'db/changelog/changes/20250830_1.delete_user_address_table.yml'
+  - include:
+      file: 'db/changelog/changes/20250909_1.delete_column_favorite_table.yml'

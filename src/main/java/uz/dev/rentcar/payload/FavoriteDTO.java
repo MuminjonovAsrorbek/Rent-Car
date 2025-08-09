@@ -1,7 +1,6 @@
 package uz.dev.rentcar.payload;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -30,9 +29,6 @@ public class FavoriteDTO implements Serializable {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp updatedAt;
-
-    @JsonIgnore
-    private boolean deleted = false;
 
     @NotNull
     @Schema(
