@@ -54,7 +54,7 @@ public class User extends AbsDeleteEntity implements UserDetails {
     @ToString.Exclude
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<Favorite> favorites;
 
