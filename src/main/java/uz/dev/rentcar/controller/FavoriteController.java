@@ -13,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.payload.FavoriteDTO;
+import uz.dev.rentcar.payload.TgFavoriteDTO;
 import uz.dev.rentcar.service.template.FavoriteService;
 
 import java.util.List;
@@ -84,6 +85,14 @@ public class FavoriteController {
     public List<FavoriteDTO> getMyFavorites(@AuthenticationPrincipal User currentUser) {
 
         return favoriteService.getMyFavorites(currentUser);
+
+    }
+
+    @GetMapping("/checked")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public TgFavoriteDTO checkFavorite(@RequestParam Long userId, @RequestParam Long carId) {
+
+        return favoriteService.getCheck(userId, carId);
 
     }
 }
