@@ -84,7 +84,7 @@ public class LocationServiceImpl implements LocationService {
 
         Booking booking = bookingRepository.getByIdOrThrow(bookingId);
 
-        if (!booking.getUser().equals(currentUser) || !currentUser.getRole().equals(RoleEnum.ADMIN)) {
+        if (!booking.getUser().equals(currentUser) && !currentUser.getRole().equals(RoleEnum.ADMIN)) {
 
             throw new SecurityException("You do not have permission to access this booking's locations.");
 

@@ -64,12 +64,13 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    @Transactional
+    @org.springframework.transaction.annotation.Transactional
     public void delete(Long id) {
 
         Favorite favorite = favoriteRepository.getByIdOrThrow(id);
-
         favoriteRepository.delete(favorite);
+        favoriteRepository.flush();
+
     }
 
     @Override

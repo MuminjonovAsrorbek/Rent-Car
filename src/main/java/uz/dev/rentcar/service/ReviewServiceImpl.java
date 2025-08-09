@@ -99,7 +99,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         Review review = reviewRepository.getByIdOrThrow(id);
 
-        if (!review.getUser().equals(currentUser) || !currentUser.getRole().equals(RoleEnum.ADMIN))
+        if (!review.getUser().equals(currentUser) && !currentUser.getRole().equals(RoleEnum.ADMIN))
             throw new AccessDeniedException("You are not allowed to update this review");
 
         review.setRating(reviewDTO.getRating());
@@ -117,7 +117,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         Review review = reviewRepository.getByIdOrThrow(id);
 
-        if (!review.getUser().equals(currentUser) || !currentUser.getRole().equals(RoleEnum.ADMIN))
+        if (!review.getUser().equals(currentUser) && !currentUser.getRole().equals(RoleEnum.ADMIN))
             throw new AccessDeniedException("You are not allowed to delete this review");
 
         reviewRepository.delete(review);
