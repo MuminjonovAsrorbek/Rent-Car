@@ -6,6 +6,7 @@ import uz.dev.rentcar.entity.Favorite;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
@@ -15,4 +16,7 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
         return findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Favorite not found with id : " + id, HttpStatus.NOT_FOUND));
     }
+
+
+    Optional<Favorite> findByUserIdAndCarId(Long userId, Long carId);
 }

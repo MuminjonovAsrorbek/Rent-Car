@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: '030-delete-column-favorite-table'
+      author: 'Asrorbek'
+      comment: 'deleted table is no longer needed'
+      changes:
+        - dropColumn:
+            tableName: favorite
+            columnName: deleted

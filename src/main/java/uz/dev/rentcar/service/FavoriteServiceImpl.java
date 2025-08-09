@@ -8,12 +8,14 @@ import uz.dev.rentcar.entity.Favorite;
 import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.mapper.FavoriteMapper;
 import uz.dev.rentcar.payload.FavoriteDTO;
+import uz.dev.rentcar.payload.TgFavoriteDTO;
 import uz.dev.rentcar.repository.CarRepository;
 import uz.dev.rentcar.repository.FavoriteRepository;
 import uz.dev.rentcar.repository.UserRepository;
 import uz.dev.rentcar.service.template.FavoriteService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -76,6 +78,15 @@ public class FavoriteServiceImpl implements FavoriteService {
         List<Favorite> favorites = favoriteRepository.findAllByUserId(currentUser.getId());
 
         return favoriteMapper.toDTO(favorites);
+    }
+
+    @Override
+    public TgFavoriteDTO getCheck(Long userId, Long carId) {
+
+        Optional<Favorite> optionalFavorite = favoriteRepository.findByUserIdAndCarId(userId, carId);
+
+        return optionalFavorite.map(favorite -> new TgFavoriteDTO(favorite.getId(), true)).orElseGet(() -> new TgFavoriteDTO(null, false));
+
     }
 
 }

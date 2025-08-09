@@ -6,9 +6,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
-import uz.dev.rentcar.entity.template.AbsDeleteEntity;
+import uz.dev.rentcar.entity.template.AbsLongEntity;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,10 +15,8 @@ import uz.dev.rentcar.entity.template.AbsDeleteEntity;
 @ToString
 @Entity
 @FieldNameConstants
-@SQLDelete(sql = "update favorite set deleted=true where id=?")
-@SQLRestriction(value = "deleted=false")
 @Table(name = "favorite")
-public class Favorite extends AbsDeleteEntity {
+public class Favorite extends AbsLongEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
