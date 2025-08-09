@@ -17,6 +17,7 @@ public interface ReviewMapper {
 
     @Mapping(target = "carId", source = "car.id")
     @Mapping(target = "userId", source = "user.id")
+    @Mapping(target = "userFullName", source = "user.fullName")
     ReviewDTO toDTO(Review review);
 
     List<ReviewDTO> toDTO(List<Review> reviews);
