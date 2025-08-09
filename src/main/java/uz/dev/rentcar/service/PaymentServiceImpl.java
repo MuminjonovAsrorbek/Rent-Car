@@ -56,7 +56,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         User user = booking.getUser();
 
-        if (!user.getId().equals(currentUser.getId()) || !currentUser.getRole().equals(RoleEnum.ADMIN)) {
+        if (!user.getId().equals(currentUser.getId()) && !currentUser.getRole().equals(RoleEnum.ADMIN)) {
 
             throw new SecurityException("You are not authorized to create a payment for this booking.");
 
@@ -94,7 +94,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         User user = booking.getUser();
 
-        if (!user.getId().equals(currentUser.getId()) || !currentUser.getRole().equals(RoleEnum.ADMIN)) {
+        if (!user.getId().equals(currentUser.getId()) && !currentUser.getRole().equals(RoleEnum.ADMIN)) {
 
             throw new SecurityException("You are not authorized to view the payment for this booking.");
 
@@ -150,7 +150,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         User user = booking.getUser();
 
-        if (!user.getId().equals(currentUser.getId()) || !currentUser.getRole().equals(RoleEnum.ADMIN)) {
+        if (!user.getId().equals(currentUser.getId()) && !currentUser.getRole().equals(RoleEnum.ADMIN)) {
 
             throw new SecurityException("You are not authorized to cancel the payment for this booking.");
 
