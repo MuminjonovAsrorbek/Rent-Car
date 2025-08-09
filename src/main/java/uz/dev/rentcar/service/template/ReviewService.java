@@ -2,14 +2,13 @@ package uz.dev.rentcar.service.template;
 
 import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.payload.ReviewDTO;
-
-import java.util.List;
+import uz.dev.rentcar.payload.response.PageableDTO;
 
 public interface ReviewService {
 
     ReviewDTO read(Long id);
 
-    List<ReviewDTO> readAll(Long carId);
+    PageableDTO readAll(Long carId, int page, int size);
 
     ReviewDTO create(ReviewDTO reviewDTO);
 
