@@ -148,7 +148,7 @@ public class CarController {
 
     }
 
-    @GetMapping("/open/filter")
+    @PostMapping("/open/filter")
     @Operation(
             summary = "Filter cars",
             description = "This endpoint allows users to filter cars based on various criteria."

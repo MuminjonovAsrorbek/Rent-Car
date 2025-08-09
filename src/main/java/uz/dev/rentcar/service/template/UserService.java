@@ -1,5 +1,6 @@
 package uz.dev.rentcar.service.template;
 
+import uz.dev.rentcar.payload.TgUserDTO;
 import uz.dev.rentcar.payload.UserDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
 
@@ -15,11 +16,11 @@ public interface UserService {
 
     UserDTO getUserById(Long id);
 
-    UserDTO updateUser(Long id,  UserDTO userDTO);
+    UserDTO updateUser(Long id, UserDTO userDTO);
 
     void deleteUser(Long id);
 
     UserDTO getUserInfo();
 
-    UserDTO getUserByPhoneNumber(String phoneNumber);
+    TgUserDTO getUserByPhoneNumber(String phoneNumber);
 }

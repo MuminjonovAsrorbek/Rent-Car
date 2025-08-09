@@ -95,7 +95,7 @@ public class AttachmentServiceImpl implements AttachmentService {
                 if (isFirst) {
 
                     car.setImageUrl(
-                            "/api/attachments/download/" + saved.getId()
+                            "/api/attachments/open/download/" + saved.getId()
                     );
 
                 }

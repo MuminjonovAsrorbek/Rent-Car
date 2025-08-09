@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.dev.rentcar.payload.TgUserDTO;
 import uz.dev.rentcar.payload.UserDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.service.template.UserService;
@@ -127,6 +128,13 @@ public class UserController {
     public UserDTO getUserInfo() {
 
         return userService.getUserInfo();
+
+    }
+
+    @GetMapping("/open/telegram/get-by-phoneNumber/{phoneNumber}")
+    public TgUserDTO getByPhoneNumber(@PathVariable String phoneNumber) {
+
+        return userService.getUserByPhoneNumber(phoneNumber);
 
     }
 }

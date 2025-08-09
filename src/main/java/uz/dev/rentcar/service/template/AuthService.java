@@ -16,4 +16,6 @@ public interface AuthService extends UserDetailsService {
     TokenDTO registerUser(RegisterDTO registerDTO);
 
     TokenDTO verifyRefreshToken(String refreshToken);
+
+    TokenDTO getTokenByPhoneNumber(String phoneNumber);
 }
