@@ -1,16 +1,22 @@
 package uz.dev.rentcar.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.entity.Review;
 import uz.dev.rentcar.entity.User;
+import uz.dev.rentcar.entity.template.AbsLongEntity;
 import uz.dev.rentcar.enums.BookingStatusEnum;
 import uz.dev.rentcar.enums.RoleEnum;
 import uz.dev.rentcar.mapper.ReviewMapper;
 import uz.dev.rentcar.payload.ReviewDTO;
+import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.repository.BookingRepository;
 import uz.dev.rentcar.repository.CarRepository;
 import uz.dev.rentcar.repository.ReviewRepository;
@@ -18,7 +24,6 @@ import uz.dev.rentcar.repository.UserRepository;
 import uz.dev.rentcar.service.template.ReviewService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,13 +48,24 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewDTO> readAll(Long carId) {
+    public PageableDTO readAll(Long carId, int page, int size) {
 
-        List<Review> reviews = reviewRepository.findByCarId(carId);
+        Sort sort = Sort.by(AbsLongEntity.Fields.id).descending();
 
-        return reviews.stream()
-                .map(reviewMapper::toDTO)
-                .collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Review> reviewPage = reviewRepository.findByCarId(carId, pageable);
+
+        List<Review> reviews = reviewPage.getContent();
+
+        return new PageableDTO(
+                reviewPage.getSize(),
+                reviewPage.getTotalElements(),
+                reviewPage.getTotalPages(),
+                reviewPage.hasNext(),
+                reviewPage.hasPrevious(),
+                reviewMapper.toDTO(reviews)
+        );
     }
 
     @Override

@@ -58,6 +58,9 @@ public class ReviewDTO implements Serializable {
     )
     private Long userId;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String userFullName;
+
     @Schema(
             description = "ID of the car being reviewed",
             example = "1"

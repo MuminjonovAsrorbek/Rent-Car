@@ -14,9 +14,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.payload.ReviewDTO;
+import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.service.template.ReviewService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/review")
@@ -44,10 +43,12 @@ public class ReviewController {
             summary = "Get all reviews for a car",
             description = "This endpoint retrieves all reviews for a specific car by its ID. Accessible to all users."
     )
-    public List<ReviewDTO> getReviews(
+    public PageableDTO getReviews(
             @Parameter(description = "ID of the car for which reviews are to be retrieved", example = "1")
-            @PathVariable Long carId) {
-        return reviewService.readAll(carId);
+            @PathVariable Long carId,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+        return reviewService.readAll(carId, page, size);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
