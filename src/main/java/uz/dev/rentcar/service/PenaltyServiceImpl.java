@@ -2,6 +2,10 @@ package uz.dev.rentcar.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uz.dev.rentcar.entity.Booking;
 import uz.dev.rentcar.entity.Penalty;
@@ -9,6 +13,7 @@ import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.enums.PenaltyStatusEnum;
 import uz.dev.rentcar.mapper.PenaltyMapper;
 import uz.dev.rentcar.payload.PenaltyDTO;
+import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.repository.BookingRepository;
 import uz.dev.rentcar.repository.PenaltyRepository;
 import uz.dev.rentcar.service.template.PenaltyService;
@@ -61,11 +66,24 @@ public class PenaltyServiceImpl implements PenaltyService {
     }
 
     @Override
-    public List<PenaltyDTO> getMyPenalties(User currentUser) {
+    public PageableDTO getMyPenalties(User currentUser, int page, int size) {
 
-        List<Penalty> penalties = penaltyRepository.findByBookingUserId(currentUser.getId());
+        Sort sort = Sort.by(Penalty.Fields.id).descending();
 
-        return penaltyMapper.toDTO(penalties);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Penalty> penaltyPage = penaltyRepository.findByBookingUserId(currentUser.getId(), pageable);
+
+        List<Penalty> penalties = penaltyPage.getContent();
+
+        return new PageableDTO(
+                penaltyPage.getSize(),
+                penaltyPage.getTotalElements(),
+                penaltyPage.getTotalPages(),
+                penaltyPage.hasNext(),
+                penaltyPage.hasPrevious(),
+                penaltyMapper.toDTO(penalties)
+        );
 
     }
 
@@ -129,11 +147,24 @@ public class PenaltyServiceImpl implements PenaltyService {
     }
 
     @Override
-    public List<PenaltyDTO> getMyOverdueReturns(User currentUser) {
+    public PageableDTO getMyOverdueReturns(User currentUser, int page, int size) {
 
-        List<Penalty> penalties = penaltyRepository.findByBookingUserIdAndStatus(currentUser.getId(), PenaltyStatusEnum.PENDING);
+        Sort sort = Sort.by(Penalty.Fields.id).descending();
 
-        return penaltyMapper.toDTO(penalties);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Penalty> penaltyPage = penaltyRepository.findByBookingUserIdAndStatus(currentUser.getId(), PenaltyStatusEnum.PENDING, pageable);
+
+        List<Penalty> penalties = penaltyPage.getContent();
+
+        return new PageableDTO(
+                penaltyPage.getSize(),
+                penaltyPage.getTotalElements(),
+                penaltyPage.getTotalPages(),
+                penaltyPage.hasNext(),
+                penaltyPage.hasPrevious(),
+                penaltyMapper.toDTO(penalties)
+        );
 
     }
 }

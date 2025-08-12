@@ -2,8 +2,7 @@ package uz.dev.rentcar.service.template;
 
 import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.payload.PenaltyDTO;
-
-import java.util.List;
+import uz.dev.rentcar.payload.response.PageableDTO;
 
 /**
  * Created by: asrorbek
@@ -14,7 +13,7 @@ public interface PenaltyService {
 
     void checkOverdueReturns(PenaltyDTO penaltyDTO);
 
-    List<PenaltyDTO> getMyPenalties(User currentUser);
+    PageableDTO getMyPenalties(User currentUser, int page, int size);
 
     PenaltyDTO confirmPenalty(Long bookingId);
 
@@ -24,5 +23,5 @@ public interface PenaltyService {
 
     PenaltyDTO cancelPenaltyWithPenaltyId(Long penaltyId);
 
-    List<PenaltyDTO> getMyOverdueReturns(User currentUser);
+    PageableDTO getMyOverdueReturns(User currentUser, int page, int size);
 }
