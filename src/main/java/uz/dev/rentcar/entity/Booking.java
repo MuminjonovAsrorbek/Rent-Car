@@ -68,7 +68,7 @@ public class Booking extends AbsDeleteEntity {
     @Enumerated(EnumType.STRING)
     private BookingStatusEnum status;
 
-    @OneToOne(mappedBy = "booking", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
     private Payment payment;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
