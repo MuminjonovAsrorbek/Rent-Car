@@ -56,7 +56,7 @@ public class NotificationController {
 
     }
 
-    @PatchMapping("/my/mark-all-as-read")
+    @PutMapping("/my/mark-all-as-read")
     @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
     @Operation(
             summary = "Mark all notifications as read",
@@ -69,7 +69,7 @@ public class NotificationController {
         return ResponseEntity.ok("All notifications marked as read.");
     }
 
-    @PatchMapping("/my/mark-all-as-unread")
+    @PutMapping("/my/mark-all-as-unread")
     @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
     @Operation(
             summary = "Mark all notifications as unread",
