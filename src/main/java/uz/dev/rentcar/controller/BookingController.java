@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.payload.BookingDTO;
 import uz.dev.rentcar.payload.request.BookingCreateDTO;
+import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.service.template.BookingService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -56,9 +55,11 @@ public class BookingController {
             summary = "Get all bookings for the current user",
             description = "This endpoint retrieves all bookings made by the currently authenticated user."
     )
-    public List<BookingDTO> getMyBookings(@AuthenticationPrincipal User currentUser) {
+    public PageableDTO getMyBookings(@RequestParam(value = "page", defaultValue = "0") int page,
+                                     @RequestParam(value = "size", defaultValue = "10") int size,
+                                     @AuthenticationPrincipal User currentUser) {
 
-        return bookingService.getMyBookings(currentUser);
+        return bookingService.getMyBookings(currentUser, page, size);
 
     }
 
@@ -99,11 +100,13 @@ public class BookingController {
             description = "This endpoint retrieves all bookings made by a specific user identified by their ID. " +
                     "Only accessible to admins."
     )
-    public List<BookingDTO> getBookingsByUserId(
+    public PageableDTO getBookingsByUserId(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
             @Parameter(description = "ID of the user whose bookings to retrieve", example = "1")
             @PathVariable Long userId) {
 
-        return bookingService.getBookingsByUserId(userId);
+        return bookingService.getBookingsByUserId(userId, page, size);
 
     }
 

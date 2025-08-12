@@ -7,8 +7,7 @@ import uz.dev.rentcar.enums.NotificationTypeEnum;
 import uz.dev.rentcar.payload.NotificationDTO;
 import uz.dev.rentcar.payload.ReturnDeadlineDTO;
 import uz.dev.rentcar.payload.SendPenaltyDTO;
-
-import java.util.List;
+import uz.dev.rentcar.payload.response.PageableDTO;
 
 /**
  * Created by: asrorbek
@@ -21,9 +20,9 @@ public interface NotificationService {
 
     void updateBookingStatus(User user, String message, NotificationTypeEnum type, Long bookingId, BookingStatusEnum bookingStatus);
 
-    List<NotificationDTO> getMyAllNotifications(User currentUser);
+    PageableDTO getMyAllNotifications(User currentUser, int page, int size);
 
-    List<NotificationDTO> getMyUnreadNotifications(User currentUser);
+    PageableDTO getMyUnreadNotifications(User currentUser, int page, int size);
 
     void markAllNotificationsAsRead(User currentUser);
 

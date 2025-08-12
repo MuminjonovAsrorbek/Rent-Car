@@ -1,20 +1,20 @@
 package uz.dev.rentcar.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
-import uz.dev.rentcar.entity.Booking;
 import uz.dev.rentcar.entity.Penalty;
 import uz.dev.rentcar.enums.PenaltyStatusEnum;
 import uz.dev.rentcar.exceptions.EntityNotFoundException;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface PenaltyRepository extends JpaRepository<Penalty, Long> {
 
     Optional<Penalty> findByBookingId(Long id);
 
-    List<Penalty> findByBookingUserId(Long id);
+    Page<Penalty> findByBookingUserId(Long id, Pageable pageable);
 
     default Penalty findByBookingIdOrThrowException(Long bookingId) {
 
@@ -32,5 +32,5 @@ public interface PenaltyRepository extends JpaRepository<Penalty, Long> {
 
     }
 
-    List<Penalty> findByBookingUserIdAndStatus(Long id, PenaltyStatusEnum penaltyStatusEnum);
+    Page<Penalty> findByBookingUserIdAndStatus(Long id, PenaltyStatusEnum penaltyStatusEnum, Pageable pageable);
 }

@@ -4,6 +4,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uz.dev.rentcar.entity.Booking;
@@ -16,6 +19,7 @@ import uz.dev.rentcar.enums.RoleEnum;
 import uz.dev.rentcar.mapper.NotificationMapper;
 import uz.dev.rentcar.payload.*;
 import uz.dev.rentcar.payload.request.CancelledBookingDTO;
+import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.repository.NotificationRepository;
 import uz.dev.rentcar.service.template.NotificationService;
 
@@ -141,24 +145,46 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<NotificationDTO> getMyAllNotifications(User currentUser) {
+    public PageableDTO getMyAllNotifications(User currentUser, int page, int size) {
 
         Sort sort = Sort.by((AbsLongEntity.Fields.id)).descending();
 
-        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId(), sort);
+        Pageable pageable = PageRequest.of(page, size, sort);
 
-        return notificationMapper.toDTO(notifications);
+        Page<Notification> notificationPage = notificationRepository.findByUserId(currentUser.getId(), pageable);
+
+        List<Notification> notifications = notificationPage.getContent();
+
+        return new PageableDTO(
+                notificationPage.getSize(),
+                notificationPage.getTotalElements(),
+                notificationPage.getTotalPages(),
+                notificationPage.hasNext(),
+                notificationPage.hasPrevious(),
+                notificationMapper.toDTO(notifications)
+        );
 
     }
 
     @Override
-    public List<NotificationDTO> getMyUnreadNotifications(User currentUser) {
+    public PageableDTO getMyUnreadNotifications(User currentUser, int page, int size) {
 
         Sort sort = Sort.by((AbsLongEntity.Fields.id)).descending();
 
-        List<Notification> notifications = notificationRepository.findByUserIdAndIsReadFalse(currentUser.getId() , sort);
+        Pageable pageable = PageRequest.of(page, size, sort);
 
-        return notificationMapper.toDTO(notifications);
+        Page<Notification> notificationPage = notificationRepository.findByUserIdAndIsReadFalse(currentUser.getId(), pageable);
+
+        List<Notification> notifications = notificationPage.getContent();
+
+        return new PageableDTO(
+                notificationPage.getSize(),
+                notificationPage.getTotalElements(),
+                notificationPage.getTotalPages(),
+                notificationPage.hasNext(),
+                notificationPage.hasPrevious(),
+                notificationMapper.toDTO(notifications)
+        );
 
     }
 
@@ -166,9 +192,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional
     public void markAllNotificationsAsRead(User currentUser) {
 
-        Sort sort = Sort.by((AbsLongEntity.Fields.id)).descending();
-
-        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId(), sort);
+        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId());
 
         for (Notification notification : notifications) {
             notification.setRead(true);
@@ -184,9 +208,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional
     public void markAllNotificationsAsUnread(User currentUser) {
 
-        Sort sort = Sort.by((AbsLongEntity.Fields.id)).descending();
-
-        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId(), sort);
+        List<Notification> notifications = notificationRepository.findByUserId(currentUser.getId());
 
         for (Notification notification : notifications) {
             notification.setRead(false);

@@ -10,9 +10,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.payload.PenaltyDTO;
+import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.service.template.PenaltyService;
-
-import java.util.List;
 
 /**
  * Created by: asrorbek
@@ -34,9 +33,11 @@ public class PenaltyController {
             summary = "Get all penalties for the authenticated user",
             description = "This endpoint retrieves all penalties associated with the currently authenticated user."
     )
-    public List<PenaltyDTO> getMyPenalties(@AuthenticationPrincipal User currentUser) {
+    public PageableDTO getMyPenalties(@RequestParam(value = "page", defaultValue = "0") int page,
+                                      @RequestParam(value = "size", defaultValue = "10") int size,
+                                      @AuthenticationPrincipal User currentUser) {
 
-        return penaltyService.getMyPenalties(currentUser);
+        return penaltyService.getMyPenalties(currentUser, page, size);
 
     }
 
@@ -46,9 +47,11 @@ public class PenaltyController {
             summary = "Get overdue returns for the authenticated user",
             description = "This endpoint retrieves all overdue returns associated with the currently authenticated user."
     )
-    public List<PenaltyDTO> getMyOverdueReturns(@AuthenticationPrincipal User currentUser) {
+    public PageableDTO getMyOverdueReturns(@RequestParam(value = "page", defaultValue = "0") int page,
+                                           @RequestParam(value = "size", defaultValue = "10") int size,
+                                           @AuthenticationPrincipal User currentUser) {
 
-        return penaltyService.getMyOverdueReturns(currentUser);
+        return penaltyService.getMyOverdueReturns(currentUser, page, size);
 
     }
 

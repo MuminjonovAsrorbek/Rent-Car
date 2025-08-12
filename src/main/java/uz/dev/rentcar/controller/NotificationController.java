@@ -11,9 +11,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.payload.NotificationDTO;
+import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.service.template.NotificationService;
-
-import java.util.List;
 
 /**
  * Created by: asrorbek
@@ -35,9 +34,11 @@ public class NotificationController {
             summary = "Get all notifications for the current user",
             description = "This endpoint retrieves all notifications for the authenticated user."
     )
-    public List<NotificationDTO> getMyAllNotifications(@AuthenticationPrincipal User currentUser) {
+    public PageableDTO getMyAllNotifications(@RequestParam(value = "page", defaultValue = "0") int page,
+                                             @RequestParam(value = "size", defaultValue = "10") int size,
+                                             @AuthenticationPrincipal User currentUser) {
 
-        return notificationService.getMyAllNotifications(currentUser);
+        return notificationService.getMyAllNotifications(currentUser, page, size);
 
     }
 
@@ -47,9 +48,11 @@ public class NotificationController {
             summary = "Get unread notifications for the current user",
             description = "This endpoint retrieves all unread notifications for the authenticated user."
     )
-    public List<NotificationDTO> getMyUnreadNotifications(@AuthenticationPrincipal User currentUser) {
+    public PageableDTO getMyUnreadNotifications(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                @RequestParam(value = "size", defaultValue = "10") int size,
+                                                @AuthenticationPrincipal User currentUser) {
 
-        return notificationService.getMyUnreadNotifications(currentUser);
+        return notificationService.getMyUnreadNotifications(currentUser, page, size);
 
     }
 

@@ -2,6 +2,9 @@ package uz.dev.rentcar.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ import uz.dev.rentcar.exceptions.InvalidRequestException;
 import uz.dev.rentcar.mapper.BookingMapper;
 import uz.dev.rentcar.payload.BookingDTO;
 import uz.dev.rentcar.payload.request.BookingCreateDTO;
+import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.repository.*;
 import uz.dev.rentcar.service.template.BookingService;
 import uz.dev.rentcar.service.template.NotificationService;
@@ -155,19 +159,30 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDTO> getMyBookings(User currentUser) {
+    public PageableDTO getMyBookings(User currentUser, int page, int size) {
 
         Sort sort = Sort.by(AbsLongEntity.Fields.id).descending();
 
-        List<Booking> bookings = bookingRepository.findByUserId(currentUser.getId(), sort);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Booking> bookingPage = bookingRepository.findByUserId(currentUser.getId(), pageable);
+
+        List<Booking> bookings = bookingPage.getContent();
 
         log.info("Fetching bookings for user: {}", currentUser.getId());
 
-        return bookingMapper.toDTO(bookings);
+        return new PageableDTO(
+                bookingPage.getSize(),
+                bookingPage.getTotalElements(),
+                bookingPage.getTotalPages(),
+                bookingPage.hasNext(),
+                bookingPage.hasPrevious(),
+                bookingMapper.toDTO(bookings)
+        );
     }
 
     @Override
-    public List<BookingDTO> getBookingsByUserId(Long userId) {
+    public PageableDTO getBookingsByUserId(Long userId, int page, int size) {
 
         if (!userRepository.existsById(userId)) {
 
@@ -177,11 +192,22 @@ public class BookingServiceImpl implements BookingService {
 
         Sort sort = Sort.by(AbsLongEntity.Fields.id).descending();
 
-        List<Booking> bookings = bookingRepository.findByUserId(userId, sort);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Booking> bookingPage = bookingRepository.findByUserId(userId, pageable);
+
+        List<Booking> bookings = bookingPage.getContent();
 
         log.info("Fetching bookings for user: {}", userId);
 
-        return bookingMapper.toDTO(bookings);
+        return new PageableDTO(
+                bookingPage.getSize(),
+                bookingPage.getTotalElements(),
+                bookingPage.getTotalPages(),
+                bookingPage.hasNext(),
+                bookingPage.hasPrevious(),
+                bookingMapper.toDTO(bookings)
+        );
     }
 
     @Override
@@ -216,7 +242,7 @@ public class BookingServiceImpl implements BookingService {
 
         log.info("Booking cancelled successfully for user: {}, booking ID: {}", currentUser.getId(), id);
 
-        notificationService.updateBookingStatus(currentUser, "Your booking has been cancelled successfully.",
+        notificationService.updateBookingStatus(booking.getUser(), "Your booking has been cancelled successfully.",
                 NotificationTypeEnum.WARNING, id, BookingStatusEnum.CANCELLED);
 
         return bookingMapper.toDTO(save);

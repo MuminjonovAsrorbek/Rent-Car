@@ -1,9 +1,6 @@
 package uz.dev.rentcar.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.SQLDelete;
@@ -30,6 +27,7 @@ public class Notification extends AbsDeleteEntity {
     private String message;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private NotificationTypeEnum type;
 
     private boolean isRead = false;

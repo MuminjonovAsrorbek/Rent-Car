@@ -1,17 +1,22 @@
 package uz.dev.rentcar.service.template;
 
 import uz.dev.rentcar.entity.User;
-import uz.dev.rentcar.payload.request.BookingCreateDTO;
 import uz.dev.rentcar.payload.BookingDTO;
-
-import java.util.List;
+import uz.dev.rentcar.payload.request.BookingCreateDTO;
+import uz.dev.rentcar.payload.response.PageableDTO;
 
 public interface BookingService {
     BookingDTO createBooking(BookingCreateDTO dto, User currentUser);
+
     BookingDTO getBookingById(Long id, User currentUser);
-    List<BookingDTO> getMyBookings(User currentUser);
-    List<BookingDTO> getBookingsByUserId(Long userId);
+
+    PageableDTO getMyBookings(User currentUser, int page, int size);
+
+    PageableDTO getBookingsByUserId(Long userId, int page, int size);
+
     BookingDTO cancelBooking(Long id, User currentUser);
+
     BookingDTO confirmBooking(Long id);
+
     BookingDTO completeBooking(Long id);
 }
