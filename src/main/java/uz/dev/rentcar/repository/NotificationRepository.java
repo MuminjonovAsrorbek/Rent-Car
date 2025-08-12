@@ -1,6 +1,7 @@
 package uz.dev.rentcar.repository;
 
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import uz.dev.rentcar.entity.Notification;
@@ -11,10 +12,12 @@ import java.util.List;
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
 
-    List<Notification> findByUserId(Long id, Sort sort);
+    Page<Notification> findByUserId(Long id, Pageable pageable);
+
+    List<Notification> findByUserId(Long userId);
 
 
-    List<Notification> findByUserIdAndIsReadFalse(Long id, Sort sort);
+    Page<Notification> findByUserIdAndIsReadFalse(Long id, Pageable pageable);
 
     default Notification findByIdOrThrowException(Long id) {
 
