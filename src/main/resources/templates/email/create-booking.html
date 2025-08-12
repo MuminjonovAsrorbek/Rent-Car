@@ -92,7 +92,7 @@
                     bajaring:</p>
                 <a th:href="${paymentUrl}" class="btn">Kredit karta orqali to‘lov</a>
             </div>
-            <div th:case="'GOOGLE_PAY', 'CLICK', 'PAYNET'">
+            <div th:if="${paymentMethod == 'GOOGLE_PAY' or paymentMethod == 'CLICK' or paymentMethod == 'PAYNET'}">
                 <p>
                     To‘lovni amalga oshirish uchun <span th:text="${paymentMethod}"></span> ilovasiga kirib, quyidagi
                     bron ID raqamini kiriting:

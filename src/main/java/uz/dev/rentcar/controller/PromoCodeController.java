@@ -54,7 +54,7 @@ public class PromoCodeController {
             summary = "Validate promo code",
             description = "This endpoint validates a promo code without authentication."
     )
-    public Boolean codeValidate(
+    public boolean codeValidate(
             @Parameter(description = "Promo code to validate", example = "SUMMER2025")
             @RequestParam String code) {
 
