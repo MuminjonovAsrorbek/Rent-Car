@@ -242,7 +242,7 @@ public class BookingServiceImpl implements BookingService {
 
         log.info("Booking cancelled successfully for user: {}, booking ID: {}", currentUser.getId(), id);
 
-        notificationService.updateBookingStatus(currentUser, "Your booking has been cancelled successfully.",
+        notificationService.updateBookingStatus(booking.getUser(), "Your booking has been cancelled successfully.",
                 NotificationTypeEnum.WARNING, id, BookingStatusEnum.CANCELLED);
 
         return bookingMapper.toDTO(save);
