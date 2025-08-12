@@ -22,6 +22,7 @@ import uz.dev.rentcar.service.template.PromoCodeService;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -66,7 +67,13 @@ public class PromoCodeServiceImpl implements PromoCodeService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        PromoCode promoCode = promoCodeRepository.findByCodeOrThrow(code);
+        Optional<PromoCode> optionalPromoCode = promoCodeRepository.findByCode(code);
+
+        if (optionalPromoCode.isEmpty()) {
+            return false;
+        }
+
+        PromoCode promoCode = optionalPromoCode.get();
 
         if (now.isBefore(promoCode.getValidFrom()))
             return false;
