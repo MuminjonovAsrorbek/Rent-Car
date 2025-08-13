@@ -58,6 +58,7 @@ public class PenaltyServiceImpl implements PenaltyService {
             penalty.setBooking(booking);
             penalty.setPenaltyAmount(penaltyDTO.getPenaltyAmount());
             penalty.setOverdueDays(penaltyDTO.getOverdueDays());
+            penalty.setStatus(PenaltyStatusEnum.PENDING);
 
             penaltyRepository.save(penalty);
 

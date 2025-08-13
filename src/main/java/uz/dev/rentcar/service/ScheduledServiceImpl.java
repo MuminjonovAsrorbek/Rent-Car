@@ -33,12 +33,15 @@ public class ScheduledServiceImpl implements ScheduledService {
     private final PenaltyService penaltyService;
 
     @Override
-    @Scheduled(cron = "0 0 0 * * ?") // Every day at midnight
+    //  @Scheduled(cron = "0 0 0 * * ?") // Every day at midnight
+    @Scheduled(cron = "0 * * * * *")
     public void checkReturnDeadlines() {
 
         LocalDateTime now = LocalDateTime.now();
 
-        LocalDateTime twoHoursFromNow = now.plusHours(2);
+//        LocalDateTime twoHoursFromNow = now.plusHours(2);
+
+        LocalDateTime twoHoursFromNow = now;
 
         List<Booking> activeBookings = bookingRepository.findByStatusAndReturnDateBetween(
                 BookingStatusEnum.CONFIRMED,
@@ -61,7 +64,8 @@ public class ScheduledServiceImpl implements ScheduledService {
     }
 
     @Override
-    @Scheduled(cron = "0 0 9 * * ?")
+//    @Scheduled(cron = "0 0 9 * * ?")
+    @Scheduled(cron = "0 * * * * *")
     public void checkOverdueReturns() {
 
         LocalDateTime now = LocalDateTime.now();
