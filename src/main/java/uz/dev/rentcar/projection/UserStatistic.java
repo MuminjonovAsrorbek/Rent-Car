@@ -9,4 +9,10 @@ public interface UserStatistic {
     Long getAdmins();
 
     Long getUsers();
+
+    Long getLastMonthUsers();
+
+    Long getLastWeekUsers();
+
+    Long getTodayUsers();
 }

@@ -27,7 +27,10 @@ public class StatisticsServiceImpl implements StatisticsService {
                 userStatistics.getTotalUsers(),
                 userStatistics.getDeletedUsers(),
                 userStatistics.getAdmins(),
-                userStatistics.getUsers()
+                userStatistics.getUsers(),
+                userStatistics.getLastMonthUsers(),
+                userStatistics.getLastWeekUsers(),
+                userStatistics.getTodayUsers()
         );
 
     }

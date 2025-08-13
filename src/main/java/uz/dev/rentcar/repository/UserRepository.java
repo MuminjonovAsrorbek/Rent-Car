@@ -28,13 +28,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     }
 
-    @Query("""
-                SELECT\s
-                    COUNT(u) AS totalUsers,
-                    SUM(CASE WHEN u.deleted = true THEN 1 ELSE 0 END) AS deletedUsers,
-                    SUM(CASE WHEN u.role = 'ADMIN' THEN 1 ELSE 0 END) AS admins,
-                    SUM(CASE WHEN u.role = 'USER' THEN 1 ELSE 0 END) AS users
-                FROM User u
-           \s""")
+    @Query(value = """
+                SELECT
+                    COUNT(*) AS totalUsers,
+                    SUM(CASE WHEN deleted = true THEN 1 ELSE 0 END) AS deletedUsers,
+                    SUM(CASE WHEN role = 'ADMIN' THEN 1 ELSE 0 END) AS admins,
+                    SUM(CASE WHEN role = 'USER' THEN 1 ELSE 0 END) AS users,
+                    SUM(CASE WHEN created_at >= CURRENT_DATE - INTERVAL '30 days' THEN 1 ELSE 0 END) AS lastMonthUsers,
+                    SUM(CASE WHEN created_at >= CURRENT_DATE - INTERVAL '7 days' THEN 1 ELSE 0 END) AS lastWeekUsers,
+                    SUM(CASE WHEN created_at >= CURRENT_DATE THEN 1 ELSE 0 END) AS todayUsers
+                FROM users
+            """, nativeQuery = true)
     UserStatistic getUserStatistics();
+
 }
