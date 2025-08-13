@@ -159,7 +159,7 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment = paymentRepository.findByBookingIdOrThrowException(bookingId);
 
         if (payment.getStatus() != PaymentStatus.PENDING) {
-            throw new IllegalStateException("Payment is not Pending.");
+            throw new InvalidRequestException("Payment is not Pending.", HttpStatus.BAD_REQUEST);
         }
 
         payment.setStatus(PaymentStatus.FAILED);
