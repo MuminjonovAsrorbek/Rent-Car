@@ -1,5 +1,7 @@
 package uz.dev.rentcar.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import uz.dev.rentcar.entity.Favorite;
@@ -11,6 +13,8 @@ import java.util.Optional;
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
     List<Favorite> findAllByUserId(Long userId);
+
+    Page<Favorite> findAllByUserId(Long userId, Pageable pageable);
 
     default Favorite getByIdOrThrow(Long id) {
         return findById(id)

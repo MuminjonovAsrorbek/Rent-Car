@@ -2,13 +2,19 @@ package uz.dev.rentcar.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uz.dev.rentcar.entity.Car;
 import uz.dev.rentcar.entity.Favorite;
 import uz.dev.rentcar.entity.User;
+import uz.dev.rentcar.entity.template.AbsLongEntity;
 import uz.dev.rentcar.mapper.FavoriteMapper;
 import uz.dev.rentcar.payload.FavoriteDTO;
 import uz.dev.rentcar.payload.TgFavoriteDTO;
+import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.repository.CarRepository;
 import uz.dev.rentcar.repository.FavoriteRepository;
 import uz.dev.rentcar.repository.UserRepository;
@@ -74,11 +80,24 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public List<FavoriteDTO> getMyFavorites(User currentUser) {
+    public PageableDTO getMyFavorites(User currentUser, int page, int size) {
 
-        List<Favorite> favorites = favoriteRepository.findAllByUserId(currentUser.getId());
+        Sort sort = Sort.by(AbsLongEntity.Fields.id).descending();
 
-        return favoriteMapper.toDTO(favorites);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Favorite> favoritePage = favoriteRepository.findAllByUserId(currentUser.getId(), pageable);
+
+        List<Favorite> favorites = favoritePage.getContent();
+
+        return new PageableDTO(
+                favoritePage.getSize(),
+                favoritePage.getTotalElements(),
+                favoritePage.getTotalPages(),
+                favoritePage.hasNext(),
+                favoritePage.hasPrevious(),
+                favoriteMapper.toDTO(favorites)
+        );
     }
 
     @Override

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.payload.FavoriteDTO;
 import uz.dev.rentcar.payload.TgFavoriteDTO;
+import uz.dev.rentcar.payload.response.PageableDTO;
 import uz.dev.rentcar.service.template.FavoriteService;
 
 import java.util.List;
@@ -82,9 +83,11 @@ public class FavoriteController {
             summary = "Get my favorites",
             description = "This endpoint retrieves all favorite items for the currently authenticated user. Accessible to users with ADMIN or USER roles."
     )
-    public List<FavoriteDTO> getMyFavorites(@AuthenticationPrincipal User currentUser) {
+    public PageableDTO getMyFavorites(@RequestParam(value = "page", defaultValue = "0") int page,
+                                      @RequestParam(value = "size", defaultValue = "10") int size,
+                                      @AuthenticationPrincipal User currentUser) {
 
-        return favoriteService.getMyFavorites(currentUser);
+        return favoriteService.getMyFavorites(currentUser, page, size);
 
     }
 
