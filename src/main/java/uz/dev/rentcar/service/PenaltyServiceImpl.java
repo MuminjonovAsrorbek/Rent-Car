@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import uz.dev.rentcar.entity.Booking;
 import uz.dev.rentcar.entity.Penalty;
 import uz.dev.rentcar.entity.User;
+import uz.dev.rentcar.enums.BookingStatusEnum;
 import uz.dev.rentcar.enums.PenaltyStatusEnum;
 import uz.dev.rentcar.mapper.PenaltyMapper;
 import uz.dev.rentcar.payload.PenaltyDTO;
@@ -97,6 +98,7 @@ public class PenaltyServiceImpl implements PenaltyService {
         Penalty penalty = penaltyRepository.findByBookingIdOrThrowException(booking.getId());
 
         penalty.setStatus(PenaltyStatusEnum.COMPLETED);
+        penalty.getBooking().setStatus(BookingStatusEnum.COMPLETED);
 
         Penalty save = penaltyRepository.save(penalty);
 
@@ -110,6 +112,7 @@ public class PenaltyServiceImpl implements PenaltyService {
         Penalty penalty = penaltyRepository.findByIdOrThrowException(penaltyId);
 
         penalty.setStatus(PenaltyStatusEnum.COMPLETED);
+        penalty.getBooking().setStatus(BookingStatusEnum.COMPLETED);
 
         Penalty save = penaltyRepository.save(penalty);
 
@@ -126,6 +129,7 @@ public class PenaltyServiceImpl implements PenaltyService {
         Penalty penalty = penaltyRepository.findByBookingIdOrThrowException(booking.getId());
 
         penalty.setStatus(PenaltyStatusEnum.CANCELED);
+        penalty.getBooking().setStatus(BookingStatusEnum.COMPLETED);
 
         Penalty save = penaltyRepository.save(penalty);
 
@@ -140,6 +144,7 @@ public class PenaltyServiceImpl implements PenaltyService {
         Penalty penalty = penaltyRepository.findByIdOrThrowException(penaltyId);
 
         penalty.setStatus(PenaltyStatusEnum.CANCELED);
+        penalty.getBooking().setStatus(BookingStatusEnum.COMPLETED);
 
         Penalty save = penaltyRepository.save(penalty);
 
