@@ -95,7 +95,7 @@ public class PaymentController {
 
     }
 
-    @PatchMapping("/{bookingId}/confirm")
+    @PutMapping("/{bookingId}/confirm")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Confirm payment",
@@ -110,7 +110,7 @@ public class PaymentController {
 
     }
 
-    @PatchMapping("/{bookingId}/cancel")
+    @PutMapping("/{bookingId}/cancel")
     @PreAuthorize("hasAnyRole('ADMIN' , 'USER')")
     @Operation(
             summary = "Cancel payment",

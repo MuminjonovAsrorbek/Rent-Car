@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -69,11 +68,11 @@ public class BookingController {
             summary = "Get booking by ID",
             description = "This endpoint retrieves a booking by its ID for the currently authenticated user."
     )
-    public ResponseEntity<BookingDTO> getBookingById(
+    public BookingDTO getBookingById(
             @Parameter(description = "ID of the booking to retrieve", example = "1")
             @PathVariable Long id,
             @AuthenticationPrincipal User currentUser) {
-        return ResponseEntity.ok(bookingService.getBookingById(id, currentUser));
+        return bookingService.getBookingById(id, currentUser);
     }
 
     @PostMapping("/{id}/cancel")
@@ -83,14 +82,12 @@ public class BookingController {
             description = "This endpoint allows users to cancel a booking by its ID. " +
                     "Only the user who made the booking or an admin can cancel it."
     )
-    public ResponseEntity<BookingDTO> cancelBooking(
+    public BookingDTO cancelBooking(
             @Parameter(description = "ID of the booking to cancel", example = "1")
             @PathVariable Long id,
             @AuthenticationPrincipal User currentUser) {
 
-        BookingDTO bookingDTO = bookingService.cancelBooking(id, currentUser);
-
-        return ResponseEntity.ok(bookingDTO);
+        return bookingService.cancelBooking(id, currentUser);
     }
 
     @GetMapping("/user/{userId}")
