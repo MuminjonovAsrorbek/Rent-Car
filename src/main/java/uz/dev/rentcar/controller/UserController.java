@@ -125,6 +125,7 @@ public class UserController {
             summary = "Get current user info",
             description = "This endpoint retrieves the information of the currently authenticated user. No parameters are required."
     )
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public UserDTO getUserInfo() {
 
         return userService.getUserInfo();
