@@ -39,9 +39,9 @@ public class ScheduledServiceImpl implements ScheduledService {
 
         LocalDateTime now = LocalDateTime.now();
 
-//        LocalDateTime twoHoursFromNow = now.plusHours(2);
+        LocalDateTime twoHoursFromNow = now.plusHours(2);
 
-        LocalDateTime twoHoursFromNow = now;
+//        LocalDateTime twoHoursFromNow = now;
 
         List<Booking> activeBookings = bookingRepository.findByStatusAndReturnDateBetween(
                 BookingStatusEnum.CONFIRMED,
