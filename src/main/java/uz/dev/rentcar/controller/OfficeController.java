@@ -19,7 +19,7 @@ import uz.dev.rentcar.service.template.OfficeService;
 @RequestMapping("/api/office")
 @RequiredArgsConstructor
 @Tag(name = "Office API", description = "Office API")
-@SecurityRequirement(name = "Bearer Authentication")
+@SecurityRequirement(name = "bearerAuth")
 public class OfficeController {
 
     private final OfficeService officeService;
