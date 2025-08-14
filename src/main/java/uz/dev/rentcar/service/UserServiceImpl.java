@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.dev.rentcar.entity.User;
 import uz.dev.rentcar.entity.template.AbsLongEntity;
+import uz.dev.rentcar.enums.RoleEnum;
 import uz.dev.rentcar.exceptions.EntityAlreadyExistException;
 import uz.dev.rentcar.mapper.UserMapper;
 import uz.dev.rentcar.payload.TgUserDTO;
@@ -137,6 +138,20 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
 
         return optionalUser.map(user -> new TgUserDTO(user.getId(), true)).orElseGet(() -> new TgUserDTO(null, false));
+
+    }
+
+    @Override
+    @Transactional
+    public UserDTO updateRole(Long userId, RoleEnum role) {
+
+        User user = userRepository.findByIdOrThrowException(userId);
+
+        user.setRole(role);
+
+        User saved = userRepository.save(user);
+
+        return userMapper.toDTO(saved);
 
     }
 }
