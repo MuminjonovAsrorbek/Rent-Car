@@ -33,8 +33,8 @@ public class ScheduledServiceImpl implements ScheduledService {
     private final PenaltyService penaltyService;
 
     @Override
-    //  @Scheduled(cron = "0 0 0 * * ?") // Every day at midnight
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 0 * * ?") // Every day at midnight
+//    @Scheduled(cron = "0 * * * * *")
     public void checkReturnDeadlines() {
 
         LocalDateTime now = LocalDateTime.now();

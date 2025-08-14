@@ -55,7 +55,7 @@ public class PenaltyController {
 
     }
 
-    @PatchMapping("/confirm/{bookingId}/booking")
+    @PutMapping("/confirm/{bookingId}/booking")
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(
             summary = "Confirm penalty for a booking",
@@ -69,7 +69,7 @@ public class PenaltyController {
 
     }
 
-    @PatchMapping("/confirm/{penaltyId}/penalty")
+    @PutMapping("/confirm/{penaltyId}/penalty")
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(
             summary = "Confirm penalty by penalty ID",
@@ -83,7 +83,7 @@ public class PenaltyController {
 
     }
 
-    @PatchMapping("/cancel/{bookingId}/booking")
+    @PutMapping("/cancel/{bookingId}/booking")
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(
             summary = "Cancel penalty for a booking",
@@ -97,7 +97,7 @@ public class PenaltyController {
 
     }
 
-    @PatchMapping("/cancel/{penaltyId}/penalty")
+    @PutMapping("/cancel/{penaltyId}/penalty")
     @PreAuthorize("hasAnyRole('ADMIN' )")
     @Operation(
             summary = "Cancel penalty by penalty ID",
