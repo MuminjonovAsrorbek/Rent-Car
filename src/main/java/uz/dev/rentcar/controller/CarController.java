@@ -162,7 +162,7 @@ public class CarController {
                             schema = @Schema(implementation = CarFilterDTO.class)
                     )
             )
-            CarFilterDTO carFilterDTO) {
+            @RequestBody CarFilterDTO carFilterDTO) {
 
         return carService.getFilteredCars(carFilterDTO);
 

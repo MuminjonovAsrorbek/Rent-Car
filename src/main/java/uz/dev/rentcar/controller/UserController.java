@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.dev.rentcar.enums.RoleEnum;
 import uz.dev.rentcar.payload.TgUserDTO;
 import uz.dev.rentcar.payload.UserDTO;
 import uz.dev.rentcar.payload.response.PageableDTO;
@@ -136,6 +137,15 @@ public class UserController {
     public TgUserDTO getByPhoneNumber(@PathVariable String phoneNumber) {
 
         return userService.getUserByPhoneNumber(phoneNumber);
+
+    }
+
+    @PatchMapping("/updateRole")
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserDTO hasAdmin(@RequestParam Long userId,
+                            @RequestParam RoleEnum role) {
+
+        return userService.updateRole(userId, role);
 
     }
 }

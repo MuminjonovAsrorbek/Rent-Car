@@ -80,7 +80,7 @@ public class Car extends AbsDeleteEntity {
     @ToString.Exclude
     private List<Attachment> attachments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "car", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<CarFeature> features = new ArrayList<>();
 
