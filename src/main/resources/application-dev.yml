@@ -38,3 +38,10 @@ spring:
 myapp:
   secret-key: ${SECRET_KEY}
   upload-path: ${UPLOAD_PATH}
+
+minio:
+  endpoint: http://${MINIO_HOSTNAME}:${MINIO_PORT}
+  access-key: ${MINIO_ACCESS_KEY}
+  secret-key: ${MINIO_SECRET_KEY}
+  bucket:
+    images: "car-images"
