@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,7 +39,8 @@ public class ReviewDTO implements Serializable {
             description = "Rating given by the user",
             example = "5"
     )
-    @Size(min = 1, max = 5, message = "Rating must be between 1 and 5")
+    @Min(1)
+    @Max(5)
     private int rating;
 
     @NotBlank
